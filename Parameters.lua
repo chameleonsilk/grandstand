@@ -8,8 +8,7 @@
 -- XX##Square
 -- start blue zones
 
-
-BlueSectorSquaresAmount = 7
+--BlueSectorSquaresAmount = 7
 BlueSectorSquares = {
 [1] = 'KM57Square',
 [2] = 'KM67Square',
@@ -20,43 +19,61 @@ BlueSectorSquares = {
 [7] = 'KM99Square'
 }
 
-BlueLRSAM_SectorSquaresAmount = 1
+--BlueLRSAM_SectorSquaresAmount = 1
 BlueLRSAM_SectorSquares = {
 [1] = 'FH84Square'
 }
 
-BlueSRSAM_SectorSquaresAmount = 2
+--BlueSRSAM_SectorSquaresAmount = 2
 BlueSRSAM_SectorSquares = {
 [1] = 'GH21Square',
 [2] = 'GG37Square'
 }
+
+BlueTRUCK_SectorSquares = {
+[1] = 'GH21Square',
+[2] = 'GG37Square',
+[3] = 'FH84Square'
+}
 -- end blue zones
 
 -- start red zones
-RedSectorSquaresAmount = 7
 RedSectorSquares = {
 [1] = 'KM77Square',
 [2] = 'GG46Square',
 [3] = 'KM56Square',
 [4] = 'KM66Square',
-[5] = 'KM86Square',
-[6] = 'GG36Square',
-[7] = 'KM98Square'
+[5] = 'KM88Square',
+[6] = 'KM86Square',
+--[x] = 'GG36Square',
+[7] = 'KM98Square',
+[8] = 'KM97Square'
 }
 
-RedLRSAM_SectorSquaresAmount = 2
+
 RedLRSAM_SectorSquares = {
 [1] = 'GC10Square',
 [2] = 'KM98Square'
 }
 
-RedSRSAM_SectorSquaresAmount = 4
+
 RedSRSAM_SectorSquares = {
 [1] = 'KM98Square',
 [2] = 'KM86Square',
 [3] = 'GG36Square',
 [4] = 'GG33Square'
 }
+
+--currently places with SAM areas
+RedTRUCK_SectorSquares = {
+[1] = 'KM98Square',
+[2] = 'KM86Square',
+[3] = 'GG36Square',
+[4] = 'GG33Square',
+[5] = 'GC10Square',
+[6] = 'KM98Square'
+}
+
 -- end red zones
 
 -- START DYNAFRONT EDITABLE STUFF

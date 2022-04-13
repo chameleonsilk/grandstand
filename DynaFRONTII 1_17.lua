@@ -67,14 +67,14 @@ local failedAttempts = 0
 if side == "RED" then
 		forWhom = "Russia"
 		farpName = "FARPRED"
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedTRUCK_SectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 end
 if side == "BLUE" then
 		forWhom = "USA"
 		farpName = "FARPBLUE"
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 end
@@ -186,7 +186,7 @@ for nomber = 1, iterations do
 	if whichSide == "RED" then
 			useSide = "RED"
 		if unitType == "AAA" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 		rand = mist.random(1,#Red_Names_AAA)
@@ -199,7 +199,7 @@ for nomber = 1, iterations do
 			end
 		end
 			if unitType == "TRUCK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedTRUCK_SectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_TRUCK)
@@ -212,7 +212,7 @@ for nomber = 1, iterations do
 			end
 		end
 			if unitType == "SHORAD" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_SHORAD)
@@ -225,7 +225,7 @@ for nomber = 1, iterations do
 			end
 		end
 					if unitType == "TANK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_TANK)
@@ -238,7 +238,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "INF" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_INF)
@@ -251,7 +251,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "APC" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_APC)
@@ -264,7 +264,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "CP" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,RedSectorSquaresAmount)
+		randsquare = mist.random(1,#RedSectorSquares)
 		zoneUsed = RedSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_CP)
@@ -277,7 +277,7 @@ for nomber = 1, iterations do
 			end
 		end
 		if unitType == "LRSAM" then
-		randsquare = mist.random(1,RedLRSAM_SectorSquaresAmount)
+		randsquare = mist.random(1,#RedLRSAM_SectorSquares)
 		zoneUsed = RedLRSAM_SectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_LRSAM)
@@ -290,7 +290,7 @@ for nomber = 1, iterations do
 			end
 		end
 		if unitType == "SRSAM" then
-		randsquare = mist.random(1,RedSRSAM_SectorSquaresAmount)
+		randsquare = mist.random(1,#RedSRSAM_SectorSquares)
 		zoneUsed = RedSRSAM_SectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Red_Names_SRSAM)
@@ -310,7 +310,7 @@ for nomber = 1, iterations do
 		if whichSide == "BLUE" then
 			useSide = "BLUE"
 		if unitType == "AAA" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_AAA)
@@ -323,7 +323,7 @@ for nomber = 1, iterations do
 			end
 		end
 			if unitType == "TRUCK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_TRUCK)
@@ -336,7 +336,7 @@ for nomber = 1, iterations do
 			end
 		end
 			if unitType == "SHORAD" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_SHORAD)
@@ -349,7 +349,7 @@ for nomber = 1, iterations do
 			end
 		end
 					if unitType == "TANK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_TANK)
@@ -362,7 +362,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "INF" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_INF)
@@ -375,7 +375,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "APC" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_APC)
@@ -388,7 +388,7 @@ for nomber = 1, iterations do
 			end
 		end
 							if unitType == "CP" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,BlueSectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSectorSquares)
 		zoneUsed = BlueSectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_CP)
@@ -401,7 +401,7 @@ for nomber = 1, iterations do
 			end
 		end
 		if unitType == "LRSAM" then
-		randsquare = mist.random(1,BlueLRSAM_SectorSquaresAmount)
+		randsquare = mist.random(1,#BlueLRSAM_SectorSquares)
 		zoneUsed = BlueLRSAM_SectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_LRSAM)
@@ -414,7 +414,7 @@ for nomber = 1, iterations do
 			end
 		end
 		if unitType == "SRSAM" then
-		randsquare = mist.random(1,BlueSRSAM_SectorSquaresAmount)
+		randsquare = mist.random(1,#BlueSRSAM_SectorSquares)
 		zoneUsed = BlueSRSAM_SectorSquares[randsquare]
 		restrictPoly = zoneUsed
 			rand = mist.random(1,#Blue_Names_SRSAM)
@@ -587,11 +587,11 @@ local pickedZone = ""
 
 if forWhichSide == "blue" or "BLUE" then
 	if LRorSR == 1 then
-	local choice = mist.random(1, RedLRSAM_SectorSquaresAmount)
+	local choice = mist.random(1, #RedLRSAM_SectorSquares)
 	pickedZone = RedLRSAM_SectorSquares[choice]
 	end
 	if LRorSR == 2 then
-	local choice = mist.random(1, RedSRSAM_SectorSquaresAmount)
+	local choice = mist.random(1, #RedSRSAM_SectorSquares)
 	pickedZone = RedSRSAM_SectorSquares[choice]
 	end
 	seadattack.red.sead.zone_name = pickedZone
@@ -599,11 +599,11 @@ if forWhichSide == "blue" or "BLUE" then
 end
 if forWhichSide == "red" or "RED" then
 	if LRorSR == 1 then
-	local choice = mist.random(1, BlueLRSAM_SectorSquaresAmount)
+	local choice = mist.random(1, #BlueLRSAM_SectorSquares)
 	pickedZone = BlueLRSAM_SectorSquares[choice]
 	end
 	if LRorSR == 2 then
-	local choice = mist.random(1, BlueSRSAM_SectorSquaresAmount)
+	local choice = mist.random(1, #BlueSRSAM_SectorSquares)
 	pickedZone = BlueSRSAM_SectorSquares[choice]
 	end	
 	seadattack.blue.sead.zone_name = pickedZone
@@ -621,14 +621,14 @@ local pickedZone = ""
 
 if forWho == "red" or "RED" then
 	if forTask == "CAS" then
-	local choice = mist.random(1, BlueSectorSquaresAmount)
+	local choice = mist.random(1, #BlueSectorSquares)
 	pickedZone = BlueSectorSquares[choice]
 	heloattack.red.cas.zone_name = pickedZone
 	groundattack.red.cas.zone_name = pickedZone
 	dynaFRONT.log:info("RED CAS is targeting $1", pickedzone)
 	end
 	if forTask == "CAP" then
-	local choice = mist.random(1, RedSectorSquaresAmount)
+	local choice = mist.random(1, #RedSectorSquares)
 	pickedZone = BlueSectorSquares[choice]
 	gcicap.red.cap.zone_name = pickedZone
 	dynaFRONT.log:info("RED CAP is targeting $1", pickedzone)
@@ -636,14 +636,14 @@ if forWho == "red" or "RED" then
 end
 if forWho == "blue" or "BLUE" then
 	if forTask == "CAS" then
-	local choice = mist.random(1, RedSectorSquaresAmount)
+	local choice = mist.random(1, #RedSectorSquares)
 	pickedZone = RedSectorSquares[choice]
 	groundattack.blue.cas.zone_name = pickedZone
 	heloattack.blue.cas.zone_name = pickedZone
 	dynaFRONT.log:info("BLUE CAS is targeting $1", pickedzone)
 	end
 	if forTask == "CAP" then
-	local choice = mist.random(1, RedSectorSquaresAmount)
+	local choice = mist.random(1, #RedSectorSquares)
 	pickedZone = RedSectorSquares[choice]
 	gcicap.blue.cap.zone_name = pickedZone
 	dynaFRONT.log:info("BLUE CAP is targeting $1", pickedzone)
