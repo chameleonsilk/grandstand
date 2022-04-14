@@ -11,7 +11,7 @@ BLUESCORE = 1
 -- intro function
 function Introduce_Mission()
 	local msg = {}
-    msg.text = 'OPERATION GRANDSTAND 0.23'
+    msg.text = 'OPERATION GRANDSTAND 0.28'
     msg.displayTime = 29  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
