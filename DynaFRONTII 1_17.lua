@@ -3,17 +3,17 @@ function Introduce_Mission()
 	local _msg = {}
     _msg.text = 'OPERATION G_randSTAND 0.23'
     _msg.displayTime = 29  
-    _msg._msgFor = {coa = {'all'}} 
+    _msg.msgFor = {coa = {'all'}} 
     mist.message.add(_msg)
 	_msg = {}
 	_msg.text = 'Created by Chameleon_Silk'
     _msg.displayTime = 10 
-    _msg._msgFor = {coa = {'all'}} 
+    _msg.msgFor = {coa = {'all'}} 
     mist.message.add(_msg)
 	_msg = {}
 	_msg.text = 'Powered by MIST 4.5.107, DynaFRONTII and GCICAP Autonomous Airfield.' 
     _msg.displayTime = 19  
-    _msg._msgFor = {coa = {'all'}} 
+    _msg.msgFor = {coa = {'all'}} 
     mist.message.add(_msg)
 	_msg = {}
 	mist.scheduleFunction(displayLeaderInfo, {"BLUE"}, timer.getTime() + 10, 1200)
@@ -22,7 +22,7 @@ function Introduce_Mission()
 	mist.scheduleFunction(showResources, {"RED"}, timer.getTime() + 90, 2400)
 end
 
-decluster = mist._random(1,10) -- Global used to _randomly decluster smoke marker schedule
+decluster = mist.random(1,10) -- Global used to _randomly decluster smoke marker schedule
 dynaFRONT = {}
 dynaFRONT.log_level = "info"
 dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -32,8 +32,8 @@ BLUESCORE = 1
 
 -- No reason to make these _names small and hard to understand. Be vebose.
 -- Some globals we will need for naming groups
-blueGroup_nameAppend = 0 
-redGroup_nameAppend = 0
+bluegroupnameAppend = 0 
+redgroupnameAppend = 0
 
 -- What are these?	
 --heloattack.blue.supply = 12
@@ -57,7 +57,7 @@ function BuildFARP(_side, ownedBy)
 	-- local/private variables could be preceded with '_' ie __forWhom. Common syntaxt
 	-- to differentiate local afrom global variables.
 	local _forWhom = ""
-	local _farp_name = ""
+	local _farpname = ""
 	local _zoneUsed = {}
 	local _randsquare = 0
 	local _restrictPoly = ""
@@ -68,16 +68,16 @@ function BuildFARP(_side, ownedBy)
 	if _side == "RED" 
 	then
 		_forWhom = "Russia"
-		_farp_name = "FARPRED"
-		_randsquare = mist._random(1,#RedTRUCK_SectorSquares)
+		_farpname = "FARPRED"
+		_randsquare = mist.random(1,#RedTRUCK_SectorSquares)
 		_zoneUsed = RedSectorSquares[_randsquare]
 		_restrictPoly = _zoneUsed
 	-- moved the below into elseif from it's own if/then
 	elseif _side == "BLUE"
 	then
 		_forWhom = "USA"
-		_farp_name = "FARPBLUE"
-		_randsquare = mist._random(1,#BlueTRUCK_SectorSquares)
+		_farpname = "FARPBLUE"
+		_randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
 		_zoneUsed = BlueSectorSquares[_randsquare]
 		_restrictPoly = _zoneUsed
 	end
@@ -92,14 +92,14 @@ function BuildFARP(_side, ownedBy)
 		local _landGood = mist.isTerrain_valid(_spawnPsn, {terrainType})
 		
 		--_failedAttempts = _failedAttempts + 1
-		_spawnPsn = mist.get_randomPointInZone(_zoneUsed, _zoneUsed.radius)
+		_spawnPsn = mist.getrandomPointInZone(_zoneUsed, _zoneUsed.radius)
         _restriction = mist.pointInPolygon(_spawnPsn, mist.getGroupPoints(_restrictPoly)) 		
 		
-		if mist.isTerrain_valid(_spawnPsn, {terrainType}) == true then 
-			_landGood = true
-		else
-			_landGood = false
-		end
+		--if mist.isTerrain_valid(_spawnPsn, {terrainType}) == true then 
+		--	_landGood = true
+		--else
+		--	_landGood = false
+		--end
 
 		--if _failedAttempts == lastAttempt then
 		--dynaFRONT.log:warn("Failed BUILD placement and exceeded attempts", {'lastAttempt'})
@@ -121,9 +121,9 @@ function BuildFARP(_side, ownedBy)
 	-- country = "RUSSIA",
 	-- category = "Heliports", 
 	-- x = _buildPsn.x,
-	-- y = _buildPsn.z + math._random(200,300),
+	-- y = _buildPsn.z + math.random(200,300),
 	--_name = "Strike1", 
-	-- group_name = "Strike1",
+	-- groupname = "Strike1",
 	-- heading = 0.47123889803847
 	--}
 			
@@ -135,10 +135,10 @@ function BuildFARP(_side, ownedBy)
 			category = "Heliports", 
 			x = _buildPsn.x,
 			y = _buildPsn.z,
-			--_name = _farp_name,
-			unit_name = _farp_name,
+			--_name = _farpname,
+			unit_name = _farpname,
 			clone = true,
-			--group_name = "FARP" .. _side,
+			--groupname = "FARP" .. _side,
 			heading = 0.47123889803847,
 		}
 			
@@ -196,11 +196,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			_use_side = "RED"
 			if unitType == "AAA"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_AAA)
-				_groupCalled = Red__names_AAA[_rand]
+				_rand = mist.random(1,#Rednames_AAA)
+				_groupCalled = Rednames_AAA[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -213,11 +213,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "TRUCK"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedTRUCK_SectorSquares)
+				_randsquare = mist.random(1,#RedTRUCK_SectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_TRUCK)
-				_groupCalled = Red__names_TRUCK[_rand]
+				_rand = mist.random(1,#Rednames_TRUCK)
+				_groupCalled = Rednames_TRUCK[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -230,11 +230,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "SHORAD"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_SHORAD)
-				_groupCalled = Red__names_SHORAD[_rand]
+				_rand = mist.random(1,#Rednames_SHORAD)
+				_groupCalled = Rednames_SHORAD[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -247,11 +247,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "TANK"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_TANK)
-				_groupCalled = Red__names_TANK[_rand]
+				_rand = mist.random(1,#Rednames_TANK)
+				_groupCalled = Rednames_TANK[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -264,11 +264,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "INF"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_INF)
-				_groupCalled = Red__names_INF[_rand]
+				_rand = mist.random(1,#Rednames_INF)
+				_groupCalled = Rednames_INF[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -280,11 +280,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			end
 			if unitType == "APC"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_APC)
-				_groupCalled = Red__names_APC[_rand]
+				_rand = mist.random(1,#Rednames_APC)
+				_groupCalled = Rednames_APC[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -297,11 +297,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "CP"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#RedSectorSquares)
+				_randsquare = mist.random(1,#RedSectorSquares)
 				_zoneUsed = RedSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_CP)
-				_groupCalled = Red__names_CP[_rand]
+				_rand = mist.random(1,#Rednames_CP)
+				_groupCalled = Rednames_CP[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[_randsquare]'})
@@ -314,11 +314,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "LRSAM" 
 			then
-				_randsquare = mist._random(1,#RedLRSAM_SectorSquares)
+				_randsquare = mist.random(1,#RedLRSAM_SectorSquares)
 				_zoneUsed = RedLRSAM_SectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_LRSAM)
-				_groupCalled = Red__names_LRSAM[_rand]
+				_rand = mist.random(1,#Rednames_LRSAM)
+				_groupCalled = Rednames_LRSAM[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedLRSAM_SectorSquares[_randsquare]'})
@@ -331,11 +331,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "SRSAM"
 			then
-				_randsquare = mist._random(1,#RedSRSAM_SectorSquares)
+				_randsquare = mist.random(1,#RedSRSAM_SectorSquares)
 				_zoneUsed = RedSRSAM_SectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Red__names_SRSAM)
-				_groupCalled = Red__names_SRSAM[_rand]
+				_rand = mist.random(1,#Rednames_SRSAM)
+				_groupCalled = Rednames_SRSAM[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSRSAM_SectorSquares[_randsquare]'})
@@ -354,11 +354,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			_use_side = "BLUE"
 			if unitType == "AAA"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_AAA)
-				_groupCalled = Blue__names_AAA[_rand]
+				_rand = mist.random(1,#Bluenames_INF_AAA)
+				_groupCalled = Bluenames_INF_AAA[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -371,11 +371,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 		
 			if unitType == "TRUCK"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueTRUCK_SectorSquares)
+				_randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_TRUCK)
-				_groupCalled = Blue__names_TRUCK[_rand]
+				_rand = mist.random(1,#Bluenames_INF_TRUCK)
+				_groupCalled = Bluenames_INF_TRUCK[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -388,11 +388,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 		
 			if unitType == "SHORAD"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_SHORAD)
-				_groupCalled = Blue__names_SHORAD[_rand]
+				_rand = mist.random(1,#Bluenames_INF_SHORAD)
+				_groupCalled = Bluenames_INF_SHORAD[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -405,11 +405,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "TANK"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_TANK)
-				_groupCalled = Blue__names_TANK[_rand]
+				_rand = mist.random(1,#Bluenames_INF_TANK)
+				_groupCalled = Bluenames_INF_TANK[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -422,11 +422,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "INF"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_INF)
-				_groupCalled = Blue__names_INF[_rand]
+				_rand = mist.random(1,#Bluenames_INF)
+				_groupCalled = Bluenames_INF[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -439,11 +439,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "APC"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_APC)
-				_groupCalled = Blue__names_APC[_rand]
+				_rand = mist.random(1,#Bluenames_INF_APC)
+				_groupCalled = Bluenames_INF_APC[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -456,11 +456,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "CP"
 			then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-				_randsquare = mist._random(1,#BlueSectorSquares)
+				_randsquare = mist.random(1,#BlueSectorSquares)
 				_zoneUsed = BlueSectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_CP)
-				_groupCalled = Blue__names_CP[_rand]
+				_rand = mist.random(1,#Bluenames_INF_CP)
+				_groupCalled = Bluenames_INF_CP[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[_randsquare]'})
@@ -473,11 +473,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "LRSAM"
 			then
-				_randsquare = mist._random(1,#BlueLRSAM_SectorSquares)
+				_randsquare = mist.random(1,#BlueLRSAM_SectorSquares)
 				_zoneUsed = BlueLRSAM_SectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_LRSAM)
-				_groupCalled = Blue__names_LRSAM[_rand]
+				_rand = mist.random(1,#Bluenames_INF_LRSAM)
+				_groupCalled = Bluenames_INF_LRSAM[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueLRSAM_SectorSquares[_randsquare]'})
@@ -490,11 +490,11 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			
 			if unitType == "SRSAM"
 			then
-				_randsquare = mist._random(1,#BlueSRSAM_SectorSquares)
+				_randsquare = mist.random(1,#BlueSRSAM_SectorSquares)
 				_zoneUsed = BlueSRSAM_SectorSquares[_randsquare]
 				_restrictPoly = _zoneUsed
-				_rand = mist._random(1,#Blue__names_SRSAM)
-				_groupCalled = Blue__names_SRSAM[_rand]
+				_rand = mist.random(1,#Bluenames_INF_SRSAM)
+				_groupCalled = Bluenames_INF_SRSAM[_rand]
 				if _restrictPoly == nil
 				then
 					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSRSAM_SectorSquares[_randsquare]'})
@@ -517,7 +517,7 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			-- again here do this
 			local _landGood = mist.isTerrain_valid(_spawnPsn, {terrainType})
 			--_failedAttempts = _failedAttempts + 1
-			_spawnPsn = mist.get_randomPointInZone(_zoneUsed, _zoneUsed.radius)
+			_spawnPsn = mist.getrandomPointInZone(_zoneUsed, _zoneUsed.radius)
 			_restriction = mist.pointInPolygon(_spawnPsn, mist.getGroupPoints(_restrictPoly)) 		
 		
 			--if mist.isTerrain_valid(_spawnPsn, {terrainType}) == true
@@ -538,41 +538,41 @@ function ManipulateForce(behaviorType, iterations, which_side, unitType, attempt
 			end
 		end
 		
-		local _group_vars = {}			
+		local groupvars = {}			
 		--if respawnGroup ~= nil then
 		--_groupCalled = respawnGroup
 		--end
 			
-		_group_vars.newGroup_name = _use_side .. " " .. unitType .. " " .. nomber -- lets _name a group i.e "REDFOR AAA 1"
-		ActiveForces[unitType][_use_side][nomber] = _group_vars.newGroup_name -- now add this _name to the active groups table, under the subcategory of its unit type
+		groupvars.newGroupname = _use_side .. " " .. unitType .. " " .. nomber -- lets _name a group i.e "REDFOR AAA 1"
+		ActiveForces[unitType][_use_side][nomber] = groupvars.newGroupname -- now add this _name to the active groups table, under the subcategory of its unit type
 		ActiveForces[unitType][_use_side].TEMPLATE[nomber] = _groupCalled
 		ActiveForces[unitType][_use_side].SQUARE[nomber] = _zoneUsed -- store the MGRS SQUARE for this group
 		ActiveForces[unitType][_use_side].POS[nomber] = _spawnPsn -- save this groups position
-		ActiveForces[unitType][_use_side]._initSize[nomber] = Group.getInitialSize(Group.getBy_name(_groupCalled)) -- set its initial size
-		ActiveForces[unitType][_use_side].SIZE[nomber] = Group.getInitialSize(Group.getBy_name(_groupCalled)) -- set its current size
+		ActiveForces[unitType][_use_side].initSize[nomber] = Group.getInitialSize(Group.getByname(_groupCalled)) -- set its initial size
+		ActiveForces[unitType][_use_side].SIZE[nomber] = Group.getInitialSize(Group.getByname(_groupCalled)) -- set its current size
 					
 		--local _data = mist.utils.serialize("TANKS", ActiveForces.TANK.BLUE) -- debug to show us our table
 		--trigger.action.outText(_data,50, true) -- display table to screen
 		--trigger.action.outText(mist.utils.tableShow(_data), 25)
 			
-		_group_vars.group_name = _groupCalled
-		_group_vars.action = behaviorType
-		_group_vars.point = _spawnPsn
+		groupvars.groupname = _groupCalled
+		groupvars.action = behaviorType
+		groupvars.point = _spawnPsn
 		--_vars.route = _path
-		_group_vars.disperse = dispersion_choice
-		_group_vars.maxDisp = dispersion_choice
+		groupvars.disperse = dispersion_choice
+		groupvars.maxDisp = dispersion_choice
 		-- _vars.radius = 100 
-		_group_vars.innerRadius = 0 
-		_group_vars.offsetRoute = true 
-		_group_vars.offsetWP1 = false
-		_group_vars.initTasks = true
+		groupvars.innerRadius = 0 
+		groupvars.offsetRoute = true 
+		groupvars.offsetWP1 = false
+		groupvars.initTasks = true
 
-		mist.cloneMoveGroup(_groupCalled, false, _group_vars)
+		mist.cloneMoveGroup(_groupCalled, false, groupvars)
 		
 		if _randomMove ~= 0
 		then
-			mist.scheduleFunction(moveStuff, {_group_vars.newGroup_name, _randomMove, moveSpeed, _use_side}, timer.getTime() + 5, mist._random(300,900))
-			--mist.scheduleFunction(advanceUnits, {_vars.newGroup_name, _use_side}, timer.getTime() + 5)
+			mist.scheduleFunction(moveStuff, {groupvars.newGroupname, _randomMove, moveSpeed, _use_side}, timer.getTime() + 5, mist.random(300,900))
+			--mist.scheduleFunction(advanceUnits, {_vars.newGroupname, _use_side}, timer.getTime() + 5)
 		end
 	end
 
@@ -592,15 +592,15 @@ function monitorGroup(tblCheck, _sideUsed, grpType)
 		local _msg = {}
 		local _initSize = tblCheck[grpTYPE][_sideUsed]._initSize[element]
 		local _currentSize = tblCheck[grpTYPE][_sideUsed].SIZE[element]
-		local _decimal_value = _currentSize / _initSize -- _convert to a decimal _value
-		local _percentage = _decimal_value * 100 -- _convert decimal into a _percentage
+		local _decimalvalue = _currentSize / _initSize -- _convert to a decimal _value
+		local _percentage = _decimalvalue * 100 -- _convert decimal into a _percentage
 	
 		if _percentage <= 90
 		then -- if the _percentage is less that 30 percent then
-			Group.destroy(Group.getBy_name(_checkThisGroup)) -- destroy the group
+			Group.destroy(Group.getByname(_checkThisGroup)) -- destroy the group
 			_msg.text = _sideUsed .. ' ' .. grpType .. ' will recieve a reinforcement in 5 minutes '
 			_msg.displayTime = 10
-			_msg._msgFor = {coa = {'all'}} 
+			_msg.msgFor = {coa = {'all'}} 
 			mist.message.add(_msg)
 			_msg = {}
 			ActiveForces[grpType][_sideUsed].DESTROYED = ActiveForces[grpType][_sideUsed].DESTROYED + 1
@@ -636,9 +636,9 @@ function CreateArmy(for_side, unitType)
 		mist.scheduleFunction(ManipulateForce, {"clone", bAAAamount, "BLUE", "AAA", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 2)
 		mist.scheduleFunction(ManipulateForce, {"clone", bTRUCKamount, "BLUE", "TRUCK", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 4)
 		mist.scheduleFunction(ManipulateForce, {"clone", bSHORADamount, "BLUE", "SHORAD", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 6)
-		mist.scheduleFunction(ManipulateForce, {"clone", bINFamount, "BLUE", "INF", 1000, "LAND", 500, 5000, mist._random(4,7), nil}, timer.getTime() + 8)
-		mist.scheduleFunction(ManipulateForce, {"clone", bTANKamount, "BLUE", "TANK", 1000, "LAND", 500, 5000, mist._random(42,60), nil}, timer.getTime() + 10)
-		mist.scheduleFunction(ManipulateForce, {"clone", bAPCamount, "BLUE", "APC", 1000, "LAND", 500, 5000, mist._random(38,50), nil}, timer.getTime() + 12)
+		mist.scheduleFunction(ManipulateForce, {"clone", bINFamount, "BLUE", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil}, timer.getTime() + 8)
+		mist.scheduleFunction(ManipulateForce, {"clone", bTANKamount, "BLUE", "TANK", 1000, "LAND", 500, 5000, mist.random(42,60), nil}, timer.getTime() + 10)
+		mist.scheduleFunction(ManipulateForce, {"clone", bAPCamount, "BLUE", "APC", 1000, "LAND", 500, 5000, mist.random(38,50), nil}, timer.getTime() + 12)
 		mist.scheduleFunction(ManipulateForce, {"clone", bCPamount, "BLUE", "CP", 1000, "LAND", 500, 5000, 0, nil}, timer.getTime() + 12)
 		mist.scheduleFunction(ManipulateForce, {"clone", bSRSAMamount, "BLUE", "SRSAM", 1000, "LAND", 400, 0, 0, nil}, timer.getTime() + 14)
 		mist.scheduleFunction(ManipulateForce, {"clone", bLRSAMamount, "BLUE", "LRSAM", 1000, "LAND", 0, 0, 0, nil}, timer.getTime() + 16)
@@ -650,9 +650,9 @@ function CreateArmy(for_side, unitType)
 		mist.scheduleFunction(ManipulateForce, {"clone", rAAAamount, "RED", "AAA", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 20)
 		mist.scheduleFunction(ManipulateForce, {"clone", rTRUCKamount, "RED", "TRUCK", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 22)
 		mist.scheduleFunction(ManipulateForce, {"clone", rSHORADamount, "RED", "SHORAD", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 24)
-		mist.scheduleFunction(ManipulateForce, {"clone", rINFamount, "RED", "INF", 1000, "LAND", 500, 5000, mist._random(4,7), nil}, timer.getTime() + 26)
-		mist.scheduleFunction(ManipulateForce, {"clone", rTANKamount, "RED", "TANK", 1000, "LAND", 500, 5000, mist._random(28,42), nil}, timer.getTime() + 28)
-		mist.scheduleFunction(ManipulateForce, {"clone", rAPCamount, "RED", "APC", 1000, "LAND", 500, 5000, mist._random(24,40), nil}, timer.getTime() + 30)
+		mist.scheduleFunction(ManipulateForce, {"clone", rINFamount, "RED", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil}, timer.getTime() + 26)
+		mist.scheduleFunction(ManipulateForce, {"clone", rTANKamount, "RED", "TANK", 1000, "LAND", 500, 5000, mist.random(28,42), nil}, timer.getTime() + 28)
+		mist.scheduleFunction(ManipulateForce, {"clone", rAPCamount, "RED", "APC", 1000, "LAND", 500, 5000, mist.random(24,40), nil}, timer.getTime() + 30)
 		mist.scheduleFunction(ManipulateForce, {"clone", rCPamount, "RED", "CP", 1000, "LAND", 500, 5000, 0, nil}, timer.getTime() + 32)
 		mist.scheduleFunction(ManipulateForce, {"clone", rSRSAMamount, "RED", "SRSAM", 1000, "LAND", 400, 0, 0, nil}, timer.getTime() + 34)
 		mist.scheduleFunction(ManipulateForce, {"clone", rLRSAMamount, "RED", "LRSAM", 1000, "LAND", 0, 0, 0, nil}, timer.getTime() + 36)
@@ -662,7 +662,7 @@ end
 
 function pickSAMzone(forWhich_side)
 	-- what is LRorSR? more verbose _name please
-	local _LRorSR = mist._random(1,2)
+	local _LRorSR = mist.random(1,2)
 	local _pickedZone = ""
 	--_pickedZone "dummy"
 
@@ -672,15 +672,15 @@ function pickSAMzone(forWhich_side)
 	then
 		if _LRorSR == 1
 		then
-			local _choice = mist._random(1, #RedLRSAM_SectorSquares)
+			local _choice = mist.random(1, #RedLRSAM_SectorSquares)
 			_pickedZone = RedLRSAM_SectorSquares[_choice]
 		end
 		if _LRorSR == 2
 		then
-			local _choice = mist._random(1, #RedSRSAM_SectorSquares)
+			local _choice = mist.random(1, #RedSRSAM_SectorSquares)
 			_pickedZone = RedSRSAM_SectorSquares[_choice]
 		end
-		seadattack.red.sead.zone__name = _pickedZone
+		seadattack.red.sead.zonename = _pickedZone
 		dynaFRONT.log:info("BLUE SEAD is targeting $1", _pickedZone)
 	end
 	
@@ -688,15 +688,15 @@ function pickSAMzone(forWhich_side)
 	then
 		if _LRorSR == 1
 		then
-			local _choice = mist._random(1, #BlueLRSAM_SectorSquares)
+			local _choice = mist.random(1, #BlueLRSAM_SectorSquares)
 			_pickedZone = BlueLRSAM_SectorSquares[_choice]
 		end
 		if _LRorSR == 2
 		then
-			local _choice = mist._random(1, #BlueSRSAM_SectorSquares)
+			local _choice = mist.random(1, #BlueSRSAM_SectorSquares)
 			_pickedZone = BlueSRSAM_SectorSquares[_choice]
 		end	
-		seadattack.blue.sead.zone__name = _pickedZone
+		seadattack.blue.sead.zone_name = _pickedZone
 		dynaFRONT.log:info("RED SEAD is targeting $1", _pickedZone)
 	--return _pickedZone
 	end
@@ -712,17 +712,17 @@ function pickSECTOR(forWho, forTask)
 	then
 		if forTask == "CAS"
 		then
-		local _choice = mist._random(1, #BlueSectorSquares)
+		local _choice = mist.random(1, #BlueSectorSquares)
 			_pickedZone = BlueSectorSquares[_choice]
-			heloattack.red.cas.zone__name = _pickedZone
-			groundattack.red.cas.zone__name = _pickedZone
+			heloattack.red.cas.zonename = _pickedZone
+			groundattack.red.cas.zonename = _pickedZone
 			dynaFRONT.log:info("RED CAS is targeting $1", _pickedZone)
 		end
 		if forTask == "CAP"
 		then
-			local _choice = mist._random(1, #RedSectorSquares)
+			local _choice = mist.random(1, #RedSectorSquares)
 			_pickedZone = BlueSectorSquares[_choice]
-			gcicap.red.cap.zone__name = _pickedZone
+			gcicap.red.cap.zonename = _pickedZone
 			dynaFRONT.log:info("RED CAP is targeting $1", _pickedZone)
 		end
 	end
@@ -731,47 +731,47 @@ function pickSECTOR(forWho, forTask)
 	then
 		if forTask == "CAS"
 		then
-			local _choice = mist._random(1, #RedSectorSquares)
+			local _choice = mist.random(1, #RedSectorSquares)
 			_pickedZone = RedSectorSquares[_choice]
-			groundattack.blue.cas.zone__name = _pickedZone
-			heloattack.blue.cas.zone__name = _pickedZone
+			groundattack.blue.cas.zonename = _pickedZone
+			heloattack.blue.cas.zonename = _pickedZone
 			dynaFRONT.log:info("BLUE CAS is targeting $1", _pickedZone)
 		end
 		if forTask == "CAP"
 		then
-			local _choice = mist._random(1, #RedSectorSquares)
+			local _choice = mist.random(1, #RedSectorSquares)
 			_pickedZone = RedSectorSquares[_choice]
-			gcicap.blue.cap.zone__name = _pickedZone
+			gcicap.blue.cap.zonename = _pickedZone
 			dynaFRONT.log:info("BLUE CAP is targeting $1", _pickedZone)
 		end
 	end
 end
 
 
-function Create_Friendly_AWAC(_awacArea, fAwac_name)
+function Create_Friendly_AWAC(_awacArea, fAwacname)
 	------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- based off of Kutaisi Intercept script by akp, but modified for my own use.
 	local awaczone = trigger.misc.getZone(_awacArea)
-	--local _rand = mist._random(1,Fighter__names)
+	--local _rand = mist.random(1,Fighter__names)
 	--fAwactask = 1  
 	local _spawnPsn = {}
     local _movePsn = {}
     -- for i = 1, 1000 do
-    _spawnPsn = mist.get_randPointInCircle(awaczone.point, awaczone.radius * 1.00)
-	_movePsn = mist.get_randPointInCircle(awaczone.point, awaczone.radius * 2.00)
+    _spawnPsn = mist.getrandPointInCircle(awaczone.point, awaczone.radius * 1.00)
+	_movePsn = mist.getrandPointInCircle(awaczone.point, awaczone.radius * 2.00)
     --local InAwacZone = mist.pointInPolygon(_movePsn, mist.getGroupPoints('fAwacZone')) 
     -- if InAwacZone == true then break
     -- end
     -- end		
-	trigger.action.activateGroup(Group.getBy_name(fAwac_name))
-	awacgrp = Group.getBy_name(fAwac_name)
+	trigger.action.activateGroup(Group.getByname(fAwacname))
+	awacgrp = Group.getByname(fAwacname)
 	
 	-- what are these variable can we cerbose these more, no need to make them small
-	local _init_wpSpeed = mist._random(450,500)
+	local _init_wpSpeed = mist.random(450,500)
 	local _wpSpeed = mist.utils.kmphToMps(_init_wpSpeed)
-	local _wpAlt = mist._random(3000,4000)
-	local _wpAlt2 = mist._random(6000,7000)
-	local _wpPsn = mist.get_randPointInCircle(_spawnPsn, awaczone.radius * 0.15, awaczone.radius * 0.01)
+	local _wpAlt = mist.random(3000,4000)
+	local _wpAlt2 = mist.random(6000,7000)
+	local _wpPsn = mist.getrandPointInCircle(_spawnPsn, awaczone.radius * 0.15, awaczone.radius * 0.01)
 	local _wpPsn2 = _movePsn
 	local _path = {}
 		_path[1] = mist.fixedWing.buildWP(_spawnPsn, _wpSpeed, _wpAlt, "BARO")
@@ -833,7 +833,7 @@ function Create_Friendly_AWAC(_awacArea, fAwac_name)
 	    --  } -- end of [1]
 
 	local _vars = {} 
-		_vars.group_name = fAwac_name
+		_vars.groupname = fAwac_name
 		_vars.action = "respawn"
 		_vars.point = _spawnPsn
 		_vars.route = _path
@@ -850,24 +850,24 @@ function Create_Friendly_AWAC(_awacArea, fAwac_name)
 end
  
   	
-function moveStuff(thisGroup_name, _randomizerDist, spd, team)	
+function moveStuff(thisgroupname, _randomizerDist, spd, team)	
 	--local _randomizer_speed = 0
 	--local _randomizer_dir = 0
-	local _randomizer_dist = 0
+	local _randomizerdist = 0
 	--local Infantry__name = {}
-	local _name = thisGroup_name
-	local _negativeHeading = mist._random(0,1) 
-	--_randomizer_speed = math._random(1,4)
+	local _name = thisgroupname
+	local _negativeHeading = mist.random(0,1) 
+	--_randomizer_speed = math.random(1,4)
 	-- red should be advancing north _randomly
 	
 	if team == "RED" then
 		if _negativeHeading == 0
 		then
-			local _randomizer_dir = mist._random(0,60)
+			local _randomizer_dir = mist.random(0,60)
 		end
 		if _negativeHeading == 1
 		then
-			local _randomizer_dir = mist._random(300,360)
+			local _randomizer_dir = mist.random(300,360)
 		end		
 	end
 		
@@ -875,43 +875,43 @@ function moveStuff(thisGroup_name, _randomizerDist, spd, team)
 	if team == "BLUE"
 	then	
 		-- blue should be advancing south _randomly
-		local _randomizer_dir = mist._random(120,240)
+		local _randomizer_dir = mist.random(120,240)
 	end
 	
 	--_randomizer_dir = _randomizer_dir * math.pi / 180
-	_randomizer_dist = mist._random(_randomizerDist, _randomizerDist * 2)
+	_randomizerdist = mist.random(_randomizerDist, _randomizerDist * 2)
 
-	local formation_rand = mist._random(1,16)
+	local formation_rand = mist.random(1,16)
 			
 	if formation_rand == 1
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'Rank', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'Rank', _randomizer_dir, spd)
 	elseif formation_rand == 2
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'EchelonL', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'EchelonL', _randomizer_dir, spd)
 	elseif formation_rand == 3
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'EchelonR', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'EchelonR', _randomizer_dir, spd)
 	elseif formation_rand == 4
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'Vee', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'Vee', _randomizer_dir, spd)
 	elseif formation_rand == 5
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, '_cone', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, '_cone', _randomizer_dir, spd)
 	elseif formation_rand == 6
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'Diamond', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'Diamond', _randomizer_dir, spd)
 	elseif formation_rand >= 7 and formation_rand <= 12
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'Off Road', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'Off Road', _randomizer_dir, spd)
 	elseif formation_rand >= 12 and formation_rand <= 16
 	then
-		mist.group_randomDistSelf(_name, _randomizer_dist, 'On Road', _randomizer_dir, spd)
+		mist.group_randomDistSelf(_name, _randomizerdist, 'On Road', _randomizer_dir, spd)
 	end
 end
 	
-function _random_markers(__minDistance, __maxDistance)
-	decluster = mist._random(1,10) -- global used to _randomly decluster smoke marker schedule
+function randommarkers(_minDistance, _maxDistance)
+	decluster = mist.random(1,10) -- global used to _randomly decluster smoke marker schedule
 	local _zonetouse = ""
 	local _minDist = 0
 	local _maxDist = 0
@@ -926,24 +926,24 @@ function _random_markers(__minDistance, __maxDistance)
 	local _delay = 0
 	local _groupToUse = {}
 	local _groupsInPlay = mist.DBs.dynGroupsAdded
-	local _groupChoice = mist._random(1, #_groupsInPlay)
+	local _groupChoice = mist.random(1, #_groupsInPlay)
 	_groupToUse = _groupsInPlay[_groupChoice]
-	unittouse = Group.getBy_name(_groupToUse.group_name) 
-	--_side = Group.getCoalition(_groupToUse.group_name)
+	unittouse = Group.getByname(_groupToUse.groupname) 
+	--_side = Group.getCoalition(_groupToUse.groupname)
 
 	if unittouse == nil
 	then
 		--return
 	end
 
-	_minDist = __minDistance
-	_maxDist = __maxDistance
+	_minDist = _minDistance
+	_maxDist = _maxDistance
 	_minDist2 = _minDist + 7
 	_maxDist2 = _maxDist + 7
 	_minDist3 = _minDist + 14
 	_maxDist3 = _maxDist + 14
-	_direction = math._random(1,4)
-	_delay = math._random(5,15)
+	_direction = math.random(1,4)
+	_delay = math.random(5,15)
 	--local _side = gcicap._sideToCoalition(unittouse:getCoalition()) -- this is from the gcicapscript
 	local _side = Group.getCoalition(unittouse)
 	--trigger.action.outText("_side" .. _side, 1 , true)
@@ -958,11 +958,11 @@ function _random_markers(__minDistance, __maxDistance)
 	if _side == 1
 	then
 		-- if _direction == 1 then
-        trigger.action.smoke({x=_unitPos.x + math._random(_minDist,_maxDist), y= land.getHeight({x = _unitPos.x, y = _unitPos.z}), z=_unitPos.z + math._random(_minDist,_maxDist)}, trigger.smokeColor.Red)
+        trigger.action.smoke({x=_unitPos.x + math.random(_minDist,_maxDist), y= land.getHeight({x = _unitPos.x, y = _unitPos.z}), z=_unitPos.z + math.random(_minDist,_maxDist)}, trigger.smokeColor.Red)
 	end
 end
 
-function _random_markers2(__minDistance, __maxDistance)
+function randommarkers2(_minDistance, _maxDistance)
 	local _zonetouse = ""
 	local _minDist = 0
 	local _maxDist = 0
@@ -977,25 +977,25 @@ function _random_markers2(__minDistance, __maxDistance)
 	local _delay = 0
 	local _groupToUse = {}
 	local _groupsInPlay = mist.DBs.dynGroupsAdded
-	local _groupChoice = mist._random(1, #_groupsInPlay)
+	local _groupChoice = mist.random(1, #_groupsInPlay)
 	_groupToUse = _groupsInPlay[_groupChoice]
 
-	unittouse = Group.getBy_name(_groupToUse.group_name) 
-	--_side = Group.getCoalition(_groupToUse.group_name)
+	unittouse = Group.getByname(_groupToUse.groupname) 
+	--_side = Group.getCoalition(_groupToUse.groupname)
 
 	if unittouse == nil
 	then
 		return
 	end
 
-	_minDist = __minDistance
-	_maxDist = __maxDistance
+	_minDist = _minDistance
+	_maxDist = _maxDistance
 	_minDist2 = _minDist + 7
 	_maxDist2 = _maxDist + 7
 	_minDist3 = _minDist + 14
 	_maxDist3 = _maxDist + 14
-	_direction = math._random(1,4)
-	_delay = math._random(5,15)
+	_direction = math.random(1,4)
+	_delay = math.random(5,15)
 
 	--local _side = gcicap._sideToCoalition(unittouse:getCoalition()) -- this is from the gcicapscript
 	local _side = Group.getCoalition(unittouse)
@@ -1011,7 +1011,7 @@ function _random_markers2(__minDistance, __maxDistance)
 	if _side == 2
 	then
 		-- if _direction == 1 then
-		trigger.action.smoke({x=_unitPos.x + math._random(_minDist,_maxDist), y= land.getHeight({x = _unitPos.x, y = _unitPos.z}), z=_unitPos.z + math._random(_minDist,_maxDist)}, trigger.smokeColor.Blue)
+		trigger.action.smoke({x=_unitPos.x + math.random(_minDist,_maxDist), y= land.getHeight({x = _unitPos.x, y = _unitPos.z}), z=_unitPos.z + math.random(_minDist,_maxDist)}, trigger.smokeColor.Blue)
 	end
 end
 
@@ -1199,7 +1199,7 @@ end -- end function
 
 
 function getQTpoints(zoneTable)
-	local t = mist.DBs.zonesBy_name[zoneTable]
+	local t = mist.DBs.zonesByname[zoneTable]
 	local _copiedPoints = {}
 	--local _copiedPoints = mist.utils.deepCopy(mist.utils.deepCopy(trigger.misc.getZone(zoneTable)))
 	--local _copiedPoints = mist.utils.deepCopy(trigger.misc.getZone(zoneTable))
@@ -1221,12 +1221,12 @@ function scoreDisplay()
 	local _msg = {}
 	_msg.text = 'BLUE SCORE IS ' .. BLUESCORE
 	_msg.displayTime = 10
-	_msg._msgFor = {coa = {'all'}} 
+	_msg.msgFor = {coa = {'all'}} 
 	mist.message.add(_msg)
 	_msg = {}
 	_msg.text = 'RED SCORE IS ' .. REDSCORE
 	_msg.displayTime = 10
-	_msg._msgFor = {coa = {'all'}} 
+	_msg.msgFor = {coa = {'all'}} 
 	mist.message.add(_msg)
 	_msg = {}
 end
@@ -1253,13 +1253,8 @@ determineForceLeaders()
 	mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "LRSAM"}, timer.getTime() + 17, 30)
 	mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "SRSAM"}, timer.getTime() + 18, 30)
 	--mist.scheduleFunction(changePOI, {""}, timer.getTime() + 1, 300) -- change POI every 5 minutes after initial call
-	mist.scheduleFunction(_random_markers, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
-	mist.scheduleFunction(_random_markers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
+	mist.scheduleFunction(randommarkers, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
+	mist.scheduleFunction(randommarkers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
 	mist.scheduleFunction(scoreDisplay, {}, timer.getTime() + 70, 300) -- schedule the mission introduction after 4 se_conds of miz running.
 	mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 1)
-	mist.scheduleFunction(Introduce_Mission, {}, timer.getTime() + 2) -- schedule the mission introduction after 4 se_conds of miz running.
-
-
-
-
-
+	mist.scheduleFunction(Introduce_Mission, {}, timer.getTime() + 2) -- schedule the mission introduction after 4 se_conds of miz running
