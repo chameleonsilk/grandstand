@@ -1,3 +1,4 @@
+--revision 4
 --[[
 Copyright (c) 2016 Snafu, Stonehouse, Rivvern, Chameleon Silk, lukrop.
 
@@ -353,7 +354,7 @@ do
   local function checkForTemplateUnits(side)
     if groundattack[side].cas.enabled then
       for i = 1, groundattack.template_count do
-        local unit = groundattack.cas.template_prefix..side..i
+        local unit = groundattack.cas.template_prefix[side]..side..i
         if not Unit.getByName(unit) then
           groundattack.log:alert("CAS template unit missing: $1", unit)
           return false
@@ -757,7 +758,7 @@ do
   -- any enemys until tasked otherwise. Default false.
   -- @treturn Group|nil newly spawned group or nil on failure.
   function groundattack.spawnFighterGroup(side, name, size, airbase, spawn_mode, task, zone, cold)
-    local template_unit_name = groundattack[task].template_prefix..side..math.random(1, groundattack.template_count)
+    local template_unit_name = groundattack[task].template_prefix[side]..side..math.random(1, groundattack.template_count)
     local template_unit = Unit.getByName(template_unit_name)
     if not template_unit then
       groundattack.log:error("Can't find template unit $1. This should never happen.\
