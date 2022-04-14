@@ -1,3 +1,4 @@
+--revision 4
 --[[
 Copyright (c) 2016 Snafu, Stonehouse, Rivvern, Chameleon Silk, lukrop.
 
@@ -462,7 +463,7 @@ do
   local function checkForTemplateUnits(side)
     if gcicap[side].gci.enabled then
       for i = 1, gcicap.template_count do
-        local unit = gcicap.gci.template_prefix..side..i
+        local unit = gcicap.gci.template_prefix[side]..side..i
         if not Unit.getByName(unit) then
           gcicap.log:alert("GCI template unit missing: $1", unit)
           return false
@@ -471,7 +472,7 @@ do
     end
     if gcicap[side].cap.enabled then
       for i = 1, gcicap.template_count do
-        local unit = gcicap.cap.template_prefix..side..i
+        local unit = gcicap.cap.template_prefix[side]..side..i
         if not Unit.getByName(unit) then
           gcicap.log:alert("CAP template unit missing: $1", unit)
           return false
@@ -1165,7 +1166,12 @@ local engage = {
   -- any enemys until tasked otherwise. Default false.
   -- @treturn Group|nil newly spawned group or nil on failure.
   function gcicap.spawnFighterGroup(side, name, size, airbase, spawn_mode, task, zone, cold)
-    local template_unit_name = gcicap[task].template_prefix..side..math.random(1, gcicap.template_count)
+    
+	
+	local template_unit_name = gcicap[task].template_prefix[side]..side..math.random(1, gcicap.template_count)
+	
+	
+	
     local template_unit = Unit.getByName(template_unit_name)
     if not template_unit then
       gcicap.log:error("Can't find template unit $1. This should never happen.\
