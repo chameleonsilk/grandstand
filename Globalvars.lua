@@ -1,3 +1,4 @@
+--revision 4
 -- DO NOT TOUCH THESE GLOBALS BELOW
 heloattack = {}
 heloattack.red = {}
@@ -5,6 +6,7 @@ heloattack.red.cas = {}
 heloattack.blue = {}
 heloattack.blue.cas = {}
 heloattack.cas = {}
+heloattack.cas.template_prefix = {}
 
 groundattack = {}
 groundattack.red = {}
@@ -12,6 +14,7 @@ groundattack.red.cas = {}
 groundattack.blue = {}
 groundattack.blue.cas = {}
 groundattack.cas = {}
+groundattack.cas.template_prefix = {}
 
 seadattack = {}
 seadattack.red = {}
@@ -19,6 +22,8 @@ seadattack.red.sead = {}
 seadattack.blue = {}
 seadattack.blue.sead = {}
 seadattack.sead = {}
+seadattack.sead.template_prefix = {}
+
 
 gcicap = {}
 gcicap.red = {}
@@ -29,9 +34,26 @@ gcicap.blue.gci = {}
 gcicap.blue.cap = {}
 gcicap.cap = {}
 gcicap.gci = {}
+gcicap.cap.template_prefix = {}
+gcicap.gci.template_prefix = {}
+
+
+heloattack.cas.template_prefix.red = {}
+groundattack.cas.template_prefix.red = {}
+seadattack.sead.template_prefix.red = {}
+gcicap.cap.template_prefix.red = {}
+gcicap.gci.template_prefix.red = {}
+heloattack.cas.template_prefix.blue = {}
+groundattack.cas.template_prefix.blue = {}
+seadattack.sead.template_prefix.blue = {}
+gcicap.cap.template_prefix.blue = {}
+gcicap.gci.template_prefix.blue = {}
+
 
 redFarpPos = {}
 blueFarpPos = {}
+
+
 
 
 ActiveForces = {}

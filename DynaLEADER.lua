@@ -30,6 +30,7 @@ heloattack.cas.template_prefix.blue = '__HELOUSSR__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADUSSR__'
 gcicap.cap.template_prefix.blue  = '__CAPUSSR__'
+gcicap.gci.template_prefix.blue = '__GCIUSSR__'
 
 end
 
@@ -59,6 +60,7 @@ heloattack.cas.template_prefix.blue = '__HELOAMERICA__'
 groundattack.cas.template_prefix.blue = '__CASAMERICA__'
 seadattack.sead.template_prefix.blue = '__SEADAMERICA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
+gcicap.gci.template_prefix.blue = '__GCIAMERICA__'
 --
 end
 
@@ -88,6 +90,7 @@ heloattack.cas.template_prefix.blue = '__HELOAMERICA__'
 groundattack.cas.template_prefix.blue = '__CASAMERICA__'
 seadattack.sead.template_prefix.blue = '__SEADAMERICA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
+gcicap.gci.template_prefix.blue = '__GCIAMERICA__'
 --
 end
 
@@ -117,6 +120,7 @@ heloattack.cas.template_prefix.blue = '__HELOCHINA__'
 groundattack.cas.template_prefix.blue = '__CASCHINA__'
 seadattack.sead.template_prefix.blue = '__SEADCHINA__'
 gcicap.cap.template_prefix.blue = '__CAPCHINA__'
+gcicap.gci.template_prefix.blue = '__GCICHINA__'
 --
 end
 
@@ -146,6 +150,7 @@ heloattack.cas.template_prefix.blue = '__HELOCHINA__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADCHINA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
+gcicap.gci.template_prefix.blue = '__GCIUSSR__'
 --
 end
 
@@ -175,6 +180,7 @@ heloattack.cas.template_prefix.blue = '__HELOUSSR__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADUSSR__'
 gcicap.cap.template_prefix.blue = '__CAPUSSR__'
+gcicap.gci.template_prefix.blue = '__GCIUSSR__'
 --
 end
 
@@ -205,6 +211,7 @@ heloattack.cas.template_prefix.red = '__HELOUSSR__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADUSSR__'
 gcicap.cap.template_prefix.red = '__CAPUSSR__'
+gcicap.gci.template_prefix.red = '__GCIUSSR__'
 --
 end
 
@@ -234,6 +241,7 @@ heloattack.cas.template_prefix.red = '__HELOAMERICA__'
 groundattack.cas.template_prefix.red = '__CASAMERICA__'
 seadattack.sead.template_prefix.red = '__SEADAMERICA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
+gcicap.gci.template_prefix.red = '__GCIAMERICA__'
 --
 end
 
@@ -263,6 +271,7 @@ heloattack.cas.template_prefix.red = '__HELOAMERICA__'
 groundattack.cas.template_prefix.red = '__CASAMERICA__'
 seadattack.sead.template_prefix.red = '__SEADAMERICA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
+gcicap.gci.template_prefix.red = '__GCIAMERICA__'
 --
 end
 
@@ -292,6 +301,7 @@ heloattack.cas.template_prefix.red = '__HELOCHINA__'
 groundattack.cas.template_prefix.red = '__CASCHINA__'
 seadattack.sead.template_prefix.red = '__SEADCHINA__'
 gcicap.cap.template_prefix.red  = '__CAPCHINA__'
+gcicap.gci.template_prefix.red = '__GCICHINA__'
 --
 end
 
@@ -321,6 +331,7 @@ heloattack.cas.template_prefix.red = '__HELOCHINA__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADCHINA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
+gcicap.gci.template_prefix.red = '__GCIUSSR__'
 --
 end
 
@@ -350,6 +361,7 @@ heloattack.cas.template_prefix.red = '__HELOUSSR__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADUSSR__'
 gcicap.cap.template_prefix.red  = '__CAPUSSR__'
+gcicap.gci.template_prefix.red  = '__GCIUSSR__'
 end
 end
 
