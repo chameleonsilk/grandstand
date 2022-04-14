@@ -156,8 +156,8 @@ mist.flagFunc.units_in_moving_zones{
 
 end
  
- timer.scheduleFunction(Play_Music_BLUE, nil, timer.getTime() + 1) 
- timer.scheduleFunction(Play_Music_RED, nil, timer.getTime() + 1) 
+-- timer.scheduleFunction(Play_Music_BLUE, nil, timer.getTime() + 1) 
+ --timer.scheduleFunction(Play_Music_RED, nil, timer.getTime() + 1) 
    -- func end   
    
-   Music_Poll("","")
+  -- Music_Poll("","")
