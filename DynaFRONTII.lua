@@ -480,7 +480,7 @@
 			local percent = decimalval * 100 -- multiplied by 100 to get percentage
 			
 
-			if percent >= 95 then -- if the percentage is less that 35 percent then
+			if percent <= DISBAND_PERCENT then -- if the percentage is less that (set in paramters.lua) then
 				Group.destroy(Group.getByName(checkThisGroup)) -- destroy the group 
 				
 				local msg = {} -- message that the group has been rendered ineffective

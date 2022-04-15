@@ -4,6 +4,7 @@
 --
 
 GROUND_RESPAWN_DELAY = 600 -- 10 minutes
+DISBAND_PERCENT = 35 -- when a group is this hurt it is removed
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
