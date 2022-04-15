@@ -1,6 +1,9 @@
+-- version 1.02
 -- START EDITABLE STUFF --
 -- determines the amount of spawned stuff when creating the sides
 --
+
+GROUND_RESPAWN_DELAY = 600 -- 10 minutes
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
@@ -247,9 +250,9 @@ gcicap.gci.speed = 280
 --- Maximum engage distance for flights as long as they are on patrol.
 -- this might be overruled by an intercept vector given from
 -- ground control (EWR) in the case of GCI. Default 15000.
-heloattack.cas.max_engage_distance = 15000
-groundattack.cas.max_engage_distance = 15000
-seadattack.sead.max_engage_distance = 15000
+heloattack.cas.max_engage_distance = 215000
+groundattack.cas.max_engage_distance = 215000
+seadattack.sead.max_engage_distance = 215000
 gcicap.cap.max_engage_distance = 30000
 --- Minimum red CAS VUL time in minutes.
 -- Minimum time the red CAS flight will orbit on station.
@@ -447,19 +450,10 @@ gcicap.red.border_group = 'redborder'
 --- Name of group which waypoints define the blue border.
 -- Default: 'blueborder'.
 gcicap.blue.border_group = 'blueborder'
---- CAS template unit's names prefix.
-heloattack.cas.template_prefix = '__HELO__'
-groundattack.cas.template_prefix = '__CAS__'
-seadattack.sead.template_prefix = '__SEAD__'
-gcicap.cap.template_prefix = '__CAP__'
-gcicap.gci.template_prefix = '__GCI__'
---- Count of template units.
--- Remember that this means you need that many
--- template units for each type.
 heloattack.template_count = 2
 groundattack.template_count = 3
-seadattack.template_count = 6
-gcicap.template_count = 5
+seadattack.template_count = 2
+gcicap.template_count = 3
 --- Wether red will also acquire targets by AWACS aircraft.
 -- This is is currently broken since isTargetDetected doesn't
 -- seem to work with AWACS airplanes. Needs a workaround.

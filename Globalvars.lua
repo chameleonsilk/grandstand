@@ -233,5 +233,9 @@ redLeader.finfo3 = {}
 redLeader.finfo4 = {}
 --
 
+REDSCORE = 1
+BLUESCORE = 1
+gid = 0
+
 leaderANNOUNCE = 0
 -- DO NOT TOUCH THESE GLOBALS ABOVE

@@ -1,1137 +1,902 @@
---revision 1.18
+		--revision 1.19
 
-decluster = mist.random(1,10) -- global used to randomly decluster smoke marker schedule
-dynaFRONT = {}
-dynaFRONT.log_level = "info"
-dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
+		decluster = mist.random(1,10) -- global used to randomly decluster smoke marker schedule
+		dynaFRONT = {}
+		dynaFRONT.log_level = "info"
+		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
 
-REDSCORE = 1
-BLUESCORE = 1
+		-- intro function
+		function Introduce_Mission() -- standard mission introduction function
+			local msg = {}
+			msg.text = 'OPERATION GRANDSTAND 0.29'
+			msg.displayTime = 29  
+			msg.msgFor = {coa = {'all'}} 
+			mist.message.add(msg)
+			msg = {}
+			msg.text = 'Created by Chameleon_Silk'
+			msg.displayTime = 10 
+			msg.msgFor = {coa = {'all'}} 
+			mist.message.add(msg)
+			msg = {}
+			msg.text = 'Powered by MIST 4.5.107, DynaFRONTII and GCICAP Autonomous Airfield.' 
+			msg.displayTime = 19  
+			msg.msgFor = {coa = {'all'}} 
+			mist.message.add(msg)
+			msg = {}
+			mist.scheduleFunction(displayLeaderInfo, {"BLUE"}, timer.getTime() + 10, 1200) -- display our blue leader info 10 seconds after launch and every 1200 seconds afterwards
+			mist.scheduleFunction(displayLeaderInfo, {"RED"}, timer.getTime() + 31, 1200) -- display our red leader info 10 seconds after launch and every 1200 seconds afterwards
+			mist.scheduleFunction(showResources, {"BLUE"}, timer.getTime() + 60, 2400) -- show our flights remaining for each side
+			mist.scheduleFunction(showResources, {"RED"}, timer.getTime() + 90, 2400)
+		end
+				
+		function BuildFARP(side, ownedBy)
+		-- ARG1 STRING, red or blue
+		-- ARG2 STRING, country of origin
+		local forWhom = ""
+		local farpName = ""
+		local zoneUsed = {}
+		local randsquare = 0
+		local restrictPoly = ""
+		local useSide = ""
+		local spawnPsn = {}
+		local failedAttempts = 0
 
--- intro function
-function Introduce_Mission()
-	local msg = {}
-    msg.text = 'OPERATION GRANDSTAND 0.28'
-    msg.displayTime = 29  
-    msg.msgFor = {coa = {'all'}} 
-    mist.message.add(msg)
-	msg = {}
-	msg.text = 'Created by Chameleon_Silk'
-    msg.displayTime = 10 
-    msg.msgFor = {coa = {'all'}} 
-    mist.message.add(msg)
-	msg = {}
-	msg.text = 'Powered by MIST 4.5.107, DynaFRONTII and GCICAP Autonomous Airfield.' 
-    msg.displayTime = 19  
-    msg.msgFor = {coa = {'all'}} 
-    mist.message.add(msg)
-	msg = {}
-	mist.scheduleFunction(displayLeaderInfo, {"BLUE"}, timer.getTime() + 10, 1200)
-	mist.scheduleFunction(displayLeaderInfo, {"RED"}, timer.getTime() + 31, 1200)
-	mist.scheduleFunction(showResources, {"BLUE"}, timer.getTime() + 60, 2400)
-	mist.scheduleFunction(showResources, {"RED"}, timer.getTime() + 90, 2400)
-	end
-		
-function BuildFARP(side, ownedBy)
--- ARG1 STRING, red or blue
--- ARG2 STRING, country of origin
-local forWhom = ""
-local farpName = ""
-local zoneUsed = {}
-local randsquare = 0
-local restrictPoly = ""
-local useSide = ""
-local spawnPsn = {}
-local failedAttempts = 0
+		if side == "RED" then
+				forWhom = "Russia" -- country name of the FAP
+				farpName = "FARPRED" -- FARP name as placed in mission editor
+				randsquare = mist.random(1,#RedTRUCK_SectorSquares) -- put it in a random truck square by getting a random string from the table
+				zoneUsed = RedSectorSquares[randsquare] -- get that triggerzone
+				restrictPoly = zoneUsed -- get the poly for that zone
+		end
+		if side == "BLUE" then -- same as red logic
+				forWhom = "USA"
+				farpName = "FARPBLUE"
+				randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+		end
 
-if side == "RED" then
-		forWhom = "Russia"
-		farpName = "FARPRED"
-		randsquare = mist.random(1,#RedTRUCK_SectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-end
-if side == "BLUE" then
-		forWhom = "USA"
-		farpName = "FARPBLUE"
-		randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-end
-
-	for i = 0, 1000 do
-		local restriction = false
-		local landgood = false
-	
-		spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius)
-        restriction = mist.pointInPolygon(spawnPsn, mist.getGroupPoints(restrictPoly)) 		
-		
-			if mist.isTerrainValid(spawnPsn, {terrainType}) == true then 
-			landgood = true
-			else
-			landgood = false
-			end
+			for i = 0, 1000 do -- for 1000 attempts
+				local restriction = false -- reset restriction
+				local landgood = false -- reset landgood
 			
-					if restriction == true and landgood == true then -- polygon restriction has been met and land valid	
-					break
+				spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius) -- get a point from that zone
+				restriction = mist.pointInPolygon(spawnPsn, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
+				
+					if mist.isTerrainValid(spawnPsn, {terrainType}) == true then -- if the land is valid
+					landgood = true -- land is good
+					else -- otherwise
+					landgood = false -- land is bad, mmm kay
 					end
-		end
-		
-		local buildPsn = mist.utils.makeVec3(spawnPsn)	
-		local buildPsnFarp = mist.utils.makeVec2(spawnPsn)			
-		
-			local vars = 
-			{
- type = "FARP",
- country = forWhom, 
- category = "Heliports", 
- x = buildPsn.x,
- y = buildPsn.z,
- --name = farpName,
-unitName = farpName,
- clone = true,
- --groupName = "FARP" .. side,
- heading = 0.47123889803847,
-			}
-			
-			if forWhom == "Russia" then
-			redFarpPos = buildPsnFarp
-			end
-			
-			if forWhom == "USA" then
-			blueFarpPos = buildPsnFarp
-			end
-			
-			mist.dynAddStatic(vars)		
-
-end
-
-		
-	
-
-	
-function ManipulateForce(behaviorType, iterations, whichSide, unitType, attempts, terrainType, placeDisperse, randomMove, moveSpeed, respawnGroup)
--- ManipulateForce --
--- ARG1 -- STRING of "respawn", "clone", "teleport"
--- ARG2 -- # of groups wanted (used with clone behaviorType, otherwise use 1 for a single group teleport or respawn)
--- ARG3 -- STRING for which side (RED" or "red" or "r" or "R" or "REDFOR" or "redfor" or "redfore" or "REDFORE" or "ENEMY" or "enemy" / "BLUE" or "blue" or "b" or "B" or "BLUFOR" or "BLU" or "blufor" or "bluefore" or "BLUEFORE" or "NATO" or "nato" or "friendly" or "FRIENDLY" or "FRIEND" or "friend" use whichever you want they will all work.
--- ARG4 -- STRING the type of units in the group ("AAA", "TRUCK", "TANK", "SRSAM", "LRSAM", "SHORAD", "APC", "INF" are the valid types
--- ARG5 -- # coordinate attempts do not use to high a value or DCS can hang while it performs the placements (use 100 as default)
--- ARG6 -- # use 0 if you wish no dispersion of the groups formation, otherwise the units will be randomly placed as far apart as this from each other (be weary of to far when using polygon to check a point for spawn restriction)
--- ARG7 -- # use 0 for no movement otherwise will move this amount randomly from its initial placement
--- ARG8 -- # speed of the randomzed movement if arg9 has a value above 0
--- ARG9 -- STRING if its not equal to "NO" then use this argument as the group name instead.
-
--- example ManipulateForce("clone", 5, "MyNamedGroupInMissionEditor", "MyTriggerZoneOrQuadName", 100, "RestrictSpawnAreaToThisGroupsNamesWaypointsAsPolygonShape", "LAND", 100, 1000, 15)
-local zoneUsed = {}
-local randsquare = 0
-local restrictPoly = ""
-local useSide = ""
-local spawnPsn = {}
-local failedAttempts = 0
-local groupCalled = ""
-local rand = 0
-
-if placeDisperse ~= 0 then
-	dispersionChoice = placeDisperse
-	else
-	dispersionChoice = false
-end
-
-
-
-for nomber = 1, iterations do	
-	if whichSide == "RED" then
-			useSide = "RED"
-		if unitType == "AAA" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-		rand = mist.random(1,#Red_Names_AAA)
-			groupCalled = Red_Names_AAA[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-			if unitType == "TRUCK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedTRUCK_SectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_TRUCK)
-			groupCalled = Red_Names_TRUCK[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-			if unitType == "SHORAD" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_SHORAD)
-			groupCalled = Red_Names_SHORAD[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-					if unitType == "TANK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_TANK)
-			groupCalled = Red_Names_TANK[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "INF" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_INF)
-			groupCalled = Red_Names_INF[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "APC" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_APC)
-			groupCalled = Red_Names_APC[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "CP" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#RedSectorSquares)
-		zoneUsed = RedSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_CP)
-			groupCalled = Red_Names_CP[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
-			end
-		end
-		if unitType == "LRSAM" then
-		randsquare = mist.random(1,#RedLRSAM_SectorSquares)
-		zoneUsed = RedLRSAM_SectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_LRSAM)
-			groupCalled = Red_Names_LRSAM[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedLRSAM_SectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedLRSAM_SectorSquares[randsquare]'})
-			end
-		end
-		if unitType == "SRSAM" then
-		randsquare = mist.random(1,#RedSRSAM_SectorSquares)
-		zoneUsed = RedSRSAM_SectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Red_Names_SRSAM)
-			groupCalled = Red_Names_SRSAM[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'RedSRSAM_SectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'RedSRSAM_SectorSquares[randsquare]'})
-			end
-	end	
-		--if nomber == iterations then return
-	--end
-	end
-	
-	
-		if whichSide == "BLUE" then
-			useSide = "BLUE"
-		if unitType == "AAA" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_AAA)
-			groupCalled = Blue_Names_AAA[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-			if unitType == "TRUCK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_TRUCK)
-			groupCalled = Blue_Names_TRUCK[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-			if unitType == "SHORAD" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_SHORAD)
-			groupCalled = Blue_Names_SHORAD[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-					if unitType == "TANK" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_TANK)
-			groupCalled = Blue_Names_TANK[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "INF" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_INF)
-			groupCalled = Blue_Names_INF[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "APC" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_APC)
-			groupCalled = Blue_Names_APC[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-							if unitType == "CP" then --or "TRUCK" or "SHORAD" or "TANK" or "INF" or "APC" then
-		randsquare = mist.random(1,#BlueSectorSquares)
-		zoneUsed = BlueSectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_CP)
-			groupCalled = Blue_Names_CP[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
-			end
-		end
-		if unitType == "LRSAM" then
-		randsquare = mist.random(1,#BlueLRSAM_SectorSquares)
-		zoneUsed = BlueLRSAM_SectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_LRSAM)
-			groupCalled = Blue_Names_LRSAM[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueLRSAM_SectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueLRSAM_SectorSquares[randsquare]'})
-			end
-		end
-		if unitType == "SRSAM" then
-		randsquare = mist.random(1,#BlueSRSAM_SectorSquares)
-		zoneUsed = BlueSRSAM_SectorSquares[randsquare]
-		restrictPoly = zoneUsed
-			rand = mist.random(1,#Blue_Names_SRSAM)
-			groupCalled = Blue_Names_SRSAM[rand]
-			if restrictPoly == nil then
-			dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSRSAM_SectorSquares[randsquare]'})
-			end
-			if zoneUsed == nil then
-			dynaFRONT.log:error("No zone for that square was found $1", {'BlueSRSAM_SectorSquares[randsquare]'})
-			end
-	end
-	--if nomber == iterations then return
-	--end
-	end
-	
-	gdata = mist.getCurrentGroupData(groupCalled)
-
-	
-			for i = 0, attempts do
-		local restriction = false
-		local landgood = false
-		--failedAttempts = failedAttempts + 1
-		spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius)
-        restriction = mist.pointInPolygon(spawnPsn, mist.getGroupPoints(restrictPoly)) 		
-		
-			if mist.isTerrainValid(spawnPsn, {terrainType}) == true then 
-			landgood = true
-			else
-			landgood = false
-			end
-
-				if failedAttempts == lastAttempt then
-				dynaFRONT.log:warn("Failed placement and exceeded attempts", {'lastAttempt'})
-				return
+					
+							if restriction == true and landgood == true then -- polygon restriction has been met and land valid	
+							break -- break out of the loop
+							end
 				end
-			
-					if restriction == true and landgood == true then -- polygon restriction has been met and land valid	
-					break
+				
+				local buildPsn = mist.utils.makeVec3(spawnPsn) -- vec3 of the spawnPsn
+				local buildPsnFarp = mist.utils.makeVec2(spawnPsn) -- vec2 of the spawnPsn
+				
+		local vars = 
+		{
+		 type = "FARP", -- its of type FARP
+		 country = forWhom, -- country
+		 category = "Heliports", -- category 
+		 x = buildPsn.x, -- vec2 x value
+		 y = buildPsn.z, -- vec2 y value
+		 --name = farpName,
+		unitName = farpName, -- the farpName
+		 clone = true, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		 --groupName = "FARP" .. side,
+		 heading = 0.47123889803847, -- probably should randomize the direction or have it face the right way in future
+		}
+					
+					if forWhom == "Russia" then
+					redFarpPos = buildPsnFarp -- store the vec3 in redFarpPos for use with the heloattack script
 					end
+					
+					if forWhom == "USA" then
+					blueFarpPos = buildPsnFarp -- store the vec3 in blueFarpPos for use with the heloattack script
+					end
+					
+					mist.dynAddStatic(vars)	-- add the static item to the mission
 		end
-		
-			local groupvars = {}
-			
-			--if respawnGroup ~= nil then
-			--groupCalled = respawnGroup
-			--end
-			
-			groupvars.newGroupName = useSide .. " " .. unitType .. " " .. nomber -- lets name a group i.e "REDFOR AAA 1"
-			ActiveForces[unitType][useSide][nomber] = groupvars.newGroupName -- now add this name to the active groups table, under the subcategory of its unit type
-			ActiveForces[unitType][useSide].TEMPLATE[nomber] = groupCalled
-			ActiveForces[unitType][useSide].SQUARE[nomber] = zoneUsed -- store the MGRS SQUARE for this group
-			ActiveForces[unitType][useSide].POS[nomber] = spawnPsn -- save this groups position
-			ActiveForces[unitType][useSide].INITSIZE[nomber] = Group.getInitialSize(Group.getByName(groupCalled)) -- set its initial size
-			ActiveForces[unitType][useSide].SIZE[nomber] = Group.getInitialSize(Group.getByName(groupCalled)) -- set its current size
-			
-			
-		--local data = mist.utils.serialize("TANKS", ActiveForces.TANK.BLUE) -- debug to show us our table
-		--trigger.action.outText(data,50, true) -- display table to screen
-		--trigger.action.outText(mist.utils.tableShow(data), 25)
-			
+
+				
 			
 
-    groupvars.groupName = groupCalled
-   groupvars.action = behaviorType
-   groupvars.point = spawnPsn
-    --vars.route = path
-	groupvars.disperse = dispersionChoice
-	groupvars.maxDisp = dispersionChoice
-	-- vars.radius = 100 
-	groupvars.innerRadius = 0 
-	groupvars.offsetRoute = true 
-	groupvars.offsetWP1 = false
-	groupvars.initTasks = true
-
-		mist.cloneMoveGroup(groupCalled, false, groupvars)
-		
-
-		
-		if randomMove ~= 0 then
-		mist.scheduleFunction(moveStuff, {groupvars.newGroupName, randomMove, moveSpeed, useSide}, timer.getTime() + 5, mist.random(300,900))
-		--mist.scheduleFunction(advanceUnits, {vars.newGroupName, useSide}, timer.getTime() + 5)
-		end
-	end
-
-end -- end ManipulateForce Function
-
-
-
-
-function monitorGroup(tblCheck, sideUsed, grpType)
--- TABLE arg tblCheck: check this activegroups table
--- STRING arg tblCheck: check this activegroups table
--- STRING arg of group type "AAA", "TANK" "APC" "INF" "CP" "SRSAM" "LRSAM" "SHORAD"
-
---local tblCheck =  tabCheck[grpType][sideUsed]
---local data = mist.utils.serialize("tblCheck", tblCheck[grpType][sideUsed]) -- debug to show us our table
---trigger.action.outText(data,5, true)		
-
-for element = 1, #tblCheck do -- for each element in the table from 1 to the amount that is in the table
-	local checkThisGroup = tblCheck[grpType][sideUsed][element] -- get the string of the group name located at that index
-	local msg = {}
-	local initsize = tblCheck[grpType][sideUsed][element].INITSIZE[element]--tblCheck[grpType][sideUsed].INITSIZE[element]
-	local currentsize = Group.getInitialSize(Group.getByName(checkThisGroup))--tblCheck[grpType][sideUsed].SIZE[element]
-	local decimalvalue = currentsize / initsize -- convert to a decimal value
-	local percentage = decimalvalue * 100 -- convert decimal into a percentage
-	
-	trigger.action.outText(initsize ,5, false)	
-	trigger.action.outText(currentsize ,5, false)	
-	
-	if percentage <= 90 then -- if the percentage is less that 30 percent then
-		Group.destroy(Group.getByName(checkThisGroup)) -- destroy the group
-		msg.text = sideUsed .. ' ' .. grpType .. ' will recieve a reinforcement in 5 minutes '
-		msg.displayTime = 10
-		msg.msgFor = {coa = {'all'}} 
-		mist.message.add(msg)
-		msg = {}
-		ActiveForces[grpType][sideUsed].DESTROYED = ActiveForces[grpType][sideUsed].DESTROYED + 1
-		table.remove(tblCheck[Element])
-		table.remove(tblCheck.POS[Element])
-		table.remove(tblCheck.SQUARE[Element])
-		local data = mist.utils.serialize("tblCheck", tabCheck) -- debug to show us our table
-		trigger.action.outText(data,50, true) -- display table to screen
-
-		if sideUsed == "RED" then dynaFRONT.RED.SCORE = dynaFRONT.RED.SCORE + 1
-		end
-		
-		if sideUsed == "BLUE" then dynaFRONT.BLUE.SCORE = dynaFRONT.BLUE.SCORE + 1 
-		end
-		
-		--local data = mist.utils.serialize("tblCheck", tblCheck) -- debug to show us our table
-		local data = mist.utils.serialize("tblCheck", tblCheck) -- debug to show us our table
-		trigger.action.outText(data,50, true)
-		
-		--mist.scheduleFunction(ManipulateForce, {"clone", 1, sideUsed, grpType, 100, "LAND", 500, 0, 0, checkThisGroup}, timer.getTime() + 300)
-		end
-	end
-end
-
-
-function CreateArmy(forSide, unitType)
-
-if forSide == "blue" or "BLUE" or "b" or "B" then
-
-mist.scheduleFunction(ManipulateForce, {"clone", bAAAamount, "BLUE", "AAA", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 2)
-mist.scheduleFunction(ManipulateForce, {"clone", bTRUCKamount, "BLUE", "TRUCK", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 4)
-mist.scheduleFunction(ManipulateForce, {"clone", bSHORADamount, "BLUE", "SHORAD", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 6)
-mist.scheduleFunction(ManipulateForce, {"clone", bINFamount, "BLUE", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil}, timer.getTime() + 8)
-mist.scheduleFunction(ManipulateForce, {"clone", bTANKamount, "BLUE", "TANK", 1000, "LAND", 500, 5000, mist.random(42,60), nil}, timer.getTime() + 10)
-mist.scheduleFunction(ManipulateForce, {"clone", bAPCamount, "BLUE", "APC", 1000, "LAND", 500, 5000, mist.random(38,50), nil}, timer.getTime() + 12)
-mist.scheduleFunction(ManipulateForce, {"clone", bCPamount, "BLUE", "CP", 1000, "LAND", 500, 5000, 0, nil}, timer.getTime() + 12)
-mist.scheduleFunction(ManipulateForce, {"clone", bSRSAMamount, "BLUE", "SRSAM", 1000, "LAND", 400, 0, 0, nil}, timer.getTime() + 14)
-mist.scheduleFunction(ManipulateForce, {"clone", bLRSAMamount, "BLUE", "LRSAM", 1000, "LAND", 0, 0, 0, nil}, timer.getTime() + 16)
-mist.scheduleFunction(Create_Friendly_AWAC, {"BlueAWAC", "bAWAC"}, timer.getTime() + 1)
-end
-
-if forSide == "red" or "RED" or "r" or "R" then
-
-mist.scheduleFunction(ManipulateForce, {"clone", rAAAamount, "RED", "AAA", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 20)
-mist.scheduleFunction(ManipulateForce, {"clone", rTRUCKamount, "RED", "TRUCK", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 22)
-mist.scheduleFunction(ManipulateForce, {"clone", rSHORADamount, "RED", "SHORAD", 1000, "LAND", 500, 0, 0, nil}, timer.getTime() + 24)
-mist.scheduleFunction(ManipulateForce, {"clone", rINFamount, "RED", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil}, timer.getTime() + 26)
-mist.scheduleFunction(ManipulateForce, {"clone", rTANKamount, "RED", "TANK", 1000, "LAND", 500, 5000, mist.random(28,42), nil}, timer.getTime() + 28)
-mist.scheduleFunction(ManipulateForce, {"clone", rAPCamount, "RED", "APC", 1000, "LAND", 500, 5000, mist.random(24,40), nil}, timer.getTime() + 30)
-mist.scheduleFunction(ManipulateForce, {"clone", rCPamount, "RED", "CP", 1000, "LAND", 500, 5000, 0, nil}, timer.getTime() + 32)
-mist.scheduleFunction(ManipulateForce, {"clone", rSRSAMamount, "RED", "SRSAM", 1000, "LAND", 400, 0, 0, nil}, timer.getTime() + 34)
-mist.scheduleFunction(ManipulateForce, {"clone", rLRSAMamount, "RED", "LRSAM", 1000, "LAND", 0, 0, 0, nil}, timer.getTime() + 36)
-mist.scheduleFunction(Create_Friendly_AWAC, {"RedAWAC", "rAWAC"}, timer.getTime() + 1)
-end
-end
-
-function pickSAMzone(forWhichSide)
-local LRorSR = mist.random(1,2)
-local pickedZone = ""
-
---pickedZone "dummy"
-
-if forWhichSide == "blue" or "BLUE" then
-	if LRorSR == 1 then
-	local choice = mist.random(1, #RedLRSAM_SectorSquares)
-	pickedZone = RedLRSAM_SectorSquares[choice]
-	end
-	if LRorSR == 2 then
-	local choice = mist.random(1, #RedSRSAM_SectorSquares)
-	pickedZone = RedSRSAM_SectorSquares[choice]
-	end
-	seadattack.red.sead.zone_name = pickedZone
-	dynaFRONT.log:info("BLUE SEAD is targeting $1", pickedzone)
-end
-if forWhichSide == "red" or "RED" then
-	if LRorSR == 1 then
-	local choice = mist.random(1, #BlueLRSAM_SectorSquares)
-	pickedZone = BlueLRSAM_SectorSquares[choice]
-	end
-	if LRorSR == 2 then
-	local choice = mist.random(1, #BlueSRSAM_SectorSquares)
-	pickedZone = BlueSRSAM_SectorSquares[choice]
-	end	
-	seadattack.blue.sead.zone_name = pickedZone
-	dynaFRONT.log:info("RED SEAD is targeting $1", pickedzone)
---return pickedZone
-end
-end
-
-
-function pickSECTOR(forWho, forTask)
-local pickedZone = ""
-
---pickedZone "dummy"
-
-
-if forWho == "red" or "RED" then
-	if forTask == "CAS" then
-	local choice = mist.random(1, #BlueSectorSquares)
-	pickedZone = BlueSectorSquares[choice]
-	heloattack.red.cas.zone_name = pickedZone
-	groundattack.red.cas.zone_name = pickedZone
-	dynaFRONT.log:info("RED CAS is targeting $1", pickedzone)
-	end
-	if forTask == "CAP" then
-	local choice = mist.random(1, #RedSectorSquares)
-	pickedZone = BlueSectorSquares[choice]
-	gcicap.red.cap.zone_name = pickedZone
-	dynaFRONT.log:info("RED CAP is targeting $1", pickedzone)
-	end
-end
-if forWho == "blue" or "BLUE" then
-	if forTask == "CAS" then
-	local choice = mist.random(1, #RedSectorSquares)
-	pickedZone = RedSectorSquares[choice]
-	groundattack.blue.cas.zone_name = pickedZone
-	heloattack.blue.cas.zone_name = pickedZone
-	dynaFRONT.log:info("BLUE CAS is targeting $1", pickedzone)
-	end
-	if forTask == "CAP" then
-	local choice = mist.random(1, #RedSectorSquares)
-	pickedZone = RedSectorSquares[choice]
-	gcicap.blue.cap.zone_name = pickedZone
-	dynaFRONT.log:info("BLUE CAP is targeting $1", pickedzone)
-	end
-end
-end
-
-
-function Create_Friendly_AWAC(_awacArea, fAwacName)
-	------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- based off of Kutaisi Intercept script by akp, but modified for my own use.
-	local awaczone = trigger.misc.getZone(_awacArea)
-	--local rand = mist.random(1,Fighter_Names)
-	--fAwactask = 1  
-  
-
-	  local spawnPsn = {}
-    local movePsn = {}
-
-     -- for i = 1, 1000 do
-      spawnPsn = mist.getRandPointInCircle(awaczone.point, awaczone.radius * 1.00)
-      movePsn = mist.getRandPointInCircle(awaczone.point, awaczone.radius * 2.00)
-     --local InAwacZone = mist.pointInPolygon(movePsn, mist.getGroupPoints('fAwacZone')) 
-     -- if InAwacZone == true then break
-    --  end
-     -- end
-    
-
-		
-	trigger.action.activateGroup(Group.getByName(fAwacName))
-	awacgrp = Group.getByName(fAwacName)
-  
-
-	
-	local InitwpSpeed = mist.random(450,500)
-	local wpSpeed = mist.utils.kmphToMps(InitwpSpeed)
-	local wpAlt = mist.random(3000,4000)
-  local wpAlt2 = mist.random(6000,7000)
-	local wpPsn = mist.getRandPointInCircle(spawnPsn, awaczone.radius * 0.15, awaczone.radius * 0.01)
-	local wpPsn2 = movePsn
-  local path = {}
-					path[1] = mist.fixedWing.buildWP(spawnPsn, wpSpeed, wpAlt, "BARO")
-					path[2] = mist.fixedWing.buildWP(wpPsn2, wpSpeed, wpAlt2, "BARO")
-        					path[1].task = {
-					id = "ComboTask",
-					params = {
-						tasks = {
-							[1] = {
-	            number = 1,
-	            auto = true,
-	            id = "AWACS",
-	            enabled = true,
-	          }, -- end of [1]
-            	          [2] = {
-	            number = 2,
-	            auto = false,
-	            id = "Orbit",
-	            enabled = true,
-	            params = {
-	              altitudeEdited = false,
-	              pattern = "Race-Track",
-	              speed = wpSpeed,
-	              altitude = wpAlt2,
-	              speedEdited = true,
-	            }, -- end of params
-	          }, -- end of [2]
-          [3] = 
-                                       {
-                                                            number = 3,
-                                                            auto = false,
-                                                            id = "WrappedAction",
-                                                            enabled = true,
-                                                            params = 
-                                                            {
-                                                                action = 
-                                                                {
-                                                                    id = "SetFrequency",
-                                                                    params = 
-                                                                    {
-                                                                        modulation = 0,
-                                                                        frequency = 131000000,
-                                                                    }, -- end of ["params"]
-                                                                }, -- end of ["action"]
-                                                            }, -- end of ["params"]
-                                                        }, -- end of [3]
-                                                        },
-                                                        },
-                                                        }
-            
-       --             path[2].task = {
-	     --     number = 1,
-	      --    auto = false,
-	      --    id = "Orbit",
-	      --    enabled = true,
-	      --    params = {
-	      --      altitudeEdited = false,
-	     --       pattern = "Circle",
-	     --       speed = wpSpeed,
-	     --       altitude = wpAlt,
-	    --        speedEdited = true,
-	    --      }, -- end of params
-	      --  } -- end of [1]
-
-
-	local vars = {} 
-	vars.groupName = fAwacName
-	vars.action = "respawn"
-	vars.point = spawnPsn
-	vars.route = path
-	mist.teleportToPoint(vars)			
-  
-
-
-	local con = awacgrp:getController()
-	con:setOption(AI.Option.Air.id.RTB_ON_BINGO, false)
-	con:setOption(AI.Option.Air.id.RADAR_USING, AI.Option.Air.val.RADAR_USING.FOR_CONTINUOUS_SEARCH)
-	--con:setOption(AI.Option.Air.id.ROE, AI.Option.Air.val.ROE.OPEN_FIRE_WEAPON_FREE)
-	con:setOption(AI.Option.Air.id.FLARE_USING, AI.Option.Air.val.FLARE_USING.AGAINST_FIRED_MISSILE)
-	con:setOption(AI.Option.Air.id.REACTION_ON_THREAT, AI.Option.Air.val.REACTION_ON_THREAT.EVADE_FIRE)
-  end
- 
-  
-  	
-function moveStuff(thisGroupName, randomizerDist, spd, team)	
-	if thisGroupName == nil then
-	return
-	end
-	
-	--local randomizer_speed = 0
-	--local randomizer_dir = 0
-	local randomizer_dist = 0
-	--local Infantry_Name = {}
-	local Name = thisGroupName
-	local negativeheading = mist.random(0,1) 
-	
-	--randomizer_speed = math.random(1,4)
-	
-	-- red should be advancing north randomly
-	
-	if team == "RED" then
-		if negativeheading == 0 then
-		randomizer_dir = mist.random(0,60)
-		end
-		if negativeheading == 1 then
-		randomizer_dir = mist.random(300,360)
-		end		
-	end
-		
-		
-	if team == "BLUE" then	
-	-- blue should be advancing south randomly
-	randomizer_dir = mist.random(120,240)
-	end
-	
-	--randomizer_dir = randomizer_dir * math.pi / 180
-
-	randomizer_dist = mist.random(randomizerDist, randomizerDist * 2)
-
-		local formationrand = mist.random(1,16)
 			
-		if formationrand == 1 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'Rank', randomizer_dir, spd)
-		elseif formationrand == 2 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'EchelonL', randomizer_dir, spd)
-		elseif formationrand == 3 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'EchelonR', randomizer_dir, spd)
-		elseif formationrand == 4 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'Vee', randomizer_dir, spd)
-		elseif formationrand == 5 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'Cone', randomizer_dir, spd)
-		elseif formationrand == 6 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'Diamond', randomizer_dir, spd)
-		elseif formationrand >= 7 and formationrand <= 12 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'Off Road', randomizer_dir, spd)
-		elseif formationrand >= 12 and formationrand <= 16 then
-		mist.groupRandomDistSelf(Name, randomizer_dist, 'On Road', randomizer_dir, spd)
+		function ManipulateForce(iterations, whichSide, unitType, attempts, terrainType, placeDisperse, randomMove, moveSpeed, respawnGroup, placementList)
+		-- ManipulateForce --
+		-- ARG1 -- # of groups wanted (used with clone behaviorType, otherwise use 1 for a single group teleport or respawn)
+		-- ARG2 -- STRING for which side (RED" or "red" or "r" or "R" or "REDFOR" or "redfor" or "redfore" or "REDFORE" or "ENEMY" or "enemy" / "BLUE" or "blue" or "b" or "B" or "BLUFOR" or "BLU" or "blufor" or "bluefore" or "BLUEFORE" or "NATO" or "nato" or "friendly" or "FRIENDLY" or "FRIEND" or "friend" use whichever you want they will all work.
+		-- ARG3 -- STRING the type of units in the group ("AAA", "TRUCK", "TANK", "SRSAM", "LRSAM", "SHORAD", "APC", "INF" are the valid types
+		-- ARG4 -- # coordinate attempts do not use to high a value or DCS can hang while it performs the placements (use 100 as default)
+		-- ARG5 -- STRING the type of terrain "LAND", "WATER"
+		-- ARG6 -- # use 0 if you wish no dispersion of the groups formation, otherwise the units will be randomly placed as far apart as this from each other (be weary of to far when using polygon to check a point for spawn restriction)
+		-- ARG7 -- # use 0 for no movement otherwise will move this amount randomly from its initial placement
+		-- ARG8 -- # speed of the randomzed movement if ARG7 has a value above 0
+		-- the next 2 arguments are used internally always set them to nil
+		-- ARG9 -- name of the group that will be respawned (used internally, use nil otherwise)
+		-- ARG10 -- index number of the entry in the data table and is used to overwrite the previous data when a group is being respawnedm otherwise this data is discarded when respawnGroup is nil
+		-- example ManipulateForce("clone", 5, "MyNamedGroupInMissionEditor", "MyTriggerZoneOrQuadName", 100, "RestrictSpawnAreaToThisGroupsNamesWaypointsAsPolygonShape", "LAND", 100, 1000, 15, nil, nil)
+
+		local zoneUsed = {} -- local variables that we use a lot further down
+		local randsquare = 0
+		local restrictPoly = ""
+		local useSide = ""
+		local spawnPsn = {}
+		local failedAttempts = 0
+		local groupCalled = ""
+		local rand = 0
+
+		if placeDisperse ~= 0 then -- if ARG6 is not equal to 0 use that for the dispersion of the spawn in, done so that if its set to 0 it will remember the groups placement on the mission editor
+			dispersionChoice = placeDisperse -- set the dispersion to that value otherwise
+			else
+			dispersionChoice = false -- if it isn't above 0 then it must be false
 		end
-	end
-	
-function random_markers(_mindistance, _maxdistance)
-decluster = mist.random(1,10) -- global used to randomly decluster smoke marker schedule
-local zonetouse = ""
-local mindist = 0
-local maxdist = 0
-local mindist2 = 0
-local maxdist2 = 0
-local mindist3 = 0
-local maxdist3 = 0
-local unitPos = {}
-local decision = ""
-local unitstouse = ""
-local direction = 0
-local delay = 0
-local groupToUse = {}
-local groupsInPlay = mist.DBs.dynGroupsAdded
-local groupchoice = mist.random(1, #groupsInPlay)
-groupToUse = groupsInPlay[groupchoice]
-
-unittouse = Group.getByName(groupToUse.groupName) 
---side = Group.getCoalition(groupToUse.groupName)
-
-if unittouse == nil then
-return
-end
-
-mindist = _mindistance
-maxdist = _maxdistance
-mindist2 = mindist + 7
-maxdist2 = maxdist + 7
-mindist3 = mindist + 14
-maxdist3 = maxdist + 14
-direction = math.random(1,4)
-delay = math.random(5,15)
-
---local side = gcicap.sideToCoalition(unittouse:getCoalition()) -- this is from the gcicapscript
-local side = Group.getCoalition(unittouse)
---trigger.action.outText("SIDE" .. side, 1 , true)
-dynaFRONT.log:info("smoke marker for $1", side)
 
 
-unitPos = mist.getLeadPos(unittouse)
+		-- since there is a lot of repeated stuff in the next section I will only comment the first block
+		for nomber = 1, iterations do	-- from 1 to ARG1 amount do a loop
+			-- START OF RED SPAWN LOGIC
+			if whichSide == "RED" then -- if ARG2 is "RED"
+				useSide = "RED" -- useSide is "RED" (used later on)
+				if unitType == "AAA" then  -- if the ARG3 is "AAA" 
+				randsquare = mist.random(1,#RedSectorSquares) -- we want a redsector square randomly selected from 1 to the amount of redsector squares in the table
+				zoneUsed = RedSectorSquares[randsquare] -- make the zoneUsed equal the randomly picked one
+				restrictPoly = zoneUsed -- the restrictPoly is named the same as the triggerzone, so set that as well
+				rand = mist.random(1,#Red_Names_AAA) -- now randomly select a template out of the amount of templates we have of that type
+					groupCalled = Red_Names_AAA[rand] -- set the groupCalled to be that randomly selected string
+					if restrictPoly == nil then -- if we don't have a poly there is a problem with a missing polygon flight path
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'}) -- these debug messages currently don't serialize the square (must fix sometime)
+					end
+					if zoneUsed == nil then -- if we don't have a zone then houston we have a problem with triggerzones
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+					if unitType == "TRUCK" then -- now do the exact same logic for every other type of group for each side...
+				randsquare = mist.random(1,#RedTRUCK_SectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_TRUCK)
+					groupCalled = Red_Names_TRUCK[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+					if unitType == "SHORAD" then
+				randsquare = mist.random(1,#RedSectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_SHORAD)
+					groupCalled = Red_Names_SHORAD[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+							if unitType == "TANK" then 
+				randsquare = mist.random(1,#RedSectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_TANK)
+					groupCalled = Red_Names_TANK[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "INF" then
+				randsquare = mist.random(1,#RedSectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_INF)
+					groupCalled = Red_Names_INF[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "APC" then
+				randsquare = mist.random(1,#RedSectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_APC)
+					groupCalled = Red_Names_APC[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "CP" then 
+				randsquare = mist.random(1,#RedSectorSquares)
+				zoneUsed = RedSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_CP)
+					groupCalled = Red_Names_CP[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSectorSquares[randsquare]'})
+					end
+				end
+				if unitType == "LRSAM" then
+				randsquare = mist.random(1,#RedLRSAM_SectorSquares)
+				zoneUsed = RedLRSAM_SectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_LRSAM)
+					groupCalled = Red_Names_LRSAM[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedLRSAM_SectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedLRSAM_SectorSquares[randsquare]'})
+					end
+				end
+				if unitType == "SRSAM" then
+				randsquare = mist.random(1,#RedSRSAM_SectorSquares)
+				zoneUsed = RedSRSAM_SectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Red_Names_SRSAM)
+					groupCalled = Red_Names_SRSAM[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'RedSRSAM_SectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'RedSRSAM_SectorSquares[randsquare]'})
+					end
+			end	
+			end
+			
+				-- START OF BLUE SPAWN LOGIC --
+				if whichSide == "BLUE" then
+					useSide = "BLUE"
+				if unitType == "AAA" then 
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_AAA)
+					groupCalled = Blue_Names_AAA[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+					if unitType == "TRUCK" then 
+				randsquare = mist.random(1,#BlueTRUCK_SectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_TRUCK)
+					groupCalled = Blue_Names_TRUCK[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+					if unitType == "SHORAD" then
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_SHORAD)
+					groupCalled = Blue_Names_SHORAD[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+							if unitType == "TANK" then
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_TANK)
+					groupCalled = Blue_Names_TANK[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "INF" then
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_INF)
+					groupCalled = Blue_Names_INF[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "APC" then
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_APC)
+					groupCalled = Blue_Names_APC[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+									if unitType == "CP" then 
+				randsquare = mist.random(1,#BlueSectorSquares)
+				zoneUsed = BlueSectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_CP)
+					groupCalled = Blue_Names_CP[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSectorSquares[randsquare]'})
+					end
+				end
+				if unitType == "LRSAM" then
+				randsquare = mist.random(1,#BlueLRSAM_SectorSquares)
+				zoneUsed = BlueLRSAM_SectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_LRSAM)
+					groupCalled = Blue_Names_LRSAM[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueLRSAM_SectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueLRSAM_SectorSquares[randsquare]'})
+					end
+				end
+				if unitType == "SRSAM" then
+				randsquare = mist.random(1,#BlueSRSAM_SectorSquares)
+				zoneUsed = BlueSRSAM_SectorSquares[randsquare]
+				restrictPoly = zoneUsed
+					rand = mist.random(1,#Blue_Names_SRSAM)
+					groupCalled = Blue_Names_SRSAM[rand]
+					if restrictPoly == nil then
+					dynaFRONT.log:error("No polygon for that square was found $1", {'BlueSRSAM_SectorSquares[randsquare]'})
+					end
+					if zoneUsed == nil then
+					dynaFRONT.log:error("No zone for that square was found $1", {'BlueSRSAM_SectorSquares[randsquare]'})
+					end
+			end
+			end
+			
+			
+				for i = 0, attempts do -- keep looping from 0 to the placement limit we set with ARG4
+				local restriction = false -- reset restriction to false
+				local landgood = false -- resete landgood value
+				spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius) -- get a random point from the triggerzone we got from earlier logic
+				restriction = mist.pointInPolygon(spawnPsn, mist.getGroupPoints(restrictPoly)) -- check that point to see if it landed inside the polygon
+				
+					if mist.isTerrainValid(spawnPsn, {terrainType}) == true then -- if that point was a valid terrain type as set in ARG
+					landgood = true -- the land was good
+					else
+					landgood = false -- otherwise the land is no good
+					end
+							if restriction == true and landgood == true then -- polygon restriction has been met and land valid	so
+							break -- break out of the loop since we have found a valid location
+							end
+				end
+				
+					local groupvars = {} -- ready our groupvars
+					
+					gid = gid + 1 -- increment our group number
+					groupvars.newGroupName = useSide .. " " .. unitType .. " " .. nomber + gid -- lets name our new group i.e "REDFOR AAA 1"
+					
+					
+					if respawnGroup == nil then -- if ARG8 is nil then its for the initial spawn
+					groupvars.groupName = groupCalled -- set the group name to be the template we wanted
+					gdata = mist.getCurrentGroupData(groupCalled) -- get our templates group data
+					ActiveForces[unitType][useSide][nomber] = groupvars.newGroupName -- now add this name to the active groups table, under the subcategory of its unit type
+					ActiveForces[unitType][useSide].TEMPLATE[nomber] = groupCalled -- remember the template we used for this group
+					ActiveForces[unitType][useSide].SQUARE[nomber] = zoneUsed -- store the MGRS SQUARE for this group
+					ActiveForces[unitType][useSide].POS[nomber] = spawnPsn -- save this groups position in the table
+					ActiveForces[unitType][useSide].INITSIZE[nomber] = Group.getInitialSize(Group.getByName(groupCalled)) -- set its initial size
+					ActiveForces[unitType][useSide].SIZE[nomber] = Group.getInitialSize(Group.getByName(groupCalled)) -- set its current size
+					else -- otherwise it was for a spawn after the initial spawning of the miz
+					groupvars.groupName = respawnGroup -- so the group we want to use is from the same template we used initially
+					gdata = mist.getCurrentGroupData(respawnGroup) -- get our templates group data
+					ActiveForces[unitType][useSide][placementList] = groupvars.newGroupName -- now overwrite this name to the active groups table, under the subcategory of its unit type
+					ActiveForces[unitType][useSide].TEMPLATE[placementList] = respawnGroup -- maybe not needed but remember the template again
+					ActiveForces[unitType][useSide].SQUARE[placementList] = zoneUsed -- store the MGRS SQUARE for this group now that its moved again
+					ActiveForces[unitType][useSide].POS[placementList] = spawnPsn -- save this groups position again
+					ActiveForces[unitType][useSide].INITSIZE[placementList] = Group.getInitialSize(Group.getByName(respawnGroup)) -- set its initial size
+					ActiveForces[unitType][useSide].SIZE[placementList] = Group.getInitialSize(Group.getByName(respawnGroup)) -- overwrite its current size again since it was destroyed previously
+					end
+					
+					
+					groupvars.action = "clone" -- we will always be cloning
+					groupvars.point = spawnPsn -- set the point for which it will spawn
+					--vars.route = path
+					groupvars.disperse = dispersionChoice -- set dispersion based on ARG6
+					groupvars.maxDisp = dispersionChoice -- the max dispersion is the same as the dispersion value (maybe change this to have another ARG in future)
+					-- vars.radius = 100 
+					groupvars.innerRadius = 0 
+					groupvars.offsetRoute = false
+					groupvars.offsetWP1 = false
+					groupvars.initTasks = true -- remember its task from ME
+					
+					mist.cloneMoveGroup(groupCalled, false, groupvars) -- modified mist function to clone and move it using our vars
+			
+				
+				-- DEBUG STUFF
+				--local data = mist.utils.serialize("tblCheck", ActiveForces) -- debug to show us our table
+				--trigger.action.outText(data,5, true)	
+				-- END DEBUG STUFF
+				
+				if randomMove ~= 0 then -- will cause stuff to randomly move around if randomMove ARG7 is anything other than 0
+				mist.scheduleFunction(moveStuff, {groupvars.newGroupName, randomMove, moveSpeed, useSide}, timer.getTime() + 5, mist.random(300,900)) -- uses ARG7 and ARG8 from the ManipulateForce function to move the new units after 5 seconds wait time
+				end
+			end
 
-if unitPos == nil then
-return
-end
-
- if side == 1 then
-   -- if direction == 1 then
-      trigger.action.smoke({x=unitPos.x + math.random(mindist,maxdist), y= land.getHeight({x = unitPos.x, y = unitPos.z}), z=unitPos.z + math.random(mindist,maxdist)}, trigger.smokeColor.Red)
-end
-end
-
-function random_markers2(_mindistance, _maxdistance)
-local zonetouse = ""
-local mindist = 0
-local maxdist = 0
-local mindist2 = 0
-local maxdist2 = 0
-local mindist3 = 0
-local maxdist3 = 0
-local unitPos = {}
-local decision = ""
-local unitstouse = ""
-local direction = 0
-local delay = 0
-local groupToUse = {}
-local groupsInPlay = mist.DBs.dynGroupsAdded
-local groupchoice = mist.random(1, #groupsInPlay)
-groupToUse = groupsInPlay[groupchoice]
-
-unittouse = Group.getByName(groupToUse.groupName) 
---side = Group.getCoalition(groupToUse.groupName)
-
-if unittouse == nil then
-return
-end
-
-mindist = _mindistance
-maxdist = _maxdistance
-mindist2 = mindist + 7
-maxdist2 = maxdist + 7
-mindist3 = mindist + 14
-maxdist3 = maxdist + 14
-direction = math.random(1,4)
-delay = math.random(5,15)
-
---local side = gcicap.sideToCoalition(unittouse:getCoalition()) -- this is from the gcicapscript
-local side = Group.getCoalition(unittouse)
---trigger.action.outText("SIDE" .. side, 1 , true)
-dynaFRONT.log:info("Marker for $1", side)
+		end -- end ManipulateForce Function
 
 
-unitPos = mist.getLeadPos(unittouse)
+		function monitorGroup(tabCheck, sideUsed, grpType)
+		-- TABLE arg tblCheck: check this ActiveGroups table
+		-- STARING arg of which side "RED" or "BLUE"
+		-- STRING arg of group type "AAA", "TANK" "APC" "INF" "CP" "SRSAM" "LRSAM" "SHORAD"
 
-if unitPos == nil then
-return
-end
+		for element = 1, #tabCheck do -- for each element in the table from 1 to the amount that is in the table
+			local checkThisGroup = tabCheck[element] -- get the string of the group name located at that index
 
- if side == 2 then
-   -- if direction == 1 then
-      trigger.action.smoke({x=unitPos.x + math.random(mindist,maxdist), y= land.getHeight({x = unitPos.x, y = unitPos.z}), z=unitPos.z + math.random(mindist,maxdist)}, trigger.smokeColor.Blue)
-end
-end
+			if Group.getByName(checkThisGroup) then -- the group must be present (existing) in order for the checks to occur
+			local is = tabCheck.INITSIZE[element] -- get its inital size using the data in the table
+			tabCheck.SIZE[element] = Group.getSize(Group.getByName(checkThisGroup)) -- update the current size of the group, incase things have died since last check
+			local cs = tabCheck.SIZE[element] -- get its current size using the data in the table
+			
+				-- DEBUG SECTION
+				--local msg = {}	-- ready a message to say the group name its current size and how many it started with (for debug purposes)
+				--msg.text = checkThisGroup .. ' ' .. cs .. ' units left from ' .. is
+				--msg.displayTime = 10
+				--msg.msgFor = {coa = {'all'}} 
+				--mist.message.add(msg)
+				--msg = {}
+				-- END DEBUG SECTION
 
+			local decimalval = cs / is -- size divided by initial size
+			local percent = decimalval * 100 -- multiplied by 100 to get percentage
+			
 
-function ColorZones(routine)
---trigger.action.markupToAll(numbr shapeId , number coalition , number id , vec3 point1 , anyValid param... , table color , table fillColor , number lineType , boolean readOnly, string message)
- --pos = table pos,
- --name/id = string/number name/id, 
- --markType = number/string markType, 
- --radius = number radius, 
- --text = string text, 
- --markFor = table markFor,
- --markForCoa = number/string markForCoa, 
- --color = table color,
- --fillColor = table fillColor, 
- --lineType = number lineType,
- --readOnly = boolean readOnly,
- --message = text message,
- --fontSize = number fontSize,
-local coloredZoneID
-local vars
-
-if routine == "ADD" then
-for i = 1, #RedSectorSquares do
- --colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = RedSectorSquares[i]
-   vars = {
-  pos = getQTpoints(zoneInQuestion),
- name = "REDSEC",
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = "TEST", 
- --markFor = {coa = {'all'}},
-markForCoa = -1,
- color = {255,0,0,255},
- fillColor = {255,0,0,80},
- lineType = 1,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- --trigger.action.outText(mist.utils.tableShow(zoneInQuestion), 25, true)
- end
- 
- for i = 1, #RedSRSAM_SectorSquares do
- --colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = RedSRSAM_SectorSquares[i]
-   vars = {
- pos = getQTpoints(zoneInQuestion),
- name = "REDSRSAM",
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = string text, 
- --markFor = {coa = {'red'}, {'blue'}},
-markForCoa = -1,
- color = {255,0,0,255},
- fillColor = {255,0,0,80},
- lineType = 1,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- end
- 
- for i = 1, #RedLRSAM_SectorSquares do
---colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = RedLRSAM_SectorSquares[i]
-   vars = {
-pos = getQTpoints(zoneInQuestion),
- name = "REDLRSAM", -- use our setup ID
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = string text, 
- --markFor = {coa = {'red'}, {'blue'}},
- markForCoa = -1,
- color = {255,0,0,255},
- fillColor = {255,0,0,80},
- lineType = 2,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- end
- 
- for i = 1, #BlueSectorSquares do
- --colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = BlueSectorSquares[i]
-   vars = {
-pos = getQTpoints(zoneInQuestion),
- name = "BLUESEC",  -- use our setup ID
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = string text, 
- --markFor = {coa = {'red'}, {'blue'}},
- markForCoa = -1,
- color = {0,0,255,255},
- fillColor = {0,0,255,80},
- lineType = 3,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- end
- 
- for i = 1, #BlueSRSAM_SectorSquares do
--- colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = BlueSRSAM_SectorSquares[i]
-   vars = {
-pos = getQTpoints(zoneInQuestion),
- name = "BLUESRSAM", -- use our setup ID
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = string text, 
-markForCoa = -1,
- color = {0,0,255,255},
- fillColor = {0,0,255,80},
- lineType = 2,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- end
- 
- for i = 1, #BlueLRSAM_SectorSquares do
- --colorID = colorID + 1
- coloredZoneID = colorID
- zoneInQuestion = BlueLRSAM_SectorSquares[i]
-  vars = {
-pos = getQTpoints(zoneInQuestion),
- name = "BLUELRSAM", -- use our setup ID
- markType = 7,  -- use Quad
- --radius = number radius, 
- --text = string text, 
- --markFor = {coa = {'red'}, {'blue'}},
- markForCoa = -1,
- color = {0,0,255,255},
- fillColor = {0,0,255,80},
- lineType = 3,
- readOnly = true
- --message = text message,
- --fontSize = number fontSize,
- }
- mist.marker.add(vars)
- end
-end
+			if percent >= 95 then -- if the percentage is less that 35 percent then
+				Group.destroy(Group.getByName(checkThisGroup)) -- destroy the group 
+				
+				local msg = {} -- message that the group has been rendered ineffective
+				msg.text = checkThisGroup .. ' has been rendered combat ineffective '
+				msg.displayTime = 10
+				msg.msgFor = {coa = {'all'}} 
+				mist.message.add(msg)
+				msg = {}
+			
+				if sideUsed == "RED" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				end		
+				if sideUsed == "BLUE" then BLUESCORE = BLUESCORE + 1 -- if it was a blue unit removed then red scores
+				end
+				
+				mist.scheduleFunction(ManipulateForce, {1, sideUsed, grpType, 100, "LAND", 500, 0, 0, tabCheck.TEMPLATE[element], element}, timer.getTime() + GROUND_RESPAWN_DELAY) -- clone the same template again and set it so that it updates the same position in the ActiveForces table after 2 minutes
+				end
+				end
+			end
+		end
 
 
-if routine == "REMOVE" then
-local val = mist.marker.get('REDSEC')
---mist.Marker.Remove(val)
-local val = mist.marker.get('BLUESEC')
---mist.Marker.Remove(val)
-local val = mist.marker.get('REDLRSAM')
---mist.Marker.Remove(val)
-local val = mist.marker.get('REDSRSAM')
---mist.Marker.Remove(val)
-local val = mist.marker.get('BLUELRSAM')
---mist.Marker.Remove(val)
-local val = mist.marker.get('BLUESRSAM')
---mist.Marker.Remove(val)
-end
+		function CreateArmy(forSide, unitType) -- create initial spawns for each force (I call CreateArmy in miz on a mission trigger)
+
+		if forSide == "blue" or "BLUE" or "b" or "B" then
+		mist.scheduleFunction(ManipulateForce, {bAAAamount, "BLUE", "AAA", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 2) -- space out each spawn in by 2 seconds to lessen the impact on server performance
+		mist.scheduleFunction(ManipulateForce, {bTRUCKamount, "BLUE", "TRUCK", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 4)
+		mist.scheduleFunction(ManipulateForce, {bSHORADamount, "BLUE", "SHORAD", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 6)
+		mist.scheduleFunction(ManipulateForce, {bINFamount, "BLUE", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 8)
+		mist.scheduleFunction(ManipulateForce, {bTANKamount, "BLUE", "TANK", 1000, "LAND", 500, 5000, mist.random(42,60), nil, nil}, timer.getTime() + 10)
+		mist.scheduleFunction(ManipulateForce, {bAPCamount, "BLUE", "APC", 1000, "LAND", 500, 5000, mist.random(38,50), nil, nil}, timer.getTime() + 12)
+		mist.scheduleFunction(ManipulateForce, {bCPamount, "BLUE", "CP", 1000, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 12)
+		mist.scheduleFunction(ManipulateForce, {bSRSAMamount, "BLUE", "SRSAM", 1000, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 14)
+		mist.scheduleFunction(ManipulateForce, {bLRSAMamount, "BLUE", "LRSAM", 1000, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 16)
+		end
+
+		if forSide == "red" or "RED" or "r" or "R" then
+		mist.scheduleFunction(ManipulateForce, {rAAAamount, "RED", "AAA", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 20)
+		mist.scheduleFunction(ManipulateForce, {rTRUCKamount, "RED", "TRUCK", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 22)
+		mist.scheduleFunction(ManipulateForce, {rSHORADamount, "RED", "SHORAD", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 24)
+		mist.scheduleFunction(ManipulateForce, {rINFamount, "RED", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 26)
+		mist.scheduleFunction(ManipulateForce, {rTANKamount, "RED", "TANK", 1000, "LAND", 500, 5000, mist.random(28,42), nil, nil}, timer.getTime() + 28)
+		mist.scheduleFunction(ManipulateForce, {rAPCamount, "RED", "APC", 1000, "LAND", 500, 5000, mist.random(24,40), nil, nil}, timer.getTime() + 30)
+		mist.scheduleFunction(ManipulateForce, {rCPamount, "RED", "CP", 1000, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 32)
+		mist.scheduleFunction(ManipulateForce, {rSRSAMamount, "RED", "SRSAM", 1000, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 34)
+		mist.scheduleFunction(ManipulateForce, {rLRSAMamount, "RED", "LRSAM", 1000, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 36)
+		end
+		end
+
+		 
+			
+		function moveStuff(thisGroupName, randomizerDist, spd, team)	-- this is old code from 7 years ago, will need to write a much better ground tasking script to attack sectors in the future, for now just have them randomly move around to create conflicts
+			if thisGroupName == nil then
+			return
+			end
+			
+			local randomizer_dist = 0
+			local Name = thisGroupName
+			local negativeheading = mist.random(0,1) -- quick hack to make things work with 0-360 degrees
+
+			
+			if team == "RED" then
+				if negativeheading == 0 then
+				randomizer_dir = mist.random(0,60) 	-- red should be advancing north randomly at the very least, here we are just setting the direction they face after they move
+				end
+				if negativeheading == 1 then
+				randomizer_dir = mist.random(300,360) 	-- red should be advancing north randomly at the very least, here we are just setting the direction they face after they move
+				end		
+			end
+				
+				
+			if team == "BLUE" then	
+			randomizer_dir = mist.random(120,240) -- blue should be advancing south randomly at the very least, here we are just setting the direction they face after they move
+			end
+			
+			randomizer_dist = mist.random(randomizerDist, randomizerDist * 2)
+
+				local formationrand = mist.random(1,16)
+					
+				if formationrand == 1 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'Rank', randomizer_dir, spd)
+				elseif formationrand == 2 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'EchelonL', randomizer_dir, spd)
+				elseif formationrand == 3 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'EchelonR', randomizer_dir, spd)
+				elseif formationrand == 4 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'Vee', randomizer_dir, spd)
+				elseif formationrand == 5 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'Cone', randomizer_dir, spd)
+				elseif formationrand == 6 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'Diamond', randomizer_dir, spd)
+				elseif formationrand >= 7 and formationrand <= 12 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'Off Road', randomizer_dir, spd)
+				elseif formationrand >= 12 and formationrand <= 16 then
+				mist.groupRandomDistSelf(Name, randomizer_dist, 'On Road', randomizer_dir, spd)
+				end
+			end
+			
+		function random_markers(_mindistance, _maxdistance)
+		decluster = mist.random(1,10) -- global used to randomly decluster smoke marker schedule
+		local zonetouse = ""
+		local mindist = 0
+		local maxdist = 0
+		local mindist2 = 0
+		local maxdist2 = 0
+		local mindist3 = 0
+		local maxdist3 = 0
+		local unitPos = {}
+		local decision = ""
+		local unitstouse = ""
+		local direction = 0
+		local delay = 0
+		local groupToUse = {}
+		local groupsInPlay = mist.DBs.dynGroupsAdded
+		local groupchoice = mist.random(1, #groupsInPlay)
+		groupToUse = groupsInPlay[groupchoice]
+		unittouse = Group.getByName(groupToUse.groupName) 
+
+		if unittouse == nil then
+		return
+		end
+
+		mindist = _mindistance
+		maxdist = _maxdistance
+		mindist2 = mindist + 7
+		maxdist2 = maxdist + 7
+		mindist3 = mindist + 14
+		maxdist3 = maxdist + 14
+		direction = math.random(1,4)
+		delay = math.random(5,15)
+
+		local side = Group.getCoalition(unittouse)
+		dynaFRONT.log:info("smoke marker for $1", side)
 
 
---mist.scheduleFunction(ColorZones, {"REMOVE"}, timer.getTime() + 2, 29) -- remove marks before updating test
---mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 3, 30)
---mist.scheduleFunction(ColorZones, {"REMOVE"}, timer.getTime() + 9, 9) -- remove marks before updating test
+		unitPos = mist.getLeadPos(unittouse)
 
-end -- end function
+		if unitPos == nil then
+		return
+		end
 
+		 if side == 1 then
+			  trigger.action.smoke({x=unitPos.x + math.random(mindist,maxdist), y= land.getHeight({x = unitPos.x, y = unitPos.z}), z=unitPos.z + math.random(mindist,maxdist)}, trigger.smokeColor.Red)
+		end
+		end
 
-function getQTpoints(zoneTable)
+		function random_markers2(_mindistance, _maxdistance)
+		local zonetouse = ""
+		local mindist = 0
+		local maxdist = 0
+		local mindist2 = 0
+		local maxdist2 = 0
+		local mindist3 = 0
+		local maxdist3 = 0
+		local unitPos = {}
+		local decision = ""
+		local unitstouse = ""
+		local direction = 0
+		local delay = 0
+		local groupToUse = {}
+		local groupsInPlay = mist.DBs.dynGroupsAdded
+		local groupchoice = mist.random(1, #groupsInPlay)
+		groupToUse = groupsInPlay[groupchoice]
 
-local t = mist.DBs.zonesByName[zoneTable]
-local copiedpoints = {}
---local copiedpoints = mist.utils.deepCopy(mist.utils.deepCopy(trigger.misc.getZone(zoneTable)))
---local copiedpoints = mist.utils.deepCopy(trigger.misc.getZone(zoneTable))
+		unittouse = Group.getByName(groupToUse.groupName) 
+		--side = Group.getCoalition(groupToUse.groupName)
 
+		if unittouse == nil then
+		return
+		end
 
-for i = 1, #t.verticies do
-copiedpoints[i] = t.verticies[i]
-end
+		mindist = _mindistance
+		maxdist = _maxdistance
+		mindist2 = mindist + 7
+		maxdist2 = maxdist + 7
+		mindist3 = mindist + 14
+		maxdist3 = maxdist + 14
+		direction = math.random(1,4)
+		delay = math.random(5,15)
 
- --local data = mist.utils.serialize("wtf", t)
- -- local data2 = mist.utils.serialize("wtf", copiedpoints)
- --trigger.action.outText(data,50, true)
- --trigger.action.outText(data2,50, false)
-return copiedpoints
-end
-
-function scoreDisplay()
-		local msg = {}
-		msg.text = 'BLUE SCORE IS ' .. BLUESCORE
-		msg.displayTime = 10
-		msg.msgFor = {coa = {'all'}} 
-		mist.message.add(msg)
-		msg = {}
-		msg.text = 'RED SCORE IS ' .. REDSCORE
-		msg.displayTime = 10
-		msg.msgFor = {coa = {'all'}} 
-		mist.message.add(msg)
-		msg = {}
-end
-mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3)
-mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "AAA"}, timer.getTime() + 61, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "TANK"}, timer.getTime() + 62, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "APC"}, timer.getTime() + 63, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "INF"}, timer.getTime() + 64, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "CP"}, timer.getTime() + 65, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "SHORAD"}, timer.getTime() + 66, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "TRUCK"}, timer.getTime() + 67, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "LRSAM"}, timer.getTime() + 68, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "RED", "SRSAM"}, timer.getTime() + 69, 30)
-
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "AAA"}, timer.getTime() + 70, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "TANK"}, timer.getTime() + 71, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "APC"}, timer.getTime() + 72, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "INF"}, timer.getTime() + 73, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "CP"}, timer.getTime() + 74, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "SHORAD"}, timer.getTime() + 75, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "TRUCK"}, timer.getTime() + 76, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "LRSAM"}, timer.getTime() + 77, 30)
-mist.scheduleFunction(monitorGroup, {ActiveForces, "BLUE", "SRSAM"}, timer.getTime() + 78, 30)
+		local side = Group.getCoalition(unittouse)
+		dynaFRONT.log:info("Marker for $1", side)
 
 
+		unitPos = mist.getLeadPos(unittouse)
+
+		if unitPos == nil then
+		return
+		end
+
+		 if side == 2 then
+		   -- if direction == 1 then
+			  trigger.action.smoke({x=unitPos.x + math.random(mindist,maxdist), y= land.getHeight({x = unitPos.x, y = unitPos.z}), z=unitPos.z + math.random(mindist,maxdist)}, trigger.smokeColor.Blue)
+		end
+		end
 
 
---mist.scheduleFunction(changePOI, {""}, timer.getTime() + 1, 300) -- change POI every 5 minutes after initial call
-mist.scheduleFunction(random_markers, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
-mist.scheduleFunction(random_markers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster)
-mist.scheduleFunction(scoreDisplay, {}, timer.getTime() + 70, 300) -- schedule the mission introduction after 4 seconds of miz running.
-mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 1)
-mist.scheduleFunction(Introduce_Mission, {}, timer.getTime() + 2) -- schedule the mission introduction after 4 seconds of miz running.
+		function ColorZones(routine) -- this is placeholder function and will need to be updated for sector control at a later time
+		--trigger.action.markupToAll(numbr shapeId , number coalition , number id , vec3 point1 , anyValid param... , table color , table fillColor , number lineType , boolean readOnly, string message)
+		 --pos = table pos,
+		 --name/id = string/number name/id, 
+		 --markType = number/string markType, 
+		 --radius = number radius, 
+		 --text = string text, 
+		 --markFor = table markFor,
+		 --markForCoa = number/string markForCoa, 
+		 --color = table color,
+		 --fillColor = table fillColor, 
+		 --lineType = number lineType,
+		 --readOnly = boolean readOnly,
+		 --message = text message,
+		 --fontSize = number fontSize,
+		local coloredZoneID
+		local vars
+
+		if routine == "ADD" then
+		for i = 1, #RedSectorSquares do
+		 --colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = RedSectorSquares[i]
+		   vars = {
+		  pos = getQTpoints(zoneInQuestion),
+		 name = "REDSEC",
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = "TEST", 
+		 --markFor = {coa = {'all'}},
+		markForCoa = -1,
+		 color = {255,0,0,255},
+		 fillColor = {255,0,0,80},
+		 lineType = 1,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 --trigger.action.outText(mist.utils.tableShow(zoneInQuestion), 25, true)
+		 end
+		 
+		 for i = 1, #RedSRSAM_SectorSquares do
+		 --colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = RedSRSAM_SectorSquares[i]
+		   vars = {
+		 pos = getQTpoints(zoneInQuestion),
+		 name = "REDSRSAM",
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = string text, 
+		 --markFor = {coa = {'red'}, {'blue'}},
+		markForCoa = -1,
+		 color = {255,0,0,255},
+		 fillColor = {255,0,0,80},
+		 lineType = 1,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		 
+		 for i = 1, #RedLRSAM_SectorSquares do
+		--colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = RedLRSAM_SectorSquares[i]
+		   vars = {
+		pos = getQTpoints(zoneInQuestion),
+		 name = "REDLRSAM", -- use our setup ID
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = string text, 
+		 --markFor = {coa = {'red'}, {'blue'}},
+		 markForCoa = -1,
+		 color = {255,0,0,255},
+		 fillColor = {255,0,0,80},
+		 lineType = 2,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		 
+		 for i = 1, #BlueSectorSquares do
+		 --colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = BlueSectorSquares[i]
+		   vars = {
+		pos = getQTpoints(zoneInQuestion),
+		 name = "BLUESEC",  -- use our setup ID
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = string text, 
+		 --markFor = {coa = {'red'}, {'blue'}},
+		 markForCoa = -1,
+		 color = {0,0,255,255},
+		 fillColor = {0,0,255,80},
+		 lineType = 3,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		 
+		 for i = 1, #BlueSRSAM_SectorSquares do
+		-- colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = BlueSRSAM_SectorSquares[i]
+		   vars = {
+		pos = getQTpoints(zoneInQuestion),
+		 name = "BLUESRSAM", -- use our setup ID
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = string text, 
+		markForCoa = -1,
+		 color = {0,0,255,255},
+		 fillColor = {0,0,255,80},
+		 lineType = 2,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		 
+		 for i = 1, #BlueLRSAM_SectorSquares do
+		 --colorID = colorID + 1
+		 coloredZoneID = colorID
+		 zoneInQuestion = BlueLRSAM_SectorSquares[i]
+		  vars = {
+		pos = getQTpoints(zoneInQuestion),
+		 name = "BLUELRSAM", -- use our setup ID
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = string text, 
+		 --markFor = {coa = {'red'}, {'blue'}},
+		 markForCoa = -1,
+		 color = {0,0,255,255},
+		 fillColor = {0,0,255,80},
+		 lineType = 3,
+		 readOnly = true
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		end
+
+
+		if routine == "REMOVE" then
+		local val = mist.marker.get('REDSEC')
+		--mist.Marker.Remove(val)
+		local val = mist.marker.get('BLUESEC')
+		--mist.Marker.Remove(val)
+		local val = mist.marker.get('REDLRSAM')
+		--mist.Marker.Remove(val)
+		local val = mist.marker.get('REDSRSAM')
+		--mist.Marker.Remove(val)
+		local val = mist.marker.get('BLUELRSAM')
+		--mist.Marker.Remove(val)
+		local val = mist.marker.get('BLUESRSAM')
+		--mist.Marker.Remove(val)
+		end
+
+		end -- end function
+
+
+		function getQTpoints(zoneTable) -- my nifty function to gather the points from a mission editor quad trigger zone
+
+		local t = mist.DBs.zonesByName[zoneTable] -- get the specific triggerzone from the database of all zones added in the mission editor
+		local copiedpoints = {} -- ready a table for its points
+
+		for i = 1, #t.verticies do -- from 1 to the end of the verticies list (in this case its 4 points)
+		copiedpoints[i] = t.verticies[i] -- copy the data to our copiedpoints table
+		end
+		return copiedpoints -- return the table of the copiedpoints
+		end
+
+		function scoreDisplay() -- straight forward score displayer
+				local msg = {}
+				msg.text = 'BLUE SCORE IS ' .. BLUESCORE .. ' ' .. '| RED SCORE IS ' .. REDSCORE -- compressed to a single line rather than multiple lines
+				msg.displayTime = 10
+				msg.msgFor = {coa = {'all'}} 
+				mist.message.add(msg)
+				msg = {}
+		end
+
+		-- main
+		mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 1) -- color in the sector zones based on the sector tables in parameters.lua
+		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
+		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
+		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.RED, "RED", "AAA"}, timer.getTime() + 61, 30) -- begin monitoring all the red groups of each type of unit
+		mist.scheduleFunction(monitorGroup, {ActiveForces.TANK.RED, "RED", "TANK"}, timer.getTime() + 62, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.APC.RED, "RED", "APC"}, timer.getTime() + 63, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.INF.RED, "RED", "INF"}, timer.getTime() + 64, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.CP.RED, "RED", "CP"}, timer.getTime() + 65, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.SHORAD.RED, "RED", "SHORAD"}, timer.getTime() + 66, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.TRUCK.RED, "RED", "TRUCK"}, timer.getTime() + 67, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.LRSAM.RED, "RED", "LRSAM"}, timer.getTime() + 68, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.SRSAM.RED, "RED", "SRSAM"}, timer.getTime() + 69, 30)
+
+		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.BLUE, "BLUE", "AAA"}, timer.getTime() + 81, 30) -- begin monitoring all the blue groups of each type of unit
+		mist.scheduleFunction(monitorGroup, {ActiveForces.TANK.BLUE, "BLUE", "TANK"}, timer.getTime() + 82, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.APC.BLUE, "BLUE", "APC"}, timer.getTime() + 83, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.INF.BLUE, "BLUE", "INF"}, timer.getTime() + 84, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.CP.BLUE, "BLUE", "CP"}, timer.getTime() + 85, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.SHORAD.BLUE, "BLUE", "SHORAD"}, timer.getTime() + 66, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.TRUCK.BLUE, "BLUE", "TRUCK"}, timer.getTime() + 86, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.LRSAM.BLUE, "BLUE", "LRSAM"}, timer.getTime() + 87, 30)
+		mist.scheduleFunction(monitorGroup, {ActiveForces.SRSAM.BLUE, "BLUE", "SRSAM"}, timer.getTime() + 88, 30)
+
+
+		mist.scheduleFunction(random_markers, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster) -- add randoimized smoke markers (this is old code written 7 years ago, maybe replace with more modern take on it at some point)
+		mist.scheduleFunction(random_markers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster) -- add randoimized smoke markers
+		mist.scheduleFunction(scoreDisplay, {}, timer.getTime() + 90, 120) -- schedule the score display after 90 seconds and every 2 minutes afterwards
+		mist.scheduleFunction(Introduce_Mission, {}, timer.getTime() + 2) -- schedule the mission introduction after 2 seconds of miz running.
 
 
 

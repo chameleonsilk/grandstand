@@ -1,7 +1,5 @@
 -- version 1.02
 function determineForceLeaders()
-redLeader.id = mist.random(1,6)
-blueLeader.id = mist.random(1,6)
 
 if blueLeader.id == 1 then
 blueLeader.name = "VLADIMIR PUTIN"
@@ -562,4 +560,7 @@ end
 	end
 end
 
+
+redLeader.id = mist.random(1,6)
+blueLeader.id = mist.random(1,6)
 determineForceLeaders()
