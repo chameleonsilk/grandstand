@@ -14,8 +14,8 @@ DISBAND_PERCENT = 35 -- when a group is this hurt it is removed
 
 --BlueSectorSquaresAmount = 7
 BlueSectorSquares = {
-[1] = 'KM57Square',
-[2] = 'KM67Square',
+[1] = 'KM58Square',
+[2] = 'KM68Square',
 [3] = 'KM78Square',
 [4] = 'KM79Square',
 [5] = 'KM89Square',
@@ -31,7 +31,8 @@ BlueLRSAM_SectorSquares = {
 --BlueSRSAM_SectorSquaresAmount = 2
 BlueSRSAM_SectorSquares = {
 [1] = 'GH21Square',
-[2] = 'GG37Square'
+[2] = 'GG37Square',
+[3] = 'KM58Square'
 }
 
 BlueTRUCK_SectorSquares = {

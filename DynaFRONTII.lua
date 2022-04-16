@@ -447,7 +447,7 @@
 				-- END DEBUG STUFF
 				
 				if randomMove ~= 0 then -- will cause stuff to randomly move around if randomMove ARG7 is anything other than 0
-				mist.scheduleFunction(moveStuff, {groupvars.newGroupName, randomMove, moveSpeed, useSide}, timer.getTime() + 5, mist.random(300,900)) -- uses ARG7 and ARG8 from the ManipulateForce function to move the new units after 5 seconds wait time
+				mist.scheduleFunction(moveStuff, {groupvars.newGroupName, randomMove, moveSpeed, useSide}, timer.getTime() + mist.random(1,60), mist.random(900,1200)) -- uses ARG7 and ARG8 from the ManipulateForce function to move the new units after 5 seconds wait time
 				end
 			end
 
@@ -505,27 +505,27 @@
 		function CreateArmy(forSide, unitType) -- create initial spawns for each force (I call CreateArmy in miz on a mission trigger)
 
 		if forSide == "blue" or "BLUE" or "b" or "B" then
-		mist.scheduleFunction(ManipulateForce, {bAAAamount, "BLUE", "AAA", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 2) -- space out each spawn in by 2 seconds to lessen the impact on server performance
-		mist.scheduleFunction(ManipulateForce, {bTRUCKamount, "BLUE", "TRUCK", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 4)
-		mist.scheduleFunction(ManipulateForce, {bSHORADamount, "BLUE", "SHORAD", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 6)
-		mist.scheduleFunction(ManipulateForce, {bINFamount, "BLUE", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 8)
-		mist.scheduleFunction(ManipulateForce, {bTANKamount, "BLUE", "TANK", 1000, "LAND", 500, 5000, mist.random(42,60), nil, nil}, timer.getTime() + 10)
-		mist.scheduleFunction(ManipulateForce, {bAPCamount, "BLUE", "APC", 1000, "LAND", 500, 5000, mist.random(38,50), nil, nil}, timer.getTime() + 12)
-		mist.scheduleFunction(ManipulateForce, {bCPamount, "BLUE", "CP", 1000, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 12)
-		mist.scheduleFunction(ManipulateForce, {bSRSAMamount, "BLUE", "SRSAM", 1000, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 14)
-		mist.scheduleFunction(ManipulateForce, {bLRSAMamount, "BLUE", "LRSAM", 1000, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 16)
+		mist.scheduleFunction(ManipulateForce, {bAAAamount, "BLUE", "AAA", 100, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 2) -- space out each spawn in by 2 seconds to lessen the impact on server performance
+		mist.scheduleFunction(ManipulateForce, {bTRUCKamount, "BLUE", "TRUCK", 50, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 4)
+		mist.scheduleFunction(ManipulateForce, {bSHORADamount, "BLUE", "SHORAD", 100, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 6)
+		mist.scheduleFunction(ManipulateForce, {bINFamount, "BLUE", "INF", 10, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 8)
+		mist.scheduleFunction(ManipulateForce, {bTANKamount, "BLUE", "TANK", 100, "LAND", 500, 5000, mist.random(28,42), nil, nil}, timer.getTime() + 10)
+		mist.scheduleFunction(ManipulateForce, {bAPCamount, "BLUE", "APC", 100, "LAND", 500, 5000, mist.random(24,32), nil, nil}, timer.getTime() + 12)
+		mist.scheduleFunction(ManipulateForce, {bCPamount, "BLUE", "CP", 100, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 12)
+		mist.scheduleFunction(ManipulateForce, {bSRSAMamount, "BLUE", "SRSAM", 100, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 14)
+		mist.scheduleFunction(ManipulateForce, {bLRSAMamount, "BLUE", "LRSAM", 100, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 16)
 		end
 
 		if forSide == "red" or "RED" or "r" or "R" then
-		mist.scheduleFunction(ManipulateForce, {rAAAamount, "RED", "AAA", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 20)
-		mist.scheduleFunction(ManipulateForce, {rTRUCKamount, "RED", "TRUCK", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 22)
-		mist.scheduleFunction(ManipulateForce, {rSHORADamount, "RED", "SHORAD", 1000, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 24)
-		mist.scheduleFunction(ManipulateForce, {rINFamount, "RED", "INF", 1000, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 26)
-		mist.scheduleFunction(ManipulateForce, {rTANKamount, "RED", "TANK", 1000, "LAND", 500, 5000, mist.random(28,42), nil, nil}, timer.getTime() + 28)
-		mist.scheduleFunction(ManipulateForce, {rAPCamount, "RED", "APC", 1000, "LAND", 500, 5000, mist.random(24,40), nil, nil}, timer.getTime() + 30)
-		mist.scheduleFunction(ManipulateForce, {rCPamount, "RED", "CP", 1000, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 32)
-		mist.scheduleFunction(ManipulateForce, {rSRSAMamount, "RED", "SRSAM", 1000, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 34)
-		mist.scheduleFunction(ManipulateForce, {rLRSAMamount, "RED", "LRSAM", 1000, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 36)
+		mist.scheduleFunction(ManipulateForce, {rAAAamount, "RED", "AAA", 100, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 20)
+		mist.scheduleFunction(ManipulateForce, {rTRUCKamount, "RED", "TRUCK", 50, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 22)
+		mist.scheduleFunction(ManipulateForce, {rSHORADamount, "RED", "SHORAD", 100, "LAND", 500, 0, 0, nil, nil}, timer.getTime() + 24)
+		mist.scheduleFunction(ManipulateForce, {rINFamount, "RED", "INF", 10, "LAND", 500, 5000, mist.random(4,7), nil, nil}, timer.getTime() + 26)
+		mist.scheduleFunction(ManipulateForce, {rTANKamount, "RED", "TANK", 100, "LAND", 500, 5000, mist.random(28,42), nil, nil}, timer.getTime() + 28)
+		mist.scheduleFunction(ManipulateForce, {rAPCamount, "RED", "APC", 100, "LAND", 500, 5000, mist.random(24,32), nil, nil}, timer.getTime() + 30)
+		mist.scheduleFunction(ManipulateForce, {rCPamount, "RED", "CP", 100, "LAND", 500, 5000, 0, nil, nil}, timer.getTime() + 32)
+		mist.scheduleFunction(ManipulateForce, {rSRSAMamount, "RED", "SRSAM", 100, "LAND", 400, 0, 0, nil, nil}, timer.getTime() + 34)
+		mist.scheduleFunction(ManipulateForce, {rLRSAMamount, "RED", "LRSAM", 100, "LAND", 0, 0, 0, nil, nil}, timer.getTime() + 36)
 		end
 		end
 

@@ -1,4 +1,4 @@
--- version 1.02
+-- version 1.03
 function determineForceLeaders()
 
 if blueLeader.id == 1 then
@@ -10,14 +10,14 @@ blueLeader.finfo3 = "LOGISTICS: ###"
 blueLeader.finfo4 = "AIRFORCE:  ####"
 blueLeader.access = "russia"
 -- blue group amounts based on location
-bAAAamount = 6
-bTRUCKamount = 6
-bSHORADamount = 2 
-bTANKamount = 6
-bAPCamount = 5
-bINFamount = 5
-bSRSAMamount = 6
-bLRSAMamount = 6
+bAAAamount = 4
+bTRUCKamount = 2
+bSHORADamount = 2
+bTANKamount = 4
+bAPCamount = 4
+bINFamount = 4
+bSRSAMamount = 4
+bLRSAMamount = 3
 bCPamount = 1
 heloattack.blue.supply = 12
 groundattack.blue.supply = 18
@@ -42,13 +42,13 @@ blueLeader.finfo3 = "LOGISTICS: ####"
 blueLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
 bAAAamount = 4
-bTRUCKamount = 8
+bTRUCKamount = 4
 bSHORADamount = 4
-bTANKamount = 8
-bAPCamount = 8
-bINFamount = 8
-bSRSAMamount = 4
-bLRSAMamount = 4
+bTANKamount = 5
+bAPCamount = 4
+bINFamount = 4
+bSRSAMamount = 3
+bLRSAMamount = 2
 bCPamount = 1
 heloattack.blue.supply = 12
 groundattack.blue.supply = 12
@@ -71,14 +71,14 @@ blueLeader.finfo2 = "DEFENSES:  ###"
 blueLeader.finfo3 = "LOGISTICS: ####"
 blueLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
-bAAAamount = 5
-bTRUCKamount = 7
-bSHORADamount = 5
-bTANKamount = 7
-bAPCamount = 5
-bINFamount = 6
-bSRSAMamount = 3
-bLRSAMamount = 3
+bAAAamount = 3
+bTRUCKamount = 5
+bSHORADamount = 3
+bTANKamount = 4
+bAPCamount = 4
+bINFamount = 3
+bSRSAMamount = 2
+bLRSAMamount = 2
 bCPamount = 1
 heloattack.blue.supply = 12
 groundattack.blue.supply = 14
@@ -101,14 +101,14 @@ blueLeader.finfo2 = "DEFENSES:  ####"
 blueLeader.finfo3 = "LOGISTICS: #####"
 blueLeader.finfo4 = "AIRFORCE:  ###"
 -- blue group amounts based on location
-bAAAamount = 7
-bTRUCKamount = 8
+bAAAamount = 5
+bTRUCKamount = 5
 bSHORADamount = 1
 bTANKamount = 5
-bAPCamount = 14
-bINFamount = 14
-bSRSAMamount = 3
-bLRSAMamount = 3
+bAPCamount = 5
+bINFamount = 9
+bSRSAMamount = 2
+bLRSAMamount = 2
 bCPamount = 1
 heloattack.blue.supply = 8
 groundattack.blue.supply = 13
@@ -132,11 +132,11 @@ blueLeader.finfo3 = "LOGISTICS: ####"
 blueLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
 bAAAamount = 3
-bTRUCKamount = 5
-bSHORADamount = 1
-bTANKamount = 12
-bAPCamount = 5
-bINFamount = 5
+bTRUCKamount = 4
+bSHORADamount = 2
+bTANKamount = 7
+bAPCamount = 4
+bINFamount = 3
 bSRSAMamount = 1
 bLRSAMamount = 1
 bCPamount = 1
@@ -161,13 +161,13 @@ blueLeader.finfo2 = "DEFENSES:  ##"
 blueLeader.finfo3 = "LOGISTICS: ###"
 blueLeader.finfo4 = "AIRFORCE:  ###"
 -- blue group amounts based on location
-bAAAamount = 4
-bTRUCKamount = 4
+bAAAamount = 3
+bTRUCKamount = 3
 bSHORADamount = 2
-bTANKamount = 10
+bTANKamount = 6
 bAPCamount = 2
-bINFamount = 12
-bSRSAMamount = 1
+bINFamount = 6
+bSRSAMamount = 3
 bLRSAMamount = 1
 bCPamount = 1
 heloattack.blue.supply = 6
@@ -192,14 +192,14 @@ redLeader.finfo2 = "DEFENSES:  #####"
 redLeader.finfo3 = "LOGISTICS: ###"
 redLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
-rAAAamount = 6
-rTRUCKamount = 6
+rAAAamount = 4
+rTRUCKamount = 2
 rSHORADamount = 2
-rTANKamount = 6
-rAPCamount = 5
-rINFamount = 5
-rSRSAMamount = 6
-rLRSAMamount = 6
+rTANKamount = 4
+rAPCamount = 4
+rINFamount = 4
+rSRSAMamount = 4
+rLRSAMamount = 3
 rCPamount = 1
 heloattack.red.supply = 10
 groundattack.red.supply = 22
@@ -223,13 +223,13 @@ redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
 rAAAamount = 4
-rTRUCKamount = 8
+rTRUCKamount = 4
 rSHORADamount = 4
-rTANKamount = 8
-rAPCamount = 8
-rINFamount = 8
-rSRSAMamount = 4
-rLRSAMamount = 4
+rTANKamount = 5
+rAPCamount = 4
+rINFamount = 4
+rSRSAMamount = 3
+rLRSAMamount = 2
 rCPamount = 1
 heloattack.red.supply = 12
 groundattack.red.supply = 12
@@ -252,14 +252,14 @@ redLeader.finfo2 = "DEFENSES:  ###"
 redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
-rAAAamount = 5
-rTRUCKamount = 7
-rSHORADamount = 5
-rTANKamount = 7
-rAPCamount = 5
-rINFamount = 6
-rSRSAMamount = 3
-rLRSAMamount = 3
+rAAAamount = 3
+rTRUCKamount = 5
+rSHORADamount = 3
+rTANKamount = 4
+rAPCamount = 4
+rINFamount = 3
+rSRSAMamount = 2
+rLRSAMamount = 2
 rCPamount = 1
 heloattack.red.supply = 12
 groundattack.red.supply = 14
@@ -282,14 +282,14 @@ redLeader.finfo2 = "DEFENSES:  ####"
 redLeader.finfo3 = "LOGISTICS: #####"
 redLeader.finfo4 = "AIRFORCE:  ###"
 -- blue group amounts based on location
-rAAAamount = 7
-rTRUCKamount = 8
+rAAAamount = 5
+rTRUCKamount = 5
 rSHORADamount = 1
 rTANKamount = 5
-rAPCamount = 14
-rINFamount = 14
-rSRSAMamount = 3
-rLRSAMamount = 3
+rAPCamount = 5
+rINFamount = 9
+rSRSAMamount = 2
+rLRSAMamount = 2
 rCPamount = 1
 heloattack.red.supply = 8
 groundattack.red.supply = 13
@@ -313,11 +313,11 @@ redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
 rAAAamount = 3
-rTRUCKamount = 5
-rSHORADamount = 1
-rTANKamount = 12
-rAPCamount = 5
-rINFamount = 5
+rTRUCKamount = 4
+rSHORADamount = 2
+rTANKamount = 7
+rAPCamount = 4
+rINFamount = 3
 rSRSAMamount = 1
 rLRSAMamount = 1
 rCPamount = 1
@@ -342,13 +342,13 @@ redLeader.finfo2 = "DEFENSES:  ##"
 redLeader.finfo3 = "LOGISTICS: ###"
 redLeader.finfo4 = "AIRFORCE:  ###"
 -- blue group amounts based on location
-rAAAamount = 4
-rTRUCKamount = 4
+rAAAamount = 3
+rTRUCKamount = 3
 rSHORADamount = 2
-rTANKamount = 10
+rTANKamount = 6
 rAPCamount = 2
-rINFamount = 12
-rSRSAMamount = 1
+rINFamount = 6
+rSRSAMamount = 3
 rLRSAMamount = 1
 rCPamount = 1
 heloattack.red.supply = 6
@@ -365,8 +365,9 @@ end
 
 function displayLeaderInfo(side)
 if side == "RED" then
+leaderANNOUNCE = leaderANNOUNCE + 1
 	if leaderANNOUNCE <= 2 then	
-		leaderANNOUNCE = leaderANNOUNCE + 1
+		
 		
 		if redLeader.id == 1 or redLeader.id == 6 then
 		trigger.action.outSoundForCoalition(coalition.side.RED, 'sovietAnthem.ogg')
@@ -438,8 +439,9 @@ if side == "RED" then
 	end
 	
 if side == "BLUE" then
+	leaderANNOUNCE = leaderANNOUNCE + 1
 	if leaderANNOUNCE <= 2 then	
-		leaderANNOUNCE = leaderANNOUNCE + 1
+	
 		
 		if blueLeader.id == 1 or blueLeader.id == 6 then
 		trigger.action.outSoundForCoalition(coalition.side.RED, 'sovietAnthem.ogg')
