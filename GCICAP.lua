@@ -509,13 +509,13 @@ do
       -- see if we can send a new CAP into the zone
       if zone.patrol_count <= 0 then
         -- first check if we already hit the maximum amounts of routine CAP groups
-        if #gcicap[side].cas.flights < gcicap[side].cas.groups_count then
+        if #gcicap[side].cap.flights < gcicap[side].cap.groups_count then
           -- check if we limit resources and if we have enough supplies
           -- if we don't limit resource or have enough supplies we spawn
           if not gcicap[side].limit_resources or
             (gcicap[side].limit_resources and gcicap[side].supply > 0) and gcicap.allowspawn == true then
             -- finally spawn it
-            gcicap.spawn(side, gcicap[side].cas.zones[i], gcicap[side].cas.spawn_mode)
+            gcicap.spawn(side, gcicap[side].cap.zones[i], gcicap[side].cap.spawn_mode)
 			gcicap.allowspawn = false;
           end
         end

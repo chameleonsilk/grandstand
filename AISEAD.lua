@@ -354,7 +354,7 @@ do
       for i = 1, seadattack.template_count do
         local unit = seadattack.sead.template_prefix[side]..side..i
         if not Unit.getByName(unit) then
-          seadattack.log:alert("CAS template unit missing: $1", unit)
+          seadattack.log:alert("SEAD template unit missing: $1", unit)
           return false
         end
       end
@@ -372,7 +372,7 @@ do
     for i = 1, seadattack[side].sead.zones_count do
       local zone_name = seadattack[side].sead.zone_name
       if not trigger.misc.getZone(zone_name) then
-        seadattack.log:alert("CAS trigger zone is missing: $1", zone_name)
+        seadattack.log:alert("sead trigger zone is missing: $1", zone_name)
         return false
       end
     end
@@ -386,16 +386,16 @@ do
       local zone = seadattack[side].sead.zones[i]
       seadattack.log:info("Zone $1 has $2 patrols", zone.name, zone.patrol_count)
 
-      -- see if we can send a new CAS into the zone
+      -- see if we can send a new sead into the zone
       if zone.patrol_count <= 0 then
-        -- first check if we already hit the maximum amounts of routine CAS groups
-        if #seadattack[side].cas.flights < seadattack[side].cas.groups_count then
+        -- first check if we already hit the maximum amounts of routine sead groups
+        if #seadattack[side].sead.flights < seadattack[side].sead.groups_count then
           -- check if we limit resources and if we have enough supplies
           -- if we don't limit resource or have enough supplies we spawn
           if not seadattack[side].limit_resources or
             (seadattack[side].limit_resources and seadattack[side].supply > 0) and seadattack.allowspawn == true then
             -- finally spawn it
-            seadattack.spawn(side, seadattack[side].cas.zones[i], seadattack[side].cas.spawn_mode)
+            seadattack.spawn(side, seadattack[side].sead.zones[i], seadattack[side].sead.spawn_mode)
 			seadattack.allowspawn = false;
           end
         end
@@ -403,7 +403,7 @@ do
         patroled_zones = patroled_zones + 1
       end
     end
-    -- if all zones are patroled and we still have cas groups left
+    -- if all zones are patroled and we still have sead groups left
     -- send them to a random zone
     if #seadattack[side].sead.flights < seadattack[side].sead.groups_count then
       if not seadattack[side].limit_resources or

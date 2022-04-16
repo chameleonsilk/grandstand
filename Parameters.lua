@@ -4,13 +4,38 @@
 --
 
 GROUND_RESPAWN_DELAY = 600 -- 10 minutes
-DISBAND_PERCENT = 35 -- when a group is this hurt it is removed
+DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
 -- All Polygon Restrictions by non-activated flight plans are
 -- XX##Square
 -- start blue zones
+
+MasterList = {
+[1] = 'KM56Square',
+[2] = 'KM58Square',
+[3] = 'KM66Square',
+[4] = 'KM68Square',
+[5] = 'KM77Square',
+[6] = 'KM78Square',
+[7] = 'KM79Square',
+[8] = 'KM86Square',
+[9] = 'KM88Square',
+[10] = 'KM89Square',
+[11] = 'KM97Square',
+[12] = 'KM98Square',
+[13] = 'KM99Square',
+[14] = 'GC10Square',
+[15] = 'GG33Square',
+[16] = 'GG36Square',
+[17] = 'GG37Square',
+[18] = 'FH84Square',
+[19] = 'GH21Square',
+[20] = 'GG46Square',
+[21] = 'KM56Square'
+}
+
 
 --BlueSectorSquaresAmount = 7
 BlueSectorSquares = {
@@ -200,7 +225,7 @@ RedTRUCK_SectorSquares = {
 	  [1] = 'Red CP Asset-1',
 	}
 
-updateMarkerSpeed = 60 -- 1 minute smoke marker update
+updateMarkerSpeed = 30 -- 30sec smoke marker update
 --- Sets how verbose the log output will be.
 -- Possible values are "none", "info", "warning" and "error".
 -- I recommend "error" for production.

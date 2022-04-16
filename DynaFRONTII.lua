@@ -1,6 +1,4 @@
-		--revision 1.19
-
-		decluster = mist.random(1,10) -- global used to randomly decluster smoke marker schedule
+		--revision 1.20
 		dynaFRONT = {}
 		dynaFRONT.log_level = "info"
 		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -529,7 +527,7 @@
 		end
 		end
 
-		 
+		
 			
 		function moveStuff(thisGroupName, randomizerDist, spd, team)	-- this is old code from 7 years ago, will need to write a much better ground tasking script to attack sectors in the future, for now just have them randomly move around to create conflicts
 			if thisGroupName == nil then
@@ -676,6 +674,53 @@
 		end
 		end
 
+		function updateGrid(tableOfZones)
+		local sectors = tableOfZones -- localize our argument
+		
+		for examinesector = 1, #sectors do -- for every sector up till the last sector in the table
+			
+			local rUnitList = mist.getUnitsInZones(mist.makeUnitTable({'[red][vehicles]'}), {sectors[examinesector]}) -- get all the red units in that sector
+			local bUnitList = mist.getUnitsInZones(mist.makeUnitTable({'[blue][vehicles]'}), {sectors[examinesector]}) -- get all the blue units in that sector
+			local zoneInQuestion = sectors[examinesector] -- we want the marker to use this zones verticies
+			
+			rus = #rUnitList
+			bus = #bUnitList
+			rushalfstr = rus / 2
+			bushalfstr = rus / 2
+			
+			local markervars = {
+			id = sectors[examinesector], -- make the marker ID the same as that zones names
+			pos = getQTpoints(zoneInQuestion), -- get the table of verticies from that zone
+			markType = 7,  -- use Quad
+			markForCoa = -1,
+			lineType = 1, -- type of line for the border
+			readOnly = true -- users can't remove this marker`
+			}
+			
+			 -- default color for no units in that sector
+	
+			markervars.color = {0,255,0,255} -- color green
+			markervars.fillColor = {0,255,0,80} -- filled green with 80 alpha
+			
+			if rus >= bushalfstr and rus ~= 0 then -- red outnumbers blues half strength
+				markervars.color = {255,0,0,255} -- color red
+				markervars.fillColor = {255,0,0,80} -- filled red with 80 alpha
+				elseif rus >= bus and rus ~= 0 then -- red outnumbers blues full strength
+				markervars.color = {255,0,0,255} -- color red
+				markervars.fillColor = {255,0,0,120} -- filled red with 120 alpha
+			end
+			
+			if bus >= rushalfstr and bus ~= 0 then -- blue outnumbers reds half strength
+				markervars.color = {0,0,255,255} -- color blue
+				markervars.fillColor = {0,0,255,80} -- filled blue with 80 alpha
+				elseif bus >= rus and bus ~= 0 then -- if they outnumber its full strength
+				markervars.color = {0,0,255,255} -- color blue
+				markervars.fillColor = {0,0,255,120} -- filled blue with 120 alpha
+			end
+			mist.marker.add(markervars)
+			end
+		end
+
 
 		function ColorZones(routine) -- this is placeholder function and will need to be updated for sector control at a later time
 		--trigger.action.markupToAll(numbr shapeId , number coalition , number id , vec3 point1 , anyValid param... , table color , table fillColor , number lineType , boolean readOnly, string message)
@@ -698,11 +743,11 @@
 		if routine == "ADD" then
 		for i = 1, #RedSectorSquares do
 		 --colorID = colorID + 1
-		 coloredZoneID = colorID
+		 id = RedSectorSquares[i]
 		 zoneInQuestion = RedSectorSquares[i]
 		   vars = {
 		  pos = getQTpoints(zoneInQuestion),
-		 name = "REDSEC",
+		 --name = "REDSEC",
 		 markType = 7,  -- use Quad
 		 --radius = number radius, 
 		 --text = "TEST", 
@@ -830,22 +875,48 @@
 		end
 
 
-		if routine == "REMOVE" then
-		local val = mist.marker.get('REDSEC')
+	if routine == "REMOVE" then
+		for i = 1, #RedSectorSquares do
+		 --colorID = colorID + 1
+		 id = RedSectorSquares[i]
+		 zoneInQuestion = RedSectorSquares[i]
+		   vars = {
+		  pos = getQTpoints(zoneInQuestion),
+		 --name = "REDSEC",
+		 markType = 7,  -- use Quad
+		 --radius = number radius, 
+		 --text = "TEST", 
+		 --markFor = {coa = {'all'}},
+		markForCoa = -1,
+		 color = {0,255,0,255},
+		 fillColor = {0,255,0,80},
+		 lineType = 1,
+		 readOnly = false
+		 --message = text message,
+		 --fontSize = number fontSize,
+		 }
+		 mist.marker.add(vars)
+		 end
+		
+		
+		--local val = mist.marker.get("REDSEC")
 		--mist.Marker.Remove(val)
-		local val = mist.marker.get('BLUESEC')
+		--local val = mist.marker.get('REDSEC')
 		--mist.Marker.Remove(val)
-		local val = mist.marker.get('REDLRSAM')
+		--local val = mist.marker.get('BLUESEC')
+		--mist.marker.remove({1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+		--local val = mist.marker.get('REDLRSAM')
 		--mist.Marker.Remove(val)
-		local val = mist.marker.get('REDSRSAM')
+		--local val = mist.marker.get('REDSRSAM')
 		--mist.Marker.Remove(val)
-		local val = mist.marker.get('BLUELRSAM')
+		--local val = mist.marker.get('BLUELRSAM')
 		--mist.Marker.Remove(val)
-		local val = mist.marker.get('BLUESRSAM')
+		--local val = mist.marker.get('BLUESRSAM')
 		--mist.Marker.Remove(val)
 		end
 
 		end -- end function
+		
 
 
 		function getQTpoints(zoneTable) -- my nifty function to gather the points from a mission editor quad trigger zone
@@ -869,7 +940,9 @@
 		end
 
 		-- main
-		mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 1) -- color in the sector zones based on the sector tables in parameters.lua
+		--mist.scheduleFunction(ColorZones, {"ADD"}, timer.getTime() + 1) -- color in the sector zones based on the sector tables in parameters.lua
+		mist.scheduleFunction(updateGrid, {MasterList}, timer.getTime() + 20, 60)
+		--mist.scheduleFunction(ColorZones, {"REMOVE"}, timer.getTime() + 10) -- color in the sector zones based on the sector tables in parameters.lua
 		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
 		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
 		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.RED, "RED", "AAA"}, timer.getTime() + 61, 30) -- begin monitoring all the red groups of each type of unit
@@ -893,8 +966,8 @@
 		mist.scheduleFunction(monitorGroup, {ActiveForces.SRSAM.BLUE, "BLUE", "SRSAM"}, timer.getTime() + 88, 30)
 
 
-		mist.scheduleFunction(random_markers, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster) -- add randoimized smoke markers (this is old code written 7 years ago, maybe replace with more modern take on it at some point)
-		mist.scheduleFunction(random_markers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed + decluster) -- add randoimized smoke markers
+		mist.scheduleFunction(random_markers, {50,250}, timer.getTime() + 10, updateMarkerSpeed) -- add randoimized smoke markers (this is old code written 7 years ago, maybe replace with more modern take on it at some point)
+		mist.scheduleFunction(random_markers2, {50,250}, timer.getTime() + 10, updateMarkerSpeed) -- add randoimized smoke markers
 		mist.scheduleFunction(scoreDisplay, {}, timer.getTime() + 90, 120) -- schedule the score display after 90 seconds and every 2 minutes afterwards
 		mist.scheduleFunction(Introduce_Mission, {}, timer.getTime() + 2) -- schedule the mission introduction after 2 seconds of miz running.
 
