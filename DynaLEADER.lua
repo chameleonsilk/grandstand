@@ -10,13 +10,13 @@ blueLeader.finfo3 = "LOGISTICS: ###"
 blueLeader.finfo4 = "AIRFORCE:  ####"
 blueLeader.access = "russia"
 -- blue group amounts based on location
-bAAAamount = 4
+bAAAamount = 3
 bTRUCKamount = 2
 bSHORADamount = 2
-bTANKamount = 4
-bAPCamount = 4
-bINFamount = 4
-bSRSAMamount = 4
+bTANKamount = 3
+bAPCamount = 3
+bINFamount = 3
+bSRSAMamount = 3
 bLRSAMamount = 3
 bCPamount = 1
 heloattack.blue.supply = 12
@@ -41,12 +41,12 @@ blueLeader.finfo2 = "DEFENSES:  ####"
 blueLeader.finfo3 = "LOGISTICS: ####"
 blueLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
-bAAAamount = 4
-bTRUCKamount = 4
-bSHORADamount = 4
+bAAAamount = 3
+bTRUCKamount = 3
+bSHORADamount = 3
 bTANKamount = 5
-bAPCamount = 4
-bINFamount = 4
+bAPCamount = 3
+bINFamount = 3
 bSRSAMamount = 3
 bLRSAMamount = 2
 bCPamount = 1
@@ -74,8 +74,8 @@ blueLeader.finfo4 = "AIRFORCE:  #####"
 bAAAamount = 3
 bTRUCKamount = 5
 bSHORADamount = 3
-bTANKamount = 4
-bAPCamount = 4
+bTANKamount = 3
+bAPCamount = 3
 bINFamount = 3
 bSRSAMamount = 2
 bLRSAMamount = 2
@@ -106,7 +106,7 @@ bTRUCKamount = 5
 bSHORADamount = 1
 bTANKamount = 5
 bAPCamount = 5
-bINFamount = 6
+bINFamount = 5
 bSRSAMamount = 2
 bLRSAMamount = 2
 bCPamount = 1
@@ -132,10 +132,10 @@ blueLeader.finfo3 = "LOGISTICS: ####"
 blueLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
 bAAAamount = 3
-bTRUCKamount = 4
+bTRUCKamount = 3
 bSHORADamount = 2
-bTANKamount = 7
-bAPCamount = 4
+bTANKamount = 6
+bAPCamount = 3
 bINFamount = 3
 bSRSAMamount = 1
 bLRSAMamount = 1
@@ -164,9 +164,9 @@ blueLeader.finfo4 = "AIRFORCE:  ###"
 bAAAamount = 3
 bTRUCKamount = 3
 bSHORADamount = 2
-bTANKamount = 6
+bTANKamount = 5
 bAPCamount = 2
-bINFamount = 6
+bINFamount = 5
 bSRSAMamount = 3
 bLRSAMamount = 1
 bCPamount = 1
@@ -192,12 +192,12 @@ redLeader.finfo2 = "DEFENSES:  #####"
 redLeader.finfo3 = "LOGISTICS: ###"
 redLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
-rAAAamount = 4
+rAAAamount = 3
 rTRUCKamount = 2
 rSHORADamount = 2
-rTANKamount = 4
-rAPCamount = 4
-rINFamount = 4
+rTANKamount = 3
+rAPCamount = 3
+rINFamount = 3
 rSRSAMamount = 4
 rLRSAMamount = 3
 rCPamount = 1
@@ -222,12 +222,12 @@ redLeader.finfo2 = "DEFENSES:  ####"
 redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  ####"
 -- blue group amounts based on location
-rAAAamount = 4
-rTRUCKamount = 4
-rSHORADamount = 4
-rTANKamount = 5
-rAPCamount = 4
-rINFamount = 4
+rAAAamount = 3
+rTRUCKamount = 3
+rSHORADamount = 3
+rTANKamount = 4
+rAPCamount = 3
+rINFamount = 3
 rSRSAMamount = 3
 rLRSAMamount = 2
 rCPamount = 1
@@ -253,10 +253,10 @@ redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
 rAAAamount = 3
-rTRUCKamount = 5
+rTRUCKamount = 4
 rSHORADamount = 3
-rTANKamount = 4
-rAPCamount = 4
+rTANKamount = 3
+rAPCamount = 3
 rINFamount = 3
 rSRSAMamount = 2
 rLRSAMamount = 2
@@ -282,12 +282,12 @@ redLeader.finfo2 = "DEFENSES:  ####"
 redLeader.finfo3 = "LOGISTICS: #####"
 redLeader.finfo4 = "AIRFORCE:  ###"
 -- blue group amounts based on location
-rAAAamount = 5
-rTRUCKamount = 5
+rAAAamount = 4
+rTRUCKamount = 4
 rSHORADamount = 1
 rTANKamount = 5
 rAPCamount = 5
-rINFamount = 6
+rINFamount = 5
 rSRSAMamount = 2
 rLRSAMamount = 2
 rCPamount = 1
@@ -313,10 +313,10 @@ redLeader.finfo3 = "LOGISTICS: ####"
 redLeader.finfo4 = "AIRFORCE:  #####"
 -- blue group amounts based on location
 rAAAamount = 3
-rTRUCKamount = 4
+rTRUCKamount = 3
 rSHORADamount = 2
-rTANKamount = 7
-rAPCamount = 4
+rTANKamount = 6
+rAPCamount = 3
 rINFamount = 3
 rSRSAMamount = 1
 rLRSAMamount = 1
@@ -345,9 +345,9 @@ redLeader.finfo4 = "AIRFORCE:  ###"
 rAAAamount = 3
 rTRUCKamount = 3
 rSHORADamount = 2
-rTANKamount = 6
+rTANKamount = 5
 rAPCamount = 2
-rINFamount = 6
+rINFamount = 5
 rSRSAMamount = 3
 rLRSAMamount = 1
 rCPamount = 1
@@ -512,22 +512,22 @@ end
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 		    local msg = {} 
-    msg.text = heloattack.blue.supply .. ' Helicopters remaining' 
+    msg.text = heloattack.blue.supply .. ' Helicopter flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = groundattack.blue.supply .. ' CAS planes remaining' 
+    msg.text = groundattack.blue.supply .. ' CAS flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = seadattack.blue.supply .. ' SEAD planes remaining' 
+    msg.text = seadattack.blue.supply .. ' SEAD flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = groundattack.blue.supply .. ' CAP planes remaining' 
+    msg.text = groundattack.blue.supply .. ' CAP flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
@@ -540,22 +540,22 @@ end
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = heloattack.red.supply .. ' Helicopters remaining' 
+    msg.text = heloattack.red.supply .. ' Helicopter flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = groundattack.red.supply .. ' CAS planes remaining' 
+    msg.text = groundattack.red.supply .. ' CAS flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = seadattack.red.supply .. ' SEAD planes remaining' 
+    msg.text = seadattack.red.supply .. ' SEAD flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
 	    local msg = {} 
-    msg.text = groundattack.red.supply .. ' CAP planes remaining' 
+    msg.text = groundattack.red.supply .. ' CAP flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
