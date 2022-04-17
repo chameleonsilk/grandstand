@@ -600,16 +600,35 @@ do
   local function getAirfields(side)
     local coal_airfields = coalition.getAirbases(gcicap.sideToCoalition(side))
     local gcicap_airfields = {}
+	
+	
+	
+	
 
     -- loop over all coalition airfields
     for i = 1, #coal_airfields do
       -- get name of airfield
+	  
+	  
+	  -- DEBUG STUFF
+				
+				-- END DEBUG STUFF
+	  
+	 -- local airid = coal_airfields[i]:getID()
+	  --trigger.action.outText(airid,50, true)	
+	  --if airid ~= "boil" or "roil" then
       local af_name = coal_airfields[i]:getName()
+	  
+	  
+	 -- local data = mist.utils.serialize("tblCheck", af_name) -- debug to show us our table
+	--			trigger.action.outText(data,50, true)	
+	  
       if not string.match(af_name, "FARP") then
         -- check if a triggerzone exists with that exact name
         if mist.DBs.zonesByName[af_name] then
           -- add it to our airfield list for gcicap
           gcicap_airfields[#gcicap_airfields + 1] = coal_airfields[i]
+		--  end
         end
       end
     end

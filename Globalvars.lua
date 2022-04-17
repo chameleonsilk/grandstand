@@ -66,6 +66,7 @@ ActiveForces.LRSAM = {}
 ActiveForces.INF = {}
 ActiveForces.APC = {}
 ActiveForces.CP = {}
+ActiveForces.NAVY = {}
 
 
 ActiveForces.AAA.RED = {}
@@ -77,6 +78,7 @@ ActiveForces.LRSAM.RED = {}
 ActiveForces.INF.RED = {}
 ActiveForces.APC.RED = {}
 ActiveForces.CP.RED = {}
+ActiveForces.NAVY.RED = {}
 
 ActiveForces.AAA.RED.DESTROYED = {}
 ActiveForces.TANK.RED.DESTROYED = {}
@@ -87,6 +89,7 @@ ActiveForces.LRSAM.RED.DESTROYED = {}
 ActiveForces.INF.RED.DESTROYED = {}
 ActiveForces.APC.RED.DESTROYED = {}
 ActiveForces.CP.RED.DESTROYED = {}
+ActiveForces.NAVY.RED.DESTROYED = {}
 
 ActiveForces.AAA.RED.TEMPLATE = {}
 ActiveForces.TANK.RED.TEMPLATE = {}
@@ -97,6 +100,7 @@ ActiveForces.LRSAM.RED.TEMPLATE = {}
 ActiveForces.INF.RED.TEMPLATE = {}
 ActiveForces.APC.RED.TEMPLATE = {}
 ActiveForces.CP.RED.TEMPLATE = {}
+ActiveForces.NAVY.RED.TEMPLATE = {}
 
 ActiveForces.AAA.RED.INITSIZE = {}
 ActiveForces.TANK.RED.INITSIZE = {}
@@ -107,6 +111,7 @@ ActiveForces.LRSAM.RED.INITSIZE = {}
 ActiveForces.INF.RED.INITSIZE = {}
 ActiveForces.APC.RED.INITSIZE = {}
 ActiveForces.CP.RED.INITSIZE = {}
+ActiveForces.NAVY.RED.INITSIZE = {}
 
 ActiveForces.AAA.RED.SIZE = {}
 ActiveForces.TANK.RED.SIZE = {}
@@ -117,6 +122,7 @@ ActiveForces.LRSAM.RED.SIZE = {}
 ActiveForces.INF.RED.SIZE = {}
 ActiveForces.APC.RED.SIZE = {}
 ActiveForces.CP.RED.SIZE= {}
+ActiveForces.NAVY.RED.SIZE = {}
 
 ActiveForces.AAA.RED.POS = {}
 ActiveForces.TANK.RED.POS = {}
@@ -127,6 +133,7 @@ ActiveForces.LRSAM.RED.POS = {}
 ActiveForces.INF.RED.POS = {}
 ActiveForces.APC.RED.POS = {}
 ActiveForces.CP.RED.POS = {}
+ActiveForces.NAVY.RED.POS = {}
 
 ActiveForces.AAA.RED.SQUARE = {}
 ActiveForces.TANK.RED.SQUARE = {}
@@ -137,6 +144,7 @@ ActiveForces.LRSAM.RED.SQUARE = {}
 ActiveForces.INF.RED.SQUARE = {}
 ActiveForces.APC.RED.SQUARE = {}
 ActiveForces.CP.RED.SQUARE = {}
+ActiveForces.NAVY.RED.SQUARE = {}
 
 ActiveForces.AAA.BLUE = {}
 ActiveForces.TANK.BLUE = {}
@@ -147,6 +155,7 @@ ActiveForces.LRSAM.BLUE = {}
 ActiveForces.INF.BLUE = {}
 ActiveForces.APC.BLUE = {}
 ActiveForces.CP.BLUE = {}
+ActiveForces.NAVY.BLUE = {}
 
 ActiveForces.AAA.BLUE.TEMPLATE = {}
 ActiveForces.TANK.BLUE.TEMPLATE = {}
@@ -157,6 +166,7 @@ ActiveForces.LRSAM.BLUE.TEMPLATE = {}
 ActiveForces.INF.BLUE.TEMPLATE = {}
 ActiveForces.APC.BLUE.TEMPLATE = {}
 ActiveForces.CP.BLUE.TEMPLATE = {}
+ActiveForces.NAVY.BLUE.TEMPLATE = {}
 
 ActiveForces.AAA.BLUE.DESTROYED = {}
 ActiveForces.TANK.BLUE.DESTROYED = {}
@@ -167,6 +177,7 @@ ActiveForces.LRSAM.BLUE.DESTROYED = {}
 ActiveForces.INF.BLUE.DESTROYED = {}
 ActiveForces.APC.BLUE.DESTROYED = {}
 ActiveForces.CP.BLUE.DESTROYED = {}
+ActiveForces.NAVY.BLUE.DESTROYED = {}
 
 ActiveForces.AAA.BLUE.INITSIZE = {}
 ActiveForces.TANK.BLUE.INITSIZE = {}
@@ -177,6 +188,7 @@ ActiveForces.LRSAM.BLUE.INITSIZE = {}
 ActiveForces.INF.BLUE.INITSIZE = {}
 ActiveForces.APC.BLUE.INITSIZE = {}
 ActiveForces.CP.BLUE.INITSIZE = {}
+ActiveForces.NAVY.BLUE.INITSIZE = {}
 
 ActiveForces.AAA.BLUE.SIZE = {}
 ActiveForces.TANK.BLUE.SIZE = {}
@@ -187,6 +199,7 @@ ActiveForces.LRSAM.BLUE.SIZE = {}
 ActiveForces.INF.BLUE.SIZE = {}
 ActiveForces.APC.BLUE.SIZE = {}
 ActiveForces.CP.BLUE.SIZE = {}
+ActiveForces.NAVY.BLUE.SIZE = {}
 
 
 ActiveForces.AAA.BLUE.POS = {}
@@ -198,6 +211,7 @@ ActiveForces.LRSAM.BLUE.POS = {}
 ActiveForces.INF.BLUE.POS = {}
 ActiveForces.APC.BLUE.POS = {}
 ActiveForces.CP.BLUE.POS = {}
+ActiveForces.NAVY.BLUE.POS = {}
 
 ActiveForces.AAA.BLUE.SQUARE = {}
 ActiveForces.TANK.BLUE.SQUARE = {}
@@ -208,6 +222,7 @@ ActiveForces.LRSAM.BLUE.SQUARE = {}
 ActiveForces.INF.BLUE.SQUARE = {}
 ActiveForces.APC.BLUE.SQUARE = {}
 ActiveForces.CP.BLUE.SQUARE = {}
+ActiveForces.NAVY.BLUE.SQUARE = {}
 
 heloattack.allowspawn = true
 seadattack.allowspawn = true

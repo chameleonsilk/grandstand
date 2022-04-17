@@ -786,14 +786,27 @@ do
     local route = {}
 
     local rand_point = {}
+	local choose_spot = mist.random(1,2)
     --if spawn_mode == "in-zone" then
 	if side == "red" then
       rand_point = mist.getRandomPointInZone(zone)
-	  airbase_pos = redFarpPos
+	
+		if choose_spot == 1 then
+		airbase_pos = redFarpPos
+		else
+		airbase_pos = redRigPos
+		end
+		
 	  end
 	if side == "blue" then
 	  rand_point = mist.getRandomPointInZone(zone)
-	  airbase_pos = blueFarpPos
+	  
+		if choose_spot == 1 then
+		airbase_pos = redFarpPos
+		else
+		airbase_pos = redRigPos
+		end
+	  
 	  end
 	--end
 

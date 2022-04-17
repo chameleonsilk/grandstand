@@ -33,7 +33,13 @@ MasterList = {
 [18] = 'FH84Square',
 [19] = 'GH21Square',
 [20] = 'GG46Square',
-[21] = 'KM56Square'
+[21] = 'KM56Square',
+[22] = 'EHSquare',
+[23] = 'FHSquare',
+[24] = 'FGSquare',
+[25] = 'EGSquare',
+[26] = 'GGSquare',
+[27] = 'GHSquare'
 }
 
 
@@ -65,6 +71,17 @@ BlueTRUCK_SectorSquares = {
 [2] = 'GG37Square',
 [3] = 'FH84Square'
 }
+
+BlueNAVAL_SectorSquares = {
+[1] = 'EHSquare',
+[2] = 'FHSquare'
+}
+
+BlueSHALLOWNAVAL_SectorSquares = {
+[1] = 'GHSquare',
+[2] = 'FJSquare'
+}
+
 -- end blue zones
 
 -- start red zones
@@ -102,6 +119,15 @@ RedTRUCK_SectorSquares = {
 [4] = 'GG33Square',
 [5] = 'GC10Square',
 [6] = 'KM98Square'
+}
+
+RedNAVAL_SectorSquares = {
+[1] = 'EGSquare',
+[2] = 'FGSquare'
+}
+
+RedSHALLOWNAVAL_SectorSquares = {
+[1] = 'GGSquare',
 }
 
 -- end red zones
@@ -167,6 +193,11 @@ RedTRUCK_SectorSquares = {
 	  [1] = 'Blue CP Asset-1',
 	}
 	
+	Blue_Naval_SHIPS = {
+	[1] = 'Blue Naval Asset-1',
+	[2] = 'Blue Naval Asset-2',
+	[3] = 'Blue Naval Asset-3'
+	}
 	
 -- end Red template names
 	
@@ -224,6 +255,14 @@ RedTRUCK_SectorSquares = {
 	Red_Names_CP = {
 	  [1] = 'Red CP Asset-1',
 	}
+	
+	Red_Naval_SHIPS = {
+	[1] = 'Red Naval Asset-1',
+	[2] = 'Red Naval Asset-2',
+	[3] = 'Red Naval Asset-3'
+	}
+	
+	
 
 updateMarkerSpeed = 30 -- 30sec smoke marker update
 --- Sets how verbose the log output will be.
