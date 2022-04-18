@@ -1,4 +1,4 @@
---revision 4
+--revision 5
 --[[
 Copyright (c) 2016 Snafu, Stonehouse, Rivvern, Chameleon Silk, lukrop.
 
@@ -802,9 +802,9 @@ do
 	  rand_point = mist.getRandomPointInZone(zone)
 	  
 		if choose_spot == 1 then
-		airbase_pos = redFarpPos
+		airbase_pos = blueFarpPos
 		else
-		airbase_pos = redRigPos
+		airbase_pos = blueRigPos
 		end
 	  
 	  end

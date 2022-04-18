@@ -1,4 +1,4 @@
--- version 1.03
+-- version 1.04
 -- START EDITABLE STUFF --
 -- determines the amount of spawned stuff when creating the sides
 --
@@ -504,21 +504,21 @@ groundattack.initial_spawn_delay = 30
 seadattack.initial_spawn_delay = 30
 gcicap.initial_spawn_delay = 30
 -- After inital spawn delay
-heloattack.next_spawn_delay = 300
-groundattack.next_spawn_delay = 300
-seadattack.next_spawn_delay = 300
-gcicap.next_spawn_delay = 300
+heloattack.next_spawn_delay = 900 -- 15 minute helo delay between respawning groups
+groundattack.next_spawn_delay = 900 -- 15 minute ground attack delay between respawning groups
+seadattack.next_spawn_delay = 900 -- 15 minute SEAD delay between respawning groups
+gcicap.next_spawn_delay = 900 -- 15 minute CAP/GCI delay between respawning groups
 ---Minimum altitudes in meters.
 -- Default 4500
-heloattack.cas.min_alt = 100
+heloattack.cas.min_alt = 90
 groundattack.cas.min_alt = 300
-seadattack.sead.min_alt = 1500
-gcicap.cap.min_alt = 2500
+seadattack.sead.min_alt = 2000
+gcicap.cap.min_alt = 4000
 --- Maximum altitudes in meters.
 -- Default 7500
-heloattack.cas.max_alt = 850
-groundattack.cas.max_alt = 1500
-seadattack.sead.max_alt = 4500
+heloattack.cas.max_alt = 1000
+groundattack.cas.max_alt = 3000
+seadattack.sead.max_alt = 5000
 gcicap.cap.max_alt = 6000
 --- Speed during their route
 -- speed is in m/s. Default 220.
@@ -530,10 +530,10 @@ gcicap.gci.speed = 280
 --- Maximum engage distance for flights as long as they are on patrol.
 -- this might be overruled by an intercept vector given from
 -- ground control (EWR) in the case of GCI. Default 15000.
-heloattack.cas.max_engage_distance = 215000
-groundattack.cas.max_engage_distance = 215000
-seadattack.sead.max_engage_distance = 215000
-gcicap.cap.max_engage_distance = 30000
+heloattack.cas.max_engage_distance = 25000
+groundattack.cas.max_engage_distance = 50000
+seadattack.sead.max_engage_distance = 25000
+gcicap.cap.max_engage_distance = 20000
 --- Minimum red CAS VUL time in minutes.
 -- Minimum time the red CAS flight will orbit on station.
 heloattack.red.cas.vul_time_min = 25
@@ -599,30 +599,30 @@ seadattack.blue.sead.zones_count = 1
 gcicap.blue.cap.zones_count = 1
 --- Amount of red CAS groups concurrently in the air.
 heloattack.red.cas.groups_count = 1
-groundattack.red.cas.groups_count = 1
+groundattack.red.cas.groups_count = 2
 seadattack.red.sead.groups_count = 1
 gcicap.red.cap.groups_count = 2
 gcicap.red.gci.groups_count = 1
 --- Amount of blue CAS groups concurrently in the air.
 heloattack.blue.cas.groups_count = 1
-groundattack.blue.cas.groups_count = 1
+groundattack.blue.cas.groups_count = 2
 seadattack.blue.sead.groups_count = 1
 gcicap.blue.cap.groups_count = 2
 gcicap.blue.gci.groups_count = 1
 --- Group size of red flights.
 -- If "2" it consists of 2 planes, if "4" it consists of 4 planes
--- if "randomized", the CAS groups consist of either 2 or 4 planes
+-- if "randomized", the CAS groups consist of either 2 or 4 planes, for GCI use dynamic to match interceptors launched to target size (gci can't use randomized)
 heloattack.red.cas.group_size = "2"
-groundattack.red.cas.group_size = "2"
+groundattack.red.cas.group_size = "randomized"
 seadattack.red.sead.group_size = "2"
 gcicap.red.cap.group_size = "randomized"
-gcicap.red.gci.group_size = "2"
+gcicap.red.gci.group_size = "dynamic"
 --- Group size of blue flights.
 heloattack.blue.cas.group_size = "2"
-groundattack.blue.cas.group_size = "2"
+groundattack.blue.cas.group_size = "randomized"
 seadattack.blue.sead.group_size = "2"
 gcicap.blue.cap.group_size = "randomized"
-gcicap.blue.gci.group_size = "2"
+gcicap.blue.gci.group_size = "dynamic"
 --- How red flights are spawned.
 -- can be "parking", "takeoff" or "air" and defines the way the fighters spawn
 -- takeoff is NOT RECOMMENDED currently since their occur timing issues with tasking
@@ -639,15 +639,6 @@ groundattack.blue.cas.spawn_mode = "parking"
 seadattack.blue.sead.spawn_mode = "parking"
 gcicap.blue.cap.spawn_mode = "parking"
 gcicap.blue.gci.spawn_mode = "parking"
---- Group size of red GCI flights.
--- Can be "2", "4" or "dynamic"
--- If "2" it consists of 2 planes, if "4" it consists of 4 planes
--- if "dynamic", the GCI groups consist of as much aircrafts
--- as the intruder group.
-gcicap.red.gci.group_size = "2"
---- Group size of blue GCI flights.
--- See @{gcicap.red.gci.group_size}
-gcicap.blue.gci.group_size = "2"
 --- Enable/disable GCI messages for red
 gcicap.red.gci.messages = true
 --- Enable/disable GCI messages for blue
