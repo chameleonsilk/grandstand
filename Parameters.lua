@@ -479,19 +479,13 @@ RedSHALLOWNAVAL_SectorSquares = {
 	
 
 updateMarkerSpeed = 30 -- 30sec smoke marker update
---- Sets how verbose the log output will be.
--- Possible values are "none", "info", "warning" and "error".
--- I recommend "error" for production.
-heloattack.log_level = "none"
-groundattack.log_level = "none"
-seadattack.log_level = "none"
-gcicap.log_level = "none"
 --- Interval, in seconds, of main function.
 -- Default 30 seconds
 heloattack.interval = 30
 groundattack.interval = 30
 seadattack.interval = 30
 gcicap.interval = 30
+bmbrstrike.interval = 30
 --- Interval, in seconds, GCI flights get vectors on targets.
 -- AI GCI flights don't use their radar, to be as stealth as
 -- possible, relying on those vectors.
@@ -503,23 +497,27 @@ heloattack.initial_spawn_delay = 30
 groundattack.initial_spawn_delay = 30
 seadattack.initial_spawn_delay = 30
 gcicap.initial_spawn_delay = 30
+bmbrstrike.initial_spawn_delay = 30
 -- After inital spawn delay
 heloattack.next_spawn_delay = 900 -- 15 minute helo delay between respawning groups
 groundattack.next_spawn_delay = 900 -- 15 minute ground attack delay between respawning groups
 seadattack.next_spawn_delay = 900 -- 15 minute SEAD delay between respawning groups
 gcicap.next_spawn_delay = 900 -- 15 minute CAP/GCI delay between respawning groups
+bmbrstrike.next_spawn_delay = 900 -- 15 minute CAP/GCI delay between respawning groups
 ---Minimum altitudes in meters.
 -- Default 4500
 heloattack.cas.min_alt = 90
-groundattack.cas.min_alt = 300
-seadattack.sead.min_alt = 2000
+groundattack.cas.min_alt = 2500
+seadattack.sead.min_alt = 2500
 gcicap.cap.min_alt = 4000
+bmbrstrike.bomb.min_alt = 5000
 --- Maximum altitudes in meters.
 -- Default 7500
 heloattack.cas.max_alt = 1000
-groundattack.cas.max_alt = 3000
+groundattack.cas.max_alt = 3500
 seadattack.sead.max_alt = 5000
 gcicap.cap.max_alt = 6000
+bmbrstrike.bomb.max_alt = 7000
 --- Speed during their route
 -- speed is in m/s. Default 220.
 heloattack.cas.speed = 60
@@ -527,6 +525,7 @@ groundattack.cas.speed = 155
 seadattack.sead.speed = 240
 gcicap.cap.speed = 260
 gcicap.gci.speed = 280
+bmbrstrike.bomb.speed = 190
 --- Maximum engage distance for flights as long as they are on patrol.
 -- this might be overruled by an intercept vector given from
 -- ground control (EWR) in the case of GCI. Default 15000.
@@ -534,28 +533,33 @@ heloattack.cas.max_engage_distance = 25000
 groundattack.cas.max_engage_distance = 50000
 seadattack.sead.max_engage_distance = 25000
 gcicap.cap.max_engage_distance = 20000
+bmbrstrike.bomb.max_engage_distance = 999999
 --- Minimum red CAS VUL time in minutes.
 -- Minimum time the red CAS flight will orbit on station.
 heloattack.red.cas.vul_time_min = 25
 groundattack.red.cas.vul_time_min = 25
 seadattack.red.sead.vul_time_min = 25
 gcicap.red.cap.vul_time_min = 25
+bmbrstrike.red.bomb.vul_time_min = 25
 --- Maximum red CAS VUL time in minutes.
 -- Maximum time the red CAS flight will orbit on station.
 heloattack.red.cas.vul_time_max = 40
 groundattack.red.cas.vul_time_max = 40
 seadattack.red.sead.vul_time_max = 40
 gcicap.red.cap.vul_time_max = 40
+bmbrstrike.red.bomb.vul_time_max = 40
 --- Minimum blue CAS VUL time in minutes.
 heloattack.blue.cas.vul_time_min = 25
 groundattack.blue.cas.vul_time_min = 25
 seadattack.blue.sead.vul_time_min = 25
 gcicap.blue.cap.vul_time_min = 25
+bmbrstrike.blue.bomb.vul_time_min = 25
 --- Maximum blue CAS VUL time in minutes.
 heloattack.blue.cas.vul_time_max = 30
 groundattack.blue.cas.vul_time_max = 30
 seadattack.blue.sead.vul_time_max = 30
 gcicap.blue.cap.vul_time_max = 30
+bmbrstrike.blue.bomb.vul_time_max = 25
 --- Use race-track orbit for flights
 -- If true will use a race-track pattern for orbit
 -- between two points in the zone.
@@ -563,16 +567,19 @@ heloattack.cas.race_track_orbit = false
 groundattack.cas.race_track_orbit = false
 seadattack.sead.race_track_orbit = false
 gcicap.cap.race_track_orbit = true
+bmbrstrike.bomb.race_track_orbit = true
 -- if race track orbit what is the minimum distance from center of the zone for the end waypoint in meters
 heloattack.cas.orbit_end_min_dist = 2500 -- 2.5km
 groundattack.cas.orbit_end_min_dist = 5000 -- 5km
 seadattack.sead.orbit_end_min_dist = 5000 -- 5km 
 gcicap.cap.orbit_end_min_dist = 20000 -- 20km
+bmbrstrike.bomb.orbit_end_min_dist = 20000 -- 20km
 -- if race track orbit what is the maximum distance from center of the zone for the end waypoint in meters
 heloattack.cas.orbit_end_max_dist = 10000 -- 10km
 groundattack.cas.orbit_end_max_dist = 20000 -- 20km
 seadattack.sead.orbit_end_max_dist = 20000 -- 20km 
 gcicap.cap.orbit_end_max_dist = 35000 -- 35km
+bmbrstrike.bomb.orbit_end_max_dist = 20000 -- 20km
 --- Enable/disable red flights airborne start.
 -- set to true for flights to start airborne at script initialisation
 -- (mission start), false for taking off from the airfield.
@@ -581,34 +588,40 @@ heloattack.red.cas.start_airborne = true
 groundattack.red.cas.start_airborne = false
 seadattack.red.sead.start_airborne = false
 gcicap.red.cap.start_airborne = false
+bmbrstrike.red.bomb.start_airborne = false
 --- Enable/disable blue CAS flights airborne start.
 heloattack.blue.cas.start_airborne = true
 groundattack.blue.cas.start_airborne = false
 seadattack.blue.sead.start_airborne = false
 gcicap.blue.cap.start_airborne = false
+bmbrstrike.blue.bomb.start_airborne = false
 --- Amount of red patrol zones.
 -- do not adjust with dyanFRONT as it pulls new zones via a function (leave at 1)
 heloattack.red.cas.zones_count = 1
 groundattack.red.cas.zones_count = 1
 seadattack.red.sead.zones_count = 1
 gcicap.red.cap.zones_count = 1
+bmbrstrike.red.bomb.zones_count = 1
 --- Amount of blue patrol zones.
 heloattack.blue.cas.zones_count = 1
 groundattack.blue.cas.zones_count = 1
 seadattack.blue.sead.zones_count = 1
 gcicap.blue.cap.zones_count = 1
+bmbrstrike.blue.bomb.zones_count = 1
 --- Amount of red CAS groups concurrently in the air.
 heloattack.red.cas.groups_count = 1
 groundattack.red.cas.groups_count = 2
 seadattack.red.sead.groups_count = 1
 gcicap.red.cap.groups_count = 2
 gcicap.red.gci.groups_count = 1
+bmbrstrike.red.bomb.groups_count = 1
 --- Amount of blue CAS groups concurrently in the air.
 heloattack.blue.cas.groups_count = 1
 groundattack.blue.cas.groups_count = 2
 seadattack.blue.sead.groups_count = 1
 gcicap.blue.cap.groups_count = 2
 gcicap.blue.gci.groups_count = 1
+bmbrstrike.blue.bomb.groups_count = 1
 --- Group size of red flights.
 -- If "2" it consists of 2 planes, if "4" it consists of 4 planes
 -- if "randomized", the CAS groups consist of either 2 or 4 planes, for GCI use dynamic to match interceptors launched to target size (gci can't use randomized)
@@ -617,12 +630,14 @@ groundattack.red.cas.group_size = "randomized"
 seadattack.red.sead.group_size = "2"
 gcicap.red.cap.group_size = "randomized"
 gcicap.red.gci.group_size = "dynamic"
+bmbrstrike.red.bomb.group_size = "2"
 --- Group size of blue flights.
 heloattack.blue.cas.group_size = "2"
 groundattack.blue.cas.group_size = "randomized"
 seadattack.blue.sead.group_size = "2"
 gcicap.blue.cap.group_size = "randomized"
 gcicap.blue.gci.group_size = "dynamic"
+bmbrstrike.blue.bomb.group_size = "2"
 --- How red flights are spawned.
 -- can be "parking", "takeoff" or "air" and defines the way the fighters spawn
 -- takeoff is NOT RECOMMENDED currently since their occur timing issues with tasking
@@ -633,12 +648,14 @@ groundattack.red.cas.spawn_mode = "parking"
 seadattack.red.sead.spawn_mode = "parking"
 gcicap.red.cap.spawn_mode = "parking"
 gcicap.red.gci.spawn_mode = "parking"
+bmbrstrike.red.bomb.spawn_mode = "parking"
 --- How blue flights are spawned.
 heloattack.blue.cas.spawn_mode = "air"
 groundattack.blue.cas.spawn_mode = "parking"
 seadattack.blue.sead.spawn_mode = "parking"
 gcicap.blue.cap.spawn_mode = "parking"
 gcicap.blue.gci.spawn_mode = "parking"
+bmbrstrike.blue.bomb.spawn_mode = "parking"
 --- Enable/disable GCI messages for red
 gcicap.red.gci.messages = true
 --- Enable/disable GCI messages for blue
@@ -663,34 +680,40 @@ heloattack.blue.hide_groups = false
 groundattack.blue.hide_groups = false
 seadattack.blue.hide_groups = false
 gcicap.blue.hide_groups = false
+bmbrstrike.blue.hide_groups = false
 --- Hide or reveal red air units in the mission.
 heloattack.red.hide_groups = false
 groundattack.red.hide_groups = false
 seadattack.red.hide_groups = false
 gcicap.red.hide_groups = false
+bmbrstrike.red.hide_groups = false
 --- Enable/disable red flights.
 heloattack.red.cas.enabled = true
 groundattack.red.cas.enabled = true
 seadattack.red.sead.enabled = true
 gcicap.red.cap.enabled = true
 gcicap.red.gci.enabled = true
+bmbrstrike.red.bomb.enabled = true
 --- Enable/disable blue flights.
 heloattack.blue.cas.enabled = true
 groundattack.blue.cas.enabled = true
 seadattack.blue.sead.enabled = true
 gcicap.blue.cap.enabled = true
 gcicap.blue.gci.enabled = true
+bmbrstrike.blue.bomb.enabled = true
 --- Enable/disable resource limitation for red.
 -- If set to true limits the amount of groups a side can spawn.
 heloattack.red.limit_resources = true
 groundattack.red.limit_resources = true
 seadattack.red.limit_resources = true
 gcicap.red.limit_resources = true
+bmbrstrike.red.limit_resources = true
 --- Enable/disable resource limitation for blue.
 heloattack.blue.limit_resources = true
 groundattack.blue.limit_resources = true
 seadattack.blue.limit_resources = true
 gcicap.blue.limit_resources = true
+bmbrstrike.blue.limit_resources = true
 --
 
 
@@ -703,6 +726,7 @@ gcicap.blue.limit_resources = true
 --gcicap.red.cap.zone_name =- RedLRSAM_SectorSquares[mist.random(1,#RedLRSAM_SectorSquares)]
 heloattack.red.cas.zone_name = 'CAS'
 groundattack.red.cas.zone_name = 'CAS'
+bmbrstrike.red.bomb.zone_name = 'CAS'
 seadattack.red.sead.zone_name = 'SEADREDTARGET'
 gcicap.red.cap.zone_name = 'CAP'
 --- Name of the trigger zone which defines blue zones.
@@ -713,6 +737,7 @@ gcicap.red.cap.zone_name = 'CAP'
 --gcicap.blue.cap.zone_name = BlueLRSAM_SectorSquares[mist.random(1,#BlueLRSAM_SectorSquares)]
 heloattack.blue.cas.zone_name = 'CAS'
 groundattack.blue.cas.zone_name = 'CAS'
+bmbrstrike.blue.bomb.zone_name = 'CAS'
 seadattack.blue.sead.zone_name = 'SEADBLUETARGET'
 gcicap.blue.cap.zone_name = 'CAP'
 --- Name of group which waypoints define the red border.
@@ -725,6 +750,7 @@ heloattack.template_count = 2
 groundattack.template_count = 3
 seadattack.template_count = 2
 gcicap.template_count = 3
+bmbrstrike.template_count = 2
 --- Wether red will also acquire targets by AWACS aircraft.
 -- This is is currently broken since isTargetDetected doesn't
 -- seem to work with AWACS airplanes. Needs a workaround.
@@ -733,12 +759,14 @@ heloattack.red.awacs = false
 groundattack.red.awacs = false
 seadattack.red.awacs = false
 gcicap.red.awacs = false
+bmbrstrike.red.awacs = false
 --- Wether blue will also acquire targets by AWACS aircraft.
 -- @see groundattack.red.awacs
 heloattack.blue.awacs = false
 groundattack.blue.awacs = false
 seadattack.blue.awacs = false
 gcicap.blue.awacs = false
+bmbrstrike.blue.awacs = false
 --- Garbage collector move timeout
 -- If a unit (aircraft) is on the ground and didn't move
 -- since this timeout, in seconds, it will be removed.
@@ -747,28 +775,46 @@ heloattack.move_timeout = 300
 groundattack.move_timeout = 300
 seadattack.move_timeout = 300
 gcicap.move_timeout = 300
+bmbrstrike.move_timeout = 800
 -- shortcut to the bullseye
 -- END EDITABLE FOR GROUNDATTACK/SEADATTACK and GCICAP
 heloattack.red.bullseye = coalition.getMainRefPoint(coalition.side.RED)
 groundattack.red.bullseye = coalition.getMainRefPoint(coalition.side.RED)
 seadattack.red.bullseye = coalition.getMainRefPoint(coalition.side.RED)
 gcicap.red.bullseye = coalition.getMainRefPoint(coalition.side.RED)
+bmbrstrike.red.bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
 groundattack.blue.bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
 seadattack.blue.bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
 gcicap.blue.bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
+bmbrstrike.blue.bullseye = coalition.getMainRefPoint(coalition.side.BLUE)
 
 heloattack.sides = { "red", "blue" }
 groundattack.sides = { "red", "blue" }
 seadattack.sides = { "red", "blue" }
 gcicap.sides = { "red", "blue" }
+bmbrstrike.sides = { "red", "blue" }
 
 heloattack.tasks = { "cas" }
 groundattack.tasks = { "cas" }
 seadattack.tasks = { "sead" }
+bmbrstrike.tasks = { "bomb" }
 gcicap.tasks = { "cap", "gci" }
+
+
+--- Sets how verbose the log output will be.
+-- Possible values are "none", "info", "warning" and "error".
+-- I recommend "error" for production.
+heloattack.log_level = "none"
+groundattack.log_level = "none"
+seadattack.log_level = "none"
+gcicap.log_level = "none"
+bmbrstrike.log_level = "none"
 
 heloattack.log = mist.Logger:new("GROUNDATTACK", groundattack.log_level)
 groundattack.log = mist.Logger:new("GROUNDATTACK", groundattack.log_level)
 seadattack.log = mist.Logger:new("SEADATTACK", groundattack.log_level)
 gcicap.log = mist.Logger:new("GCICAP", groundattack.log_level)
+bmbrstrike.log = mist.Logger:new("BMBRSTRIKE", bmbrstrike.log_level)
+
+
 

@@ -24,6 +24,14 @@ seadattack.blue.sead = {}
 seadattack.sead = {}
 seadattack.sead.template_prefix = {}
 
+bmbrstrike = {}
+bmbrstrike.red = {}
+bmbrstrike.red.bomb = {}
+bmbrstrike.blue = {}
+bmbrstrike.blue.bomb = {}
+bmbrstrike.bomb = {}
+bmbrstrike.bomb.template_prefix = {}
+
 
 gcicap = {}
 gcicap.red = {}
@@ -43,11 +51,14 @@ groundattack.cas.template_prefix.red = {}
 seadattack.sead.template_prefix.red = {}
 gcicap.cap.template_prefix.red = {}
 gcicap.gci.template_prefix.red = {}
+bmbrstrike.bomb.template_prefix.red = {}
+
 heloattack.cas.template_prefix.blue = {}
 groundattack.cas.template_prefix.blue = {}
 seadattack.sead.template_prefix.blue = {}
 gcicap.cap.template_prefix.blue = {}
 gcicap.gci.template_prefix.blue = {}
+bmbrstrike.bomb.template_prefix.blue = {}
 
 
 redFarpPos = {}
@@ -228,6 +239,7 @@ heloattack.allowspawn = true
 seadattack.allowspawn = true
 groundattack.allowspawn= true
 gcicap.allowspawn = true
+bmbrstrike.allowspawn = true
 
 colorID = 0 -- global used for colorIDs
 

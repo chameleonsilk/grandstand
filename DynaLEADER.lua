@@ -25,12 +25,14 @@ heloattack.blue.supply = 12
 groundattack.blue.supply = 18
 seadattack.blue.supply = 6
 gcicap.blue.supply = 18
+bmbrstrike.blue.supply = 6
 --
 heloattack.cas.template_prefix.blue = '__HELOUSSR__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADUSSR__'
 gcicap.cap.template_prefix.blue  = '__CAPUSSR__'
 gcicap.gci.template_prefix.blue = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRUSSR__'
 
 end
 
@@ -58,11 +60,13 @@ heloattack.blue.supply = 12
 groundattack.blue.supply = 12
 seadattack.blue.supply = 12
 gcicap.blue.supply = 12
+bmbrstrike.blue.supply = 6
 heloattack.cas.template_prefix.blue = '__HELOAMERICA__'
 groundattack.cas.template_prefix.blue = '__CASAMERICA__'
 seadattack.sead.template_prefix.blue = '__SEADAMERICA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
 gcicap.gci.template_prefix.blue = '__GCIAMERICA__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRAMERICA__'
 --
 end
 
@@ -90,11 +94,13 @@ heloattack.blue.supply = 12
 groundattack.blue.supply = 14
 seadattack.blue.supply = 14
 gcicap.blue.supply = 14
+bmbrstrike.blue.supply = 6
 heloattack.cas.template_prefix.blue = '__HELOAMERICA__'
 groundattack.cas.template_prefix.blue = '__CASAMERICA__'
 seadattack.sead.template_prefix.blue = '__SEADAMERICA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
 gcicap.gci.template_prefix.blue = '__GCIAMERICA__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRAMERICA__'
 --
 end
 
@@ -122,11 +128,13 @@ heloattack.blue.supply = 8
 groundattack.blue.supply = 13
 seadattack.blue.supply = 10
 gcicap.blue.supply = 13
+bmbrstrike.blue.supply = 6
 heloattack.cas.template_prefix.blue = '__HELOCHINA__'
 groundattack.cas.template_prefix.blue = '__CASCHINA__'
 seadattack.sead.template_prefix.blue = '__SEADCHINA__'
 gcicap.cap.template_prefix.blue = '__CAPCHINA__'
 gcicap.gci.template_prefix.blue = '__GCICHINA__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRCHINA__'
 --
 end
 
@@ -154,11 +162,13 @@ heloattack.blue.supply = 4
 groundattack.blue.supply = 16
 seadattack.blue.supply = 8
 gcicap.blue.supply = 20
+bmbrstrike.blue.supply = 6
 heloattack.cas.template_prefix.blue = '__HELOCHINA__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADCHINA__'
 gcicap.cap.template_prefix.blue = '__CAPAMERICA__'
 gcicap.gci.template_prefix.blue = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRAMERICA__'
 --
 end
 
@@ -186,11 +196,13 @@ heloattack.blue.supply = 6
 groundattack.blue.supply = 12
 seadattack.blue.supply = 12
 gcicap.blue.supply = 14
+bmbrstrike.blue.supply = 6
 heloattack.cas.template_prefix.blue = '__HELOUSSR__'
 groundattack.cas.template_prefix.blue = '__CASUSSR__'
 seadattack.sead.template_prefix.blue = '__SEADUSSR__'
 gcicap.cap.template_prefix.blue = '__CAPUSSR__'
 gcicap.gci.template_prefix.blue = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.blue = '__BMBRUSSR__'
 --
 end
 
@@ -219,11 +231,13 @@ heloattack.red.supply = 10
 groundattack.red.supply = 22
 seadattack.red.supply = 6
 gcicap.red.supply = 20
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOUSSR__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADUSSR__'
 gcicap.cap.template_prefix.red = '__CAPUSSR__'
 gcicap.gci.template_prefix.red = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRUSSR__'
 --
 end
 
@@ -251,11 +265,13 @@ heloattack.red.supply = 12
 groundattack.red.supply = 12
 seadattack.red.supply = 12
 gcicap.red.supply = 12
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOAMERICA__'
 groundattack.cas.template_prefix.red = '__CASAMERICA__'
 seadattack.sead.template_prefix.red = '__SEADAMERICA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
 gcicap.gci.template_prefix.red = '__GCIAMERICA__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRAMERICA__'
 --
 end
 
@@ -283,11 +299,13 @@ heloattack.red.supply = 12
 groundattack.red.supply = 14
 seadattack.red.supply = 14
 gcicap.red.supply = 14
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOAMERICA__'
 groundattack.cas.template_prefix.red = '__CASAMERICA__'
 seadattack.sead.template_prefix.red = '__SEADAMERICA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
 gcicap.gci.template_prefix.red = '__GCIAMERICA__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRAMERICA__'
 --
 end
 
@@ -315,11 +333,13 @@ heloattack.red.supply = 8
 groundattack.red.supply = 13
 seadattack.red.supply = 10
 gcicap.red.supply = 13
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOCHINA__'
 groundattack.cas.template_prefix.red = '__CASCHINA__'
 seadattack.sead.template_prefix.red = '__SEADCHINA__'
 gcicap.cap.template_prefix.red  = '__CAPCHINA__'
 gcicap.gci.template_prefix.red = '__GCICHINA__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRUSSR__'
 --
 end
 
@@ -347,11 +367,13 @@ heloattack.red.supply = 4
 groundattack.red.supply = 16
 seadattack.red.supply = 8
 gcicap.red.supply = 20
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOCHINA__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADCHINA__'
 gcicap.cap.template_prefix.red = '__CAPAMERICA__'
 gcicap.gci.template_prefix.red = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRAMERICA__'
 --
 end
 
@@ -379,11 +401,13 @@ heloattack.red.supply = 6
 groundattack.red.supply = 16
 seadattack.red.supply = 6
 gcicap.red.supply = 12
+bmbrstrike.red.supply = 6
 heloattack.cas.template_prefix.red = '__HELOUSSR__'
 groundattack.cas.template_prefix.red = '__CASUSSR__'
 seadattack.sead.template_prefix.red = '__SEADUSSR__'
 gcicap.cap.template_prefix.red  = '__CAPUSSR__'
 gcicap.gci.template_prefix.red  = '__GCIUSSR__'
+bmbrstrike.bomb.template_prefix.red = '__BMBRUSSR__'
 end
 end
 
@@ -555,6 +579,11 @@ end
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
+		    local msg = {} 
+    msg.text = bmbrstrike.blue.supply .. ' BOMBER flights remaining' 
+    msg.displayTime = 10  
+    msg.msgFor = {coa = {'all'}} 
+    mist.message.add(msg)
 end
 	
 	if side == "RED" then
@@ -580,6 +609,11 @@ end
     mist.message.add(msg)
 	    local msg = {} 
     msg.text = groundattack.red.supply .. ' CAP flights remaining' 
+    msg.displayTime = 10  
+    msg.msgFor = {coa = {'all'}} 
+    mist.message.add(msg)
+			    local msg = {} 
+    msg.text = bmbrstrike.red.supply .. ' BOMBER flights remaining' 
     msg.displayTime = 10  
     msg.msgFor = {coa = {'all'}} 
     mist.message.add(msg)
