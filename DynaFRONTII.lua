@@ -1,4 +1,4 @@
-		--revision 1.21
+		--revision 1.31
 		dynaFRONT = {}
 		dynaFRONT.log_level = "info"
 		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -6,7 +6,7 @@
 		-- intro function
 		function Introduce_Mission() -- standard mission introduction function
 			local msg = {}
-			msg.text = 'OPERATION GRANDSTAND 0.32'
+			msg.text = 'OPERATION GRANDSTAND 0.33'
 			msg.displayTime = 29  
 			msg.msgFor = {coa = {'all'}} 
 			mist.message.add(msg)
@@ -381,7 +381,7 @@
 					end
 					
 					
-					groupvars.action = "clone" -- we will always be cloning
+					groupvars.action = 'clone' -- we will always be cloning
 					groupvars.point = spawnPsn -- set the point for which it will spawn
 					--vars.route = path
 					groupvars.disperse = dispersionChoice -- set dispersion based on ARG6
@@ -393,7 +393,7 @@
 					groupvars.initTasks = true -- remember its task from ME
 					
 					mist.cloneMoveGroup(groupCalled, false, groupvars) -- modified mist function to clone and move it using our vars
-			
+					trigger.action.deactivateGroup(groupCalled)
 				
 				-- DEBUG STUFF
 				--local data = mist.utils.serialize("tblCheck", ActiveForces) -- debug to show us our table
@@ -723,7 +723,7 @@ function BuildFARP(side, ownedBy)
 			rus = #rUnitList
 			bus = #bUnitList
 			rushalfstr = rus / 2
-			bushalfstr = rus / 2
+			bushalfstr = bus / 2
 			
 			local markervars = {
 			id = sectors[examinesector], -- make the marker ID the same as that zones names
