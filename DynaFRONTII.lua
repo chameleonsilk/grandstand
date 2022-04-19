@@ -743,28 +743,28 @@ function BuildFARP(side, ownedBy)
 			 -- default color for no units in that sector
 	
 			markervars.color = {0,255,0,255} -- color green
-			markervars.fillColor = {0,255,0,60} -- filled green with 20 alpha
+			markervars.fillColor = {0,255,0,60} -- filled green with 60 alpha
 			
 			if rus >= bushalfstr and rus ~= 0 then -- red outnumbers blues half strength
 				markervars.color = {255,0,0,255} -- color red
-				markervars.fillColor = {255,0,0,80} -- filled red with 80 alpha
+				markervars.fillColor = {255,0,0,140} -- filled red with 80 alpha
 				elseif rus >= bus and rus ~= 0 then -- red outnumbers blues full strength
 				markervars.color = {255,0,0,255} -- color red
-				markervars.fillColor = {255,0,0,140} -- filled red with 120 alpha
+				markervars.fillColor = {255,0,0,80} -- filled red with 120 alpha
 				elseif rus ~= 0 and bus == 0 then
-				markervars.color = {255,0,0,255} -- color blue
-				markervars.fillColor = {255,0,0,180} -- filled blue with 120 alpha
+				markervars.color = {255,0,0,255} -- color red
+				markervars.fillColor = {255,0,0,180} -- filled blue with 180 alpha
 			end
 			
 			if bus >= rushalfstr and bus ~= 0 then -- blue outnumbers reds half strength
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,80} -- filled blue with 80 alpha
+				markervars.fillColor = {0,0,255,140} -- filled blue with 140 alpha
 				elseif bus >= rus and bus ~= 0 then -- if they outnumber its full strength
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,140} -- filled blue with 120 alpha
+				markervars.fillColor = {0,0,255,80} -- filled blue with 80 alpha
 				elseif bus ~= 0 and rus == 0 then
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,180} -- filled blue with 120 alpha
+				markervars.fillColor = {0,0,255,180} -- filled blue with 180 alpha
 			end
 			mist.marker.add(markervars) -- add or modify the marker if already present
 			end
@@ -1241,14 +1241,20 @@ function BuildFARP(side, ownedBy)
 	end
 
 		-- main
-		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 1, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 2, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 3, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 4, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 5, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 6, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 150, 174}, timer.getTime() + 7, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 8, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 125, 150}, timer.getTime() + 2, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 100, 124}, timer.getTime() + 4, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 75, 99}, timer.getTime() + 6, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 50, 74}, timer.getTime() + 8, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 25, 49}, timer.getTime() + 10, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 1, 24}, timer.getTime() + 12, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 14, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 16, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 18, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 20, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 22, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 24, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 150, 174}, timer.getTime() + 26, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 28, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"RED", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"BLUE", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"RED", "FARP"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
