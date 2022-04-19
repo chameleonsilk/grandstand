@@ -1116,13 +1116,13 @@ function BuildFARP(side, ownedBy)
 					
 					
 					if forWhom == "Russia" then
-					blueStrikePos = buildPsn -- store the vec2 in redStrikePos for use with the bomber and scoring script
+					blueStrikePos = buildPsnStrike -- store the vec2 in redStrikePos for use with the bomber and scoring script
 					--blueAttack = Strike_Area
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1001, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
-					blueStrikePos = buildPsn -- store the vec2 in blueStrikePos for use with the bomber and scoring script
+					blueStrikePos = buildPsnStrike -- store the vec2 in blueStrikePos for use with the bomber and scoring script
 					--redAttack = Strike_Area
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1002, req_num = 3}
 					end
@@ -1241,14 +1241,14 @@ function BuildFARP(side, ownedBy)
 	end
 
 		-- main
-		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 1, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 2, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 3, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 4, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 5, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 6, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 150, 174}, timer.getTime() + 7, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 8, 60) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 1, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 2, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 3, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 4, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 5, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 6, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 150, 174}, timer.getTime() + 7, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 8, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"RED", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"BLUE", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
 		mist.scheduleFunction(updateStrike, {"RED", "FARP"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
