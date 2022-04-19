@@ -3,8 +3,10 @@
 -- determines the amount of spawned stuff when creating the sides
 --
 
-GROUND_RESPAWN_DELAY = 600 -- 10 minutes
+GROUND_RESPAWN_DELAY = 600 -- 10 minutes for normal ground stuff
+GROUND_RESPAWN_DELAY = 3600 -- 1 hour for SAMs
 DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
+DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
@@ -223,9 +225,10 @@ MasterList = {
 [165] = 'KM89',
 [166] = 'KN80',
 
-[167] = 'KM97',
-[168] = 'KM98',
-[169] = 'KM99'
+[167] = 'KM96',
+[168] = 'KM97',
+[169] = 'KM98',
+[170] = 'KM99'
 }
 
 SeaList = {
@@ -461,7 +464,8 @@ RedSRSAM_SectorSquares = {
 [1] = 'KM98',
 [2] = 'KM86',
 [3] = 'GG36',
-[4] = 'GG33'
+[4] = 'GG33',
+[5] = 'KM96'
 }
 
 --currently places with SAM areas

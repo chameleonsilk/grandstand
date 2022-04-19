@@ -6,7 +6,7 @@
 		-- intro function
 		function Introduce_Mission() -- standard mission introduction function
 			local msg = {}
-			msg.text = 'OPERATION GRANDSTAND 0.34'
+			msg.text = 'OPERATION GRANDSTAND 0.35'
 			msg.displayTime = 29  
 			msg.msgFor = {coa = {'all'}} 
 			mist.message.add(msg)
@@ -412,6 +412,8 @@
 		-- TABLE arg tblCheck: check this ActiveGroups table
 		-- STARING arg of which side "RED" or "BLUE"
 		-- STRING arg of group type "AAA", "TANK" "APC" "INF" "CP" "SRSAM" "LRSAM" "SHORAD"
+		local disbandThreshold = 1
+		local respawnTimer = 1
 
 		for element = 1, #tabCheck do -- for each element in the table from 1 to the amount that is in the table
 			local checkThisGroup = tabCheck[element] -- get the string of the group name located at that index
@@ -433,9 +435,17 @@
 			local decimalval = cs / is -- size divided by initial size
 			local percent = decimalval * 100 -- multiplied by 100 to get percentage
 			
-
-			if percent <= DISBAND_PERCENT then -- if the percentage is less that (set in paramters.lua) then
+			if grpType == "SRSAM" or "LRSAM" then
+			disbandThreshold = DISBAND_SAM_PERCENT
+			respawnTimer = GROUND_RESPAWN_SAM_DELAY
+			else
+			disbandThreshold = DISBAND_PRECRENT
+			respawnTimer = GROUND_RESPAWN_DELAY
+			end
+			
+				if percent <= disbandThreshold then -- if the percentage is less that (set in paramters.lua) then
 				Group.destroy(Group.getByName(checkThisGroup)) -- destroy the group 
+				
 				
 				local msg = {} -- message that the group has been rendered ineffective
 				msg.text = checkThisGroup .. ' has been rendered combat ineffective '
@@ -455,7 +465,7 @@
 				local terrain = "WATER"
 				end
 				
-				mist.scheduleFunction(ManipulateForce, {1, sideUsed, grpType, 100, terrain, 500, 0, 0, tabCheck.TEMPLATE[element], element}, timer.getTime() + GROUND_RESPAWN_DELAY) -- clone the same template again and set it so that it updates the same position in the ActiveForces table after 2 minutes
+				mist.scheduleFunction(ManipulateForce, {1, sideUsed, grpType, 100, terrain, 500, 0, 0, tabCheck.TEMPLATE[element], element}, timer.getTime() + respawnTimer) -- clone the same template again and set it so that it updates the same position in the ActiveForces table after 2 minutes
 				end
 				end
 			end
