@@ -1,10 +1,10 @@
--- version 1.04
+-- version 1.05
 -- START EDITABLE STUFF --
 -- determines the amount of spawned stuff when creating the sides
 --
 
-GROUND_RESPAWN_DELAY = 600 -- 10 minutes for normal ground stuff
-GROUND_RESPAWN_DELAY = 3600 -- 1 hour for SAMs
+GROUND_RESPAWN_DELAY = 600 -- 5 minutes for normal ground stuff
+GROUND_RESPAWN_DELAY = 2400 -- 40 minutes for SAMs
 DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
 DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
 -- NEW GRID BASED SECTOR MAPS
@@ -13,36 +13,6 @@ DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
 -- All Polygon Restrictions by non-activated flight plans are
 -- XX##Square
 -- start blue zones
-
-MasterList = {
-[1] = 'KM56Square',
-[2] = 'KM58Square',
-[3] = 'KM66Square',
-[4] = 'KM68Square',
-[5] = 'KM77Square',
-[6] = 'KM78Square',
-[7] = 'KM79Square',
-[8] = 'KM86Square',
-[9] = 'KM88Square',
-[10] = 'KM89Square',
-[11] = 'KM97Square',
-[12] = 'KM98Square',
-[13] = 'KM99Square',
-[14] = 'GC10Square',
-[15] = 'GG33Square',
-[16] = 'GG36Square',
-[17] = 'GG37Square',
-[18] = 'FH84Square',
-[19] = 'GH21Square',
-[20] = 'GG46Square',
-[21] = 'KM56Square',
-[22] = 'EHSquare',
-[23] = 'FHSquare',
-[24] = 'FGSquare',
-[25] = 'EGSquare',
-[26] = 'GGSquare',
-[27] = 'GHSquare'
-}
 
 MasterList = {
 [1] = 'FF67',

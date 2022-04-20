@@ -1,4 +1,4 @@
-		--revision 1.34
+		--revision .36
 		dynaFRONT = {}
 		dynaFRONT.log_level = "info"
 		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -6,7 +6,7 @@
 		-- intro function
 		function Introduce_Mission() -- standard mission introduction function
 			local msg = {}
-			msg.text = 'OPERATION GRANDSTAND 0.35'
+			msg.text = 'OPERATION GRANDSTAND 0.36'
 			msg.displayTime = 29  
 			msg.msgFor = {coa = {'all'}} 
 			mist.message.add(msg)
@@ -417,7 +417,17 @@
 
 		for element = 1, #tabCheck do -- for each element in the table from 1 to the amount that is in the table
 			local checkThisGroup = tabCheck[element] -- get the string of the group name located at that index
-
+			
+			if grpType == "SRSAM" or "LRSAM" then
+			disbandThreshold = DISBAND_SAM_PERCENT
+			respawnTimer = GROUND_RESPAWN_SAM_DELAY
+			elseif grpType == "AAA" or "TRUCK" or "APC" or "INF" or "CP" or "SHORAD" or "TANK" then
+			disbandThreshold = DISBAND_PRECRENT
+			respawnTimer = GROUND_RESPAWN_DELAY
+			else
+			respawnTimer = GROUND_RESPAWN_DELAY
+			end
+			
 			if Group.getByName(checkThisGroup) then -- the group must be present (existing) in order for the checks to occur
 			local is = tabCheck.INITSIZE[element] -- get its inital size using the data in the table
 			tabCheck.SIZE[element] = Group.getSize(Group.getByName(checkThisGroup)) -- update the current size of the group, incase things have died since last check
@@ -434,14 +444,6 @@
 
 			local decimalval = cs / is -- size divided by initial size
 			local percent = decimalval * 100 -- multiplied by 100 to get percentage
-			
-			if grpType == "SRSAM" or "LRSAM" then
-			disbandThreshold = DISBAND_SAM_PERCENT
-			respawnTimer = GROUND_RESPAWN_SAM_DELAY
-			else
-			disbandThreshold = DISBAND_PRECRENT
-			respawnTimer = GROUND_RESPAWN_DELAY
-			end
 			
 				if percent <= disbandThreshold then -- if the percentage is less that (set in paramters.lua) then
 				Group.destroy(Group.getByName(checkThisGroup)) -- destroy the group 
@@ -564,12 +566,22 @@ function BuildFARP(side, ownedBy)
 		 heading = 0.47123889803847, -- probably should randomize the direction or have it face the right way in future
 		}
 					
+					local Strike_Area = {
+					x = buildPsn.x,
+					y = buildPsn.y,
+					z = buildPsn.z,
+					radius = 6000
+					}
+					
+					
 					if forWhom == "Russia" then
-					redFarpPos = buildPsnFarp -- store the vec3 in redFarpPos for use with the heloattack script
+					redFarpPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1005, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
-					blueFarpPos = buildPsnFarp -- store the vec3 in blueFarpPos for use with the heloattack script
+					blueFarpPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1006, req_num = 3}
 					end
 					
 					mist.dynAddStatic(vars)	-- add the static item to the mission
@@ -753,99 +765,150 @@ function BuildFARP(side, ownedBy)
 			 -- default color for no units in that sector
 	
 			markervars.color = {0,255,0,255} -- color green
-			markervars.fillColor = {0,255,0,60} -- filled green with 60 alpha
+			markervars.fillColor = {0,255,0,40} -- filled green with 40 alpha
 			
 			if rus >= bushalfstr and rus ~= 0 then -- red outnumbers blues half strength
 				markervars.color = {255,0,0,255} -- color red
-				markervars.fillColor = {255,0,0,140} -- filled red with 80 alpha
+				markervars.fillColor = {255,0,0,80} -- filled red with 80 alpha
 				elseif rus >= bus and rus ~= 0 then -- red outnumbers blues full strength
 				markervars.color = {255,0,0,255} -- color red
-				markervars.fillColor = {255,0,0,80} -- filled red with 120 alpha
+				markervars.fillColor = {255,0,0,100} -- filled red with 120 alpha
 				elseif rus ~= 0 and bus == 0 then
 				markervars.color = {255,0,0,255} -- color red
-				markervars.fillColor = {255,0,0,180} -- filled blue with 180 alpha
+				markervars.fillColor = {255,0,0,120} -- filled blue with 180 alpha
 			end
 			
 			if bus >= rushalfstr and bus ~= 0 then -- blue outnumbers reds half strength
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,140} -- filled blue with 140 alpha
+				markervars.fillColor = {0,0,255,80} -- filled blue with 140 alpha
 				elseif bus >= rus and bus ~= 0 then -- if they outnumber its full strength
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,80} -- filled blue with 80 alpha
+				markervars.fillColor = {0,0,255,100} -- filled blue with 80 alpha
 				elseif bus ~= 0 and rus == 0 then
 				markervars.color = {0,0,255,255} -- color blue
-				markervars.fillColor = {0,0,255,180} -- filled blue with 180 alpha
+				markervars.fillColor = {0,0,255,120} -- filled blue with 180 alpha
 			end
 			mist.marker.add(markervars) -- add or modify the marker if already present
 			end
 		end
 		
-		function updateStrike(side, task)
-		local whatSide = side
-		local mission = task
+		function updateStrike()
+		--local whatSide = side
+		--local mission = task
 		
-		if whatSide == "RED" and task == "STRIKE" then
-		-- for blues building
+		
+		 -- for reds building
+		if redStrikePos ~= nil then
 			local markervars = {
-			id = "redstrike", -- make the marker ID the same as that zones names
-			pos = redStrikePos, -- get the table of verticies from that zone
-			markType = 0,  -- use circle
+			--id = "redstrike", -- make the marker ID the same as that zones names
+			pos = {x = redStrikePos.x, y = redStrikePos.z}, -- get the table of verticies from that zone
+			markType = 2,  -- use circle
 			markForCoa = -1,
-			radius = 3000,
+			radius = redStrikePos.radius,
 			text = "Strike Target",
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,0,128,255}, -- color purple
-			fillColor = {128,0,128,120} -- filled purple with 20 alpha
+			color = {128,128,128,255}, -- color silver
+			fillColor = {128,0,128,180} -- filled purple with 40 alpha
 			}
+			mist.marker.add(markervars) -- add or modify the marker if already present	
 		end
+		--end
 		
-		if whatSide == "BLUE" and task == "STRIKE" then
-		-- for reds building
-			local markervars = {
-			id = "bluestrike", -- make the marker ID the same as that zones names
-			pos = blueStrikePos, -- get the table of verticies from that zone
-			markType = 2,  -- use circle
-			markForCoa = -1,
-			radius = 3000,
-			lineType = 1, -- type of line for the border
-			readOnly = true, -- users can't remove this marker`
-			color = {128,0,128,255}, -- color purple
-			fillColor = {128,0,128,120} -- filled purple with 20 alpha
-			}
-		end
 		
-		if whatSide == "RED" and task == "FARP" then
+		if blueStrikePos ~= nil then
 		-- for blues building
 			local markervars = {
-			id = "redfarp", -- make the marker ID the same as that zones names
-			pos = redFarpPos, -- get the table of verticies from that zone
+			id = "bluestrike", -- make the marker ID the same as that zones names
+			pos = {x = blueStrikePos.x, y = blueStrikePos.z}, -- get the table of verticies from that zone
 			markType = 2,  -- use circle
 			markForCoa = -1,
-			radius = 3000,
+			radius = blueStrikePos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,0,128,255}, -- color purple
-			fillColor = {128,0,128,120} -- filled purple with 20 alpha
+			color = {128,128,128,255}, -- color silver
+			fillColor = {255,255,0,180} -- filled purple with 40 alpha
 			}
+			mist.marker.add(markervars) -- add or modify the marker if already present	
+		--	end
 		end
 		
-		if whatSide == "BLUE" and task == "FARP" then
-		-- for reds building
+		
+		-- for blues building
+		if redFarpPos ~= nil then
 			local markervars = {
-			id = "bluefarp", -- make the marker ID the same as that zones names
-			pos = blueFarpPos, -- get the table of verticies from that zone
+			id = "redfarp", -- make the marker ID the same as that zones names
+			pos = {x = redFarpPos.x, y = redFarpPos.z}, -- get the table of verticies from that zone
 			markType = 2,  -- use circle
 			markForCoa = -1,
-			radius = 3000,
+			radius = redFarpPos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,0,128,255}, -- color purple
-			fillColor = {128,0,128,120} -- filled purple with 20 alpha
+			color = {128,128,128,255}, -- color silver
+			fillColor = {255,255,0,180} -- filled yellow with 40 alpha
 			}
-		end	
-		mist.marker.add(markervars) -- add or modify the marker if already present		
+			mist.marker.add(markervars) -- add or modify the marker if already present	
+		--end
 		end
+		
+		
+		-- for blues building
+		if blueFarpPos ~= nil then
+			local markervars = {
+			id = "bluefarp", -- make the marker ID the same as that zones names
+			pos = {x = blueFarpPos.x, y = blueFarpPos.z}, -- get the table of verticies from that zone
+			markType = 2,  -- use circle
+			markForCoa = -1,
+			radius = blueFarpPos.radius,
+			lineType = 1, -- type of line for the border
+			readOnly = true, -- users can't remove this marker`
+			color = {128,128,128,255}, -- color silver
+			fillColor = {128,128,128,180} -- filled silver with 40 alpha
+			}
+			mist.marker.add(markervars) -- add or modify the marker if already present	
+		--end	
+		end
+		
+				
+		-- for blues building
+		if redRigPos ~= nil then
+			local markervars = {
+			id = "redrig", -- make the marker ID the same as that zones names
+			pos = {x = redRigPos.x, y = redRigPos.z}, -- get the table of verticies from that zone
+			markType = 2,  -- use circle
+			markForCoa = -1,
+			radius = redRigPos.radius,
+			lineType = 1, -- type of line for the border
+			readOnly = true, -- users can't remove this marker`
+			color = {128,128,128,255}, -- color silver
+			fillColor = {128,128,128,180} -- filled silver with 40 alpha
+			}
+			mist.marker.add(markervars) -- add or modify the marker if already present	
+		--end
+		end
+		
+		
+		-- for blues building
+		if blueRigPos ~= nil then
+			local markervars = {
+			id = "bluerig", -- make the marker ID the same as that zones names
+			pos = {x = blueRigPos.x, y = blueRigPos.z}, -- get the table of verticies from that zone
+			markType = 2,  -- use circle
+			markForCoa = -1,
+			radius = blueRigPos.radius,
+			lineType = 1, -- type of line for the border
+			readOnly = true, -- users can't remove this marker`
+			color = {128,128,128,255}, -- color purple
+			fillColor = {128,128,128,180} -- filled green with 40 alpha
+			}
+			mist.marker.add(markervars) -- add or modify the marker if already present	
+		--end	
+		end
+		
+		--if markervars ~= nil then
+		
+		--end
+end		
 
 		function getQTpoints(zoneTable) -- my nifty function to gather the points from a mission editor quad trigger zone
 
@@ -860,7 +923,7 @@ function BuildFARP(side, ownedBy)
 
 		function scoreDisplay() -- straight forward score displayer
 				local msg = {}
-				msg.text = 'BLUE SCORE IS ' .. BLUESCORE .. ' ' .. '| RED SCORE IS ' .. REDSCORE -- compressed to a single line rather than multiple lines
+				msg.text = 'BLUE is commanded by ' .. blueLeader.name .. ' and their SCORE IS ' .. BLUESCORE .. ' ' .. '| RED is commanded by ' .. redLeader.name .. ' and their SCORE is ' .. REDSCORE -- compressed to a single line rather than multiple lines
 				msg.displayTime = 10
 				msg.msgFor = {coa = {'all'}} 
 				mist.message.add(msg)
@@ -940,20 +1003,21 @@ function BuildFARP(side, ownedBy)
 		 heading = 0.47123889803847, -- probably should randomize the direction or have it face the right way in future
 		}
 		
-					local Strike_Area = {}
-					Strike_Area.x = buildPsn.x
-					Strike_Area.y = buildPsn.y
-					Strike_Area.z = buildPsn.z
-					
+					local Strike_Area = {
+					x = buildPsn.x,
+					y = buildPsn.y,
+					z = buildPsn.z,
+					radius = 6000
+					}
 		
 					
 					if forWhom == "Russia" then
-					redRigPos = buildPsnRig -- store the vec3 in redFarpPos for use with the heloattack script
+					redRigPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1003, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
-					blueRigPos = buildPsnRig -- store the vec3 in blueFarpPos for use with the heloattack script
+					blueRigPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1004, req_num = 3}
 					end
 					
@@ -1121,18 +1185,18 @@ function BuildFARP(side, ownedBy)
 					x = buildPsn.x,
 					z = buildPsn.z,
 					y = buildPsn.y,
-					radius = 2000
+					radius = 6000
 					}
 					
 					
 					if forWhom == "Russia" then
-					blueStrikePos = buildPsnStrike -- store the vec2 in redStrikePos for use with the bomber and scoring script
+					redStrikePos = Strike_Area -- store the strike area in redStrikePos for use with the bomber and scoring script
 					--blueAttack = Strike_Area
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1001, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
-					blueStrikePos = buildPsnStrike -- store the vec2 in blueStrikePos for use with the bomber and scoring script
+					blueStrikePos = Strike_Area -- store the vec2 in blueStrikePos for use with the bomber and scoring script
 					--redAttack = Strike_Area
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1002, req_num = 3}
 					end
@@ -1143,7 +1207,7 @@ function BuildFARP(side, ownedBy)
 		
 		function MonitorTask(whichTask, side)
 		if side == "BLUE" and whichTask == "STRIKE" then
-		if trigger.misc.getUserFlag('1001') == 1 then
+		if trigger.misc.getUserFlag('1001') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Red structures have been demolished'
@@ -1153,12 +1217,13 @@ function BuildFARP(side, ownedBy)
 				
 				BLUESCORE = BLUESCORE + 10
 				--trigger.action.setUserFlag('1001',0)
+				trigger.action.setUserFlag('1001', 0)
 				mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 1)
 			end
 			end
 			
 		if side == "BLUE" and whichTask == "NAVAL_HELIPORT" then
-		if trigger.misc.getUserFlag('1003') == 1 then
+		if trigger.misc.getUserFlag('1003') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Red heliport has been demolished'
@@ -1167,13 +1232,13 @@ function BuildFARP(side, ownedBy)
 			mist.message.add(msg)
 				
 				BLUESCORE = BLUESCORE + 10
-				--trigger.action.setUserFlag('1001',0)
+				trigger.action.setUserFlag('1003',0)
 				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1)
 			end
 		end
 		
 				if side == "BLUE" and whichTask == "FARP" then
-		if trigger.misc.getUserFlag('1005') == 1 then
+		if trigger.misc.getUserFlag('1005') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Red heliport has been demolished'
@@ -1182,14 +1247,14 @@ function BuildFARP(side, ownedBy)
 			mist.message.add(msg)
 				
 				BLUESCORE = BLUESCORE + 10
-				--trigger.action.setUserFlag('1001',0)
+				trigger.action.setUserFlag('1005',0)
 				mist.scheduleFunction(BuildOILRIGS, {1, "RED", "Russia"}, timer.getTime() + 1)
 			end
 		end
 	
 			
 			if side == "RED" and whichTask == "STRIKE" then
-			if trigger.misc.getUserFlag('1002') == 1 then
+			if trigger.misc.getUserFlag('1002') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Blue structures have been demolished'
@@ -1198,13 +1263,13 @@ function BuildFARP(side, ownedBy)
 			mist.message.add(msg)
 				
 				REDSCORE = REDSCORE + 10
-				--trigger.action.setUserFlag('1002',0)
+				trigger.action.setUserFlag('1002',0)
 				mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 1)
 			end
 		end
 		
 			if side == "RED" and whichTask == "NAVAL_HELIPORT" then
-			if trigger.misc.getUserFlag('1004') == 1 then
+			if trigger.misc.getUserFlag('1004') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Blue heliport has been demolished'
@@ -1213,13 +1278,13 @@ function BuildFARP(side, ownedBy)
 			mist.message.add(msg)
 				
 				REDSCORE = REDSCORE + 10
-				--trigger.action.setUserFlag('1002',0)
+				trigger.action.setUserFlag('1004',0)
 				mist.scheduleFunction(BuildOILRIGS, {1, "BLUE", "USA"}, timer.getTime() + 1)
 			end
 		end
 		
 		if side == "RED" and whichTask == "FARP" then
-			if trigger.misc.getUserFlag('1006') == 1 then
+			if trigger.misc.getUserFlag('1006') ~= 0 then
 			local msg = {}
 			
 			msg.text = ' Blue FARP has been demolished'
@@ -1228,7 +1293,7 @@ function BuildFARP(side, ownedBy)
 			mist.message.add(msg)
 				
 				REDSCORE = REDSCORE + 10
-				--trigger.action.setUserFlag('1002',0)
+				trigger.action.setUserFlag('1006',0)
 				mist.scheduleFunction(BuildFARP, {1, "BLUE", "USA"}, timer.getTime() + 1)
 			end
 		end
@@ -1251,7 +1316,7 @@ function BuildFARP(side, ownedBy)
 	end
 
 		-- main
-		mist.scheduleFunction(updateGrid, {SeaList, 125, 150}, timer.getTime() + 2, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 125, 144}, timer.getTime() + 2, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {SeaList, 100, 124}, timer.getTime() + 4, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {SeaList, 75, 99}, timer.getTime() + 6, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {SeaList, 50, 74}, timer.getTime() + 8, 120) -- update grid every 60 seconds
@@ -1263,12 +1328,9 @@ function BuildFARP(side, ownedBy)
 		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 20, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 22, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 24, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 150, 174}, timer.getTime() + 26, 120) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 150, 170}, timer.getTime() + 26, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 28, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {"RED", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {"BLUE", "STRIKE"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {"RED", "FARP"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {"BLUE", "FARP"}, timer.getTime() + 30, 60) -- update grid every 60 seconds
+		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 60, 300) -- update strike targets every 5 minutes
 		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
 		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
 		mist.scheduleFunction(BuildOILRIGS, {rNAVYSTATICamount, "RED", "Russia"}, timer.getTime() + 8)
@@ -1277,8 +1339,8 @@ function BuildFARP(side, ownedBy)
 		mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 12)
 		mist.scheduleFunction(MonitorTask, {"STRIKE", "RED"}, timer.getTime() + 13, 30)
 		mist.scheduleFunction(MonitorTask, {"STRIKE", "BLUE"}, timer.getTime() + 14, 30)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_STATIC", "RED"}, timer.getTime() + 15, 30)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_STATIC", "BLUE"}, timer.getTime() + 16, 30)
+		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 30)
+		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 30)
 		mist.scheduleFunction(MonitorTask, {"FARP", "RED"}, timer.getTime() + 17, 30)
 		mist.scheduleFunction(MonitorTask, {"FARP", "BLUE"}, timer.getTime() + 18, 30)
 		
