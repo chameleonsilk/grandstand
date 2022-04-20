@@ -4,7 +4,7 @@
 --
 
 GROUND_RESPAWN_DELAY = 600 -- 5 minutes for normal ground stuff
-GROUND_RESPAWN_DELAY = 2400 -- 40 minutes for SAMs
+GROUND_RESPAWN_SAM_DELAY = 2400 -- 40 minutes for SAMs
 DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
 DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
 -- NEW GRID BASED SECTOR MAPS
