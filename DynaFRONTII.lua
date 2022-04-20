@@ -808,8 +808,8 @@ function BuildFARP(side, ownedBy)
 			text = "Strike Target",
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color silver
-			fillColor = {128,0,128,180} -- filled purple with 40 alpha
+			color = {0,0,0,255}, -- color silver
+			fillColor = {128,0,128,180} -- filled purple with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		end
@@ -826,8 +826,8 @@ function BuildFARP(side, ownedBy)
 			radius = blueStrikePos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color silver
-			fillColor = {255,255,0,180} -- filled purple with 40 alpha
+			color = {0,0,0,255}, -- color silver
+			fillColor = {128,0,128,180} -- filled purple with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		--	end
@@ -844,8 +844,8 @@ function BuildFARP(side, ownedBy)
 			radius = redFarpPos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color silver
-			fillColor = {255,255,0,180} -- filled yellow with 40 alpha
+			color = {0,0,0,255}, -- color silver
+			fillColor = {255,255,0,180} -- filled yellow with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		--end
@@ -862,8 +862,8 @@ function BuildFARP(side, ownedBy)
 			radius = blueFarpPos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color silver
-			fillColor = {128,128,128,180} -- filled silver with 40 alpha
+			color = {0,0,0,255}, -- color silver
+			fillColor = {255,255,0,180} -- filled yellow with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		--end	
@@ -880,8 +880,8 @@ function BuildFARP(side, ownedBy)
 			radius = redRigPos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color silver
-			fillColor = {128,128,128,180} -- filled silver with 40 alpha
+			color = {0,0,0,255}, -- color silver
+			fillColor = {128,128,128,180} -- filled silver with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		--end
@@ -898,8 +898,8 @@ function BuildFARP(side, ownedBy)
 			radius = blueRigPos.radius,
 			lineType = 1, -- type of line for the border
 			readOnly = true, -- users can't remove this marker`
-			color = {128,128,128,255}, -- color purple
-			fillColor = {128,128,128,180} -- filled green with 40 alpha
+			color = {0,0,0,255}, -- color purple
+			fillColor = {128,128,128,180} -- filled silver with 180 alpha
 			}
 			mist.marker.add(markervars) -- add or modify the marker if already present	
 		--end	
