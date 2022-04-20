@@ -575,11 +575,13 @@ function BuildFARP(side, ownedBy)
 					
 					
 					if forWhom == "Russia" then
+					redStartFarp = buildPsnFarp
 					redFarpPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1005, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
+					blueStartFarp = buildPsnFarp
 					blueFarpPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1006, req_num = 3}
 					end
@@ -1012,11 +1014,13 @@ end
 		
 					
 					if forWhom == "Russia" then
+					redStartRig = buildPsnRig
 					redRigPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1003, req_num = 3}
 					end
 					
 					if forWhom == "USA" then
+					blueStartRig = buildPsnRig
 					blueRigPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
 					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1004, req_num = 3}
 					end

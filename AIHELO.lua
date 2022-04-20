@@ -783,19 +783,19 @@ do
 	
 	if side == "red" then
 		if choose_spot == 1 then
-		airbase_pos = redFarpPos
+		airbase_pos = redStartFarp
 		end
 		if choose_spot == 2 then
-		airbase_pos = redRigPos
+		airbase_pos = redStartRig
 		end
 	end
 
 	if side == "blue" then
 		if choose_spot == 1 then
-		airbase_pos = blueFarpPos
+		airbase_pos = blueStartFarp
 		end
 		if choose_spot == 2 then
-		airbase_pos = blueRigPos
+		airbase_pos = blueStartRig
 		end
 	end	
 	
