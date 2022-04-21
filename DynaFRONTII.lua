@@ -531,12 +531,25 @@ function BuildFARP(side, ownedBy)
 				restrictPoly = zoneUsed
 		end
 
-			for i = 0, 1000 do -- for 1000 attempts
+						for i = 0, 100 do -- for 1000 attempts
 				local restriction = false -- reset restriction
+				local restriction2 = false
+				local restriction3 = false
+				local restriction4 = false
+				local restriction5 = false
 				local landgood = false -- reset landgood
 			
 				spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius) -- get a point from that zone
+				local spawnPsn2 = {y = spawnPsn.y - 500, x = spawnPsn.x - 500}
+				local spawnPsn3 = {y = spawnPsn.y + 500, x = spawnPsn.x + 500}
+				local spawnPsn4 = {y = spawnPsn.y - 500, x = spawnPsn.x + 500}
+				local spawnPsn5 = {y = spawnPsn.y + 500, x = spawnPsn.x - 500}
+				
 				restriction = mist.pointInPolygon(spawnPsn, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
+				restriction2 = mist.pointInPolygon(spawnPsn2, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
+				restriction3 = mist.pointInPolygon(spawnPsn3, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
+				restriction4 = mist.pointInPolygon(spawnPsn4, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
+				restriction5 = mist.pointInPolygon(spawnPsn5, mist.getGroupPoints(restrictPoly)) -- is that point within the associated polygon
 				
 					if mist.isTerrainValid(spawnPsn, {terrainType}) == true then -- if the land is valid
 					landgood = true -- land is good
@@ -544,27 +557,142 @@ function BuildFARP(side, ownedBy)
 					landgood = false -- land is bad, mmm kay
 					end
 					
-							if restriction == true and landgood == true then -- polygon restriction has been met and land valid	
+					if restriction and restriction2 and restriction3 and restriction4 and restriction5 then
+					-- all restrictions met
+					restrictions = true
+					else
+					restrictions = false
+					end
+					
+							if landgood == true and restrictions == true then--and restriction2 == true and restriction3 == true and restriction4 == true and restriction5 == true then-- polygon restriction has been met and land valid	
 							break -- break out of the loop
 							end
+				
+				local data = mist.utils.serialize("sP", spawnPsn) -- debug to show us our table
+				trigger.action.outText(data,55, true)	
+				local data = mist.utils.serialize("sP", spawnPsn2) -- debug to show us our table
+				trigger.action.outText(data,55, false)	
+				
+				
 				end
 				
 				local buildPsn = mist.utils.makeVec3(spawnPsn) -- vec3 of the spawnPsn
 				local buildPsnFarp = mist.utils.makeVec2(spawnPsn) -- vec2 of the spawnPsn
 				
-		local vars = 
-		{
-		 type = "FARP", -- its of type FARP
-		 country = forWhom, -- country
-		 category = "Heliports", -- category 
-		 x = buildPsn.x, -- vec2 x value
-		 y = buildPsn.z, -- vec2 y value
+		--local vars = 
+		--{
+		-- type = "FARP", -- its of type FARP
+		-- country = forWhom, -- country
+		-- category = "Heliports", -- category 
+		-- x = buildPsn.x, -- vec2 x value
+		-- y = buildPsn.z, -- vec2 y value
 		 --name = farpName,
-		 unitName = farpName, -- the farpName
-		 clone = true, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		-- unitName = farpName, -- the farpName
+		-- clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
 		 --groupName = "FARP" .. side,
-		 heading = 0.47123889803847, -- probably should randomize the direction or have it face the right way in future
+		-- heading = 0, -- probably should randomize the direction or have it face the right way in future
+		--}
+		
+			 -- DEBUG STUFF
+			--	local data = mist.utils.serialize("v3", spawnPsn) -- debug to show us our table
+			--	trigger.action.outText(data,25, true)	
+				
+				--local data2 = mist.utils.serialize("v2", buildPsnFarp) -- debug to show us our table
+				--trigger.action.outText(data2,25, false)	
+				-- END DEBUG STUFF
+		
+		
+		local vars = {
+		type = "Invisible FARP", -- its of type FARP
+		country = forWhom, -- country
+		category = "Heliports", -- category 
+		x = buildPsn.x, -- vec2 x value
+		y = buildPsn.z, -- vec2 y value
+		 --name = farpName,
+		unitName = farpName, -- the farpName
+		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--groupName = "FARP" .. side,
+		heading = 0, -- probably should randomize the direction or have it face the right way in future
+		heliport_callsign_id = 2,
+		heliport_modulation = 0,
+		heliport_frequency = "127.5",
 		}
+		mist.dynAddStatic(vars)	-- add the static item to the mission
+		
+		local newx = buildPsn.x - 40
+		local newy = buildPsn.z - 70
+		
+		
+		local vars = {
+		type = "FARP Ammo Dump Coating", -- its of type FARP
+		country = forWhom, -- country
+		category = "Fortifications", -- category 
+		x = newx,
+		y = newy,
+		 --name = farpName,
+		--unitName = farpName, -- the farpName
+		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--groupName = "FARP" .. side,
+		heading = 1.5708, -- probably should randomize the direction or have it face the right way in future
+		}
+		mist.dynAddStatic(vars)	-- add the static item to the mission
+		
+		local newx = buildPsn.x 
+		local newy = buildPsn.z - 70
+		
+		local vars = {
+		type = "FARP Fuel Depot", -- its of type FARP
+		country = forWhom, -- country
+		category = "Fortifications", -- category 
+		x = newx,
+		y = newy,
+		 --name = farpName,
+		--unitName = farpName, -- the farpName
+		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--groupName = "FARP" .. side,
+		heading = 1.5708, -- probably should randomize the direction or have it face the right way in future
+		--heliport_callsign_id = 2,
+		--heliport_modulation = 0,
+		}
+		mist.dynAddStatic(vars)	-- add the static item to the mission
+		
+		local newx = buildPsn.x + 40
+		local newy = buildPsn.z - 70
+		
+		local vars = {
+		type = "FARP CP Blindage", -- its of type FARP
+		country = forWhom, -- country
+		category = "Fortifications", -- category 
+		x = newx,
+		y = newy,
+		 --name = farpName,
+		--unitName = farpName, -- the farpName
+		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--groupName = "FARP" .. side,
+		heading = 1.5708, -- probably should randomize the direction or have it face the right way in future
+		--heliport_callsign_id = 2,
+		--heliport_modulation = 0,
+		}
+		mist.dynAddStatic(vars)	-- add the static item to the mission
+		
+		local newx = buildPsn.x + 80
+		local newy = buildPsn.z - 70
+		
+		local vars = {
+		type = "FARP Tent", -- its of type FARP
+		country = forWhom, -- country
+		category = "Fortifications", -- category 
+		x = newx,
+		y = newy,
+		 --name = farpName,
+		--unitName = farpName, -- the farpName
+		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--groupName = "FARP" .. side,
+		heading = 1.5708, -- probably should randomize the direction or have it face the right way in future
+		--heliport_callsign_id = 2,
+		--heliport_modulation = 0,
+		}
+		mist.dynAddStatic(vars)	-- add the static item to the mission
 					
 					local Strike_Area = {
 					x = buildPsn.x,
@@ -573,20 +701,24 @@ function BuildFARP(side, ownedBy)
 					radius = 6000
 					}
 					
+					local Strike_Area_Zone = {
+					point = {buildPsn.x, buildPsn.z, buildPsn.y},
+					radius = 3000
+					}
+					
 					
 					if forWhom == "Russia" then
 					redStartFarp = buildPsnFarp
 					redFarpPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1005, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1005', req_num = 1}
 					end
 					
 					if forWhom == "USA" then
 					blueStartFarp = buildPsnFarp
 					blueFarpPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1006, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1006', req_num = 1}
 					end
 					
-					mist.dynAddStatic(vars)	-- add the static item to the mission
 		end
 		
 			
@@ -802,7 +934,7 @@ function BuildFARP(side, ownedBy)
 		 -- for reds building
 		if redStrikePos ~= nil then
 			local markervars = {
-			--id = "redstrike", -- make the marker ID the same as that zones names
+			id = "redstrike", -- make the marker ID the same as that zones names
 			pos = {x = redStrikePos.x, y = redStrikePos.z}, -- get the table of verticies from that zone
 			markType = 2,  -- use circle
 			markForCoa = -1,
@@ -1011,18 +1143,23 @@ end
 					z = buildPsn.z,
 					radius = 6000
 					}
+					
+					local Strike_Area_Zone = {
+					point = {buildPsn.x, buildPsn.z, buildPsn.y},
+					radius = 10000
+					}
 		
 					
 					if forWhom == "Russia" then
 					redStartRig = buildPsnRig
 					redRigPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1003, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1003', req_num = 2}
 					end
 					
 					if forWhom == "USA" then
 					blueStartRig = buildPsnRig
 					blueRigPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1004, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1004', req_num = 2}
 					end
 					
 					mist.dynAddStatic(vars)	-- add the static item to the mission
@@ -1112,7 +1249,7 @@ end
 			 y = buildPsn.z + math.random(200,300),
 			 --name = "Strike1", 
 			 groupName = "Strike1",
-			 clone = true,
+			 clone = false,
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars)
@@ -1125,7 +1262,7 @@ end
 			 y = buildPsn.z + math.random(300, 600),
 			 --name = "Strike2", 
 			 groupName = "Strike2",
-			 clone = true,
+			 clone = false,
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars2)
@@ -1137,7 +1274,7 @@ end
 			 x = buildPsn.x + math.random(300, 590),
 			 y = buildPsn.z + math.random(300,600),
 			 --name = "Strike3", 
-			 clone = true,
+			 clone = false,
 			 groupName = "Strike3",
 			 heading = 0.47123889803847
 			}
@@ -1153,7 +1290,7 @@ end
 			 y = buildPsn.z + math.random(200,300),
 			 --name = "Strike1", 
 			 groupName = "Strike1",
-			 clone = true,
+			 clone = false,
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars)
@@ -1166,7 +1303,7 @@ end
 			 y = buildPsn.z + math.random(300, 600),
 			 --name = "Strike2", 
 			 groupName = "Strike2",
-			 clone = true,
+			 clone = false,
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars2)
@@ -1179,7 +1316,7 @@ end
 			 y = buildPsn.z + math.random(300,600),
 			 --name = "Strike3", 
 			 groupName = "Strike3",
-			 clone = true,
+			 clone = false,
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars3)
@@ -1192,17 +1329,22 @@ end
 					radius = 6000
 					}
 					
+						local Strike_Area_Zone = {
+					point = {buildPsn.x, buildPsn.z, buildPsn.y},
+					radius = 3000
+					}
+					
 					
 					if forWhom == "Russia" then
 					redStrikePos = Strike_Area -- store the strike area in redStrikePos for use with the bomber and scoring script
 					--blueAttack = Strike_Area
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1001, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1001', req_num = 1}
 					end
 					
 					if forWhom == "USA" then
 					blueStrikePos = Strike_Area -- store the vec2 in blueStrikePos for use with the bomber and scoring script
 					--redAttack = Strike_Area
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area, flag = 1002, req_num = 3}
+					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1002', req_num = 1}
 					end
 				
 			end
@@ -1210,8 +1352,27 @@ end
 		
 		
 		function MonitorTask(whichTask, side)
+		local msg = {}
+			
+			--trigger.action.setUserFlag('1001', true)
+			
+			local data = trigger.misc.getUserFlag('1001')
+			local data2 = trigger.misc.getUserFlag('1002')
+			local data3 = trigger.misc.getUserFlag('1003')
+			local data4 = trigger.misc.getUserFlag('1004')
+			local data5 = trigger.misc.getUserFlag('1005')
+			local data6 = trigger.misc.getUserFlag('1006')
+			
+			msg.text = ' Monitoring... ' .. whichTask .. side .. data .. data2 .. data3 .. data4 .. data5 .. data6
+			msg.displayTime = 10
+			msg.msgFor = {coa = {'ALL'}}
+			mist.message.add(msg)
+			
+			
+		
+		
 		if side == "BLUE" and whichTask == "STRIKE" then
-		if trigger.misc.getUserFlag('1001') ~= 0 then
+		if trigger.misc.getUserFlag('1001') == 1 then
 			local msg = {}
 			
 			msg.text = ' Red structures have been demolished'
@@ -1227,7 +1388,7 @@ end
 			end
 			
 		if side == "BLUE" and whichTask == "NAVAL_HELIPORT" then
-		if trigger.misc.getUserFlag('1003') ~= 0 then
+		if trigger.misc.getUserFlag('1003') == 1 then
 			local msg = {}
 			
 			msg.text = ' Red heliport has been demolished'
@@ -1237,28 +1398,28 @@ end
 				
 				BLUESCORE = BLUESCORE + 10
 				trigger.action.setUserFlag('1003',0)
-				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildOILRIGS, {1, "RED", "Russia"}, timer.getTime() + 1)
 			end
 		end
 		
 				if side == "BLUE" and whichTask == "FARP" then
-		if trigger.misc.getUserFlag('1005') ~= 0 then
+		if trigger.misc.getUserFlag('1005') == 1 then
 			local msg = {}
 			
-			msg.text = ' Red heliport has been demolished'
+			msg.text = ' Red FARP has been demolished'
 			msg.displayTime = 10
 			msg.msgFor = {coa = {'ALL'}}
 			mist.message.add(msg)
 				
 				BLUESCORE = BLUESCORE + 10
 				trigger.action.setUserFlag('1005',0)
-				mist.scheduleFunction(BuildOILRIGS, {1, "RED", "Russia"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1)
 			end
 		end
 	
 			
 			if side == "RED" and whichTask == "STRIKE" then
-			if trigger.misc.getUserFlag('1002') ~= 0 then
+			if trigger.misc.getUserFlag('1002') == 1 then
 			local msg = {}
 			
 			msg.text = ' Blue structures have been demolished'
@@ -1273,7 +1434,7 @@ end
 		end
 		
 			if side == "RED" and whichTask == "NAVAL_HELIPORT" then
-			if trigger.misc.getUserFlag('1004') ~= 0 then
+			if trigger.misc.getUserFlag('1004') == 1 then
 			local msg = {}
 			
 			msg.text = ' Blue heliport has been demolished'
@@ -1288,7 +1449,7 @@ end
 		end
 		
 		if side == "RED" and whichTask == "FARP" then
-			if trigger.misc.getUserFlag('1006') ~= 0 then
+			if trigger.misc.getUserFlag('1006') == 1 then
 			local msg = {}
 			
 			msg.text = ' Blue FARP has been demolished'
@@ -1334,7 +1495,7 @@ end
 		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 24, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {MasterList, 150, 170}, timer.getTime() + 26, 120) -- update grid every 60 seconds
 		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 28, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 60, 300) -- update strike targets every 5 minutes
+		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 60, 10) -- update strike targets every 5 minutes
 		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
 		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
 		mist.scheduleFunction(BuildOILRIGS, {rNAVYSTATICamount, "RED", "Russia"}, timer.getTime() + 8)
@@ -1345,9 +1506,8 @@ end
 		mist.scheduleFunction(MonitorTask, {"STRIKE", "BLUE"}, timer.getTime() + 14, 30)
 		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 30)
 		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 30)
-		mist.scheduleFunction(MonitorTask, {"FARP", "RED"}, timer.getTime() + 17, 30)
 		mist.scheduleFunction(MonitorTask, {"FARP", "BLUE"}, timer.getTime() + 18, 30)
-		
+		mist.scheduleFunction(MonitorTask, {"FARP", "RED"}, timer.getTime() + 18, 30)
 		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.RED, "RED", "AAA"}, timer.getTime() + 61, 45) -- begin monitoring all the red groups of each type of unit
 		mist.scheduleFunction(monitorGroup, {ActiveForces.TANK.RED, "RED", "TANK"}, timer.getTime() + 62, 45)
 		mist.scheduleFunction(monitorGroup, {ActiveForces.APC.RED, "RED", "APC"}, timer.getTime() + 63, 45)
