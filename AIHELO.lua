@@ -769,7 +769,8 @@ do
     end
     local template_group = mist.getGroupData(template_unit:getGroup():getName())
     local template_unit_data = template_group.units[1]
-    local airbase_pos = airbase:getPoint()
+    --local airbase_pos = airbase:getPoint()
+	local airbase_pos = {}
     local group_data = {}
     local unit_data = {}
     local onboard_num = template_unit_data.onboard_num - 1

@@ -1,4 +1,4 @@
-		--revision .39
+		--revision .40
 		dynaFRONT = {}
 		dynaFRONT.log_level = "info"
 		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -459,9 +459,41 @@
 				mist.message.add(msg)
 				msg = {}
 			
-				if sideUsed == "RED" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				if sideUsed == "RED" then
+				 if grpType == "TRUCK" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "AAA" then REDSCORE = REDSCORE + 2 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "TANK" then REDSCORE = REDSCORE + 3 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "CP" then REDSCORE = REDSCORE + 5 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "INF" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "APC" then REDSCORE = REDSCORE + 2 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "SHORAD" then REDSCORE = REDSCORE + 3 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "NAVY" then REDSCORE = REDSCORE + 5 -- if it was a red unit removed then red scores
+				 end
 				end		
-				if sideUsed == "BLUE" then BLUESCORE = BLUESCORE + 1 -- if it was a blue unit removed then red scores
+				if sideUsed == "BLUE" then
+				 if grpType == "TRUCK" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "AAA" then REDSCORE = REDSCORE + 2 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "TANK" then REDSCORE = REDSCORE + 3 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "CP" then REDSCORE = REDSCORE + 5 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "INF" then REDSCORE = REDSCORE + 1 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "APC" then REDSCORE = REDSCORE + 2 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "SHORAD" then REDSCORE = REDSCORE + 3 -- if it was a red unit removed then red scores
+				 end
+				 if grpType == "NAVY" then REDSCORE = REDSCORE + 5 -- if it was a red unit removed then red scores
+				 end
 				end
 				
 				if grpType ~= "NAVY" then
@@ -620,7 +652,7 @@ function BuildFARP(side, ownedBy)
 		heliport_modulation = 0,
 		heliport_frequency = "128.5",
 		}
-		mist.dynAddStatic(vars)	-- add the static item to the mission
+		--mist.dynAddStatic(vars)	-- add the static item to the mission
 		
 		local newx = buildPsn.x - 40
 		local newy = buildPsn.z - 70
@@ -1083,7 +1115,7 @@ end
 
 		
 		if side == "RED" then
-				forWhom = "Russia" -- country name of the FAP
+				forWhom = "Russia" -- country name of the RIG
 				groupprefix = "r"
 				--farpName = "FARPRED" -- FARP name as placed in mission editor
 				randsquare = mist.random(1,#RedSHALLOWNAVAL_SectorSquares) -- put it in a random truck square by getting a random string from the table
@@ -1393,13 +1425,14 @@ end
 			local msg = {}
 			
 			msg.text = ' Red structures have been demolished'
-			msg.displayTime = 10
+			msg.displayTime = 60
 			msg.msgFor = {coa = {'ALL'}}
 			mist.message.add(msg)
 				
 				BLUESCORE = BLUESCORE + 10
 				--trigger.action.setUserFlag('1001',0)
 				trigger.action.setUserFlag('1001', 0)
+				mist.marker.remove("redstrike")
 				mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 1800)
 			end
 			end
@@ -1424,12 +1457,13 @@ end
 			local msg = {}
 			
 			msg.text = ' Red FARP has been demolished'
-			msg.displayTime = 10
+			msg.displayTime = 60
 			msg.msgFor = {coa = {'ALL'}}
 			mist.message.add(msg)
 				
 				BLUESCORE = BLUESCORE + 10
 				trigger.action.setUserFlag('1005',0)
+				mist.marker.remove("redfarp")
 				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1800)
 			end
 		end
@@ -1440,12 +1474,13 @@ end
 			local msg = {}
 			
 			msg.text = ' Blue structures have been demolished'
-			msg.displayTime = 10
+			msg.displayTime = 60
 			msg.msgFor = {coa = {'ALL'}}
 			mist.message.add(msg)
 				
 				REDSCORE = REDSCORE + 10
 				trigger.action.setUserFlag('1002',0)
+				mist.marker.remove("bluestrike")
 				mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 1800)
 			end
 		end
@@ -1470,12 +1505,13 @@ end
 			local msg = {}
 			
 			msg.text = ' Blue FARP has been demolished'
-			msg.displayTime = 10
+			msg.displayTime = 60
 			msg.msgFor = {coa = {'ALL'}}
 			mist.message.add(msg)
 				
 				REDSCORE = REDSCORE + 10
 				trigger.action.setUserFlag('1006',0)
+				mist.marker.remove("bluefarp")
 				mist.scheduleFunction(BuildFARP, {1, "BLUE", "USA"}, timer.getTime() + 1800)
 			end
 		end
@@ -1515,14 +1551,14 @@ end
 		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 29, 300) -- update strike targets every 5 minutes
 		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
 		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
-		mist.scheduleFunction(BuildOILRIGS, {rNAVYSTATICamount, "RED", "Russia"}, timer.getTime() + 8)
-		mist.scheduleFunction(BuildOILRIGS, {bNAVYSTATICamount, "BLUE", "USA"}, timer.getTime() + 10)
+		--mist.scheduleFunction(BuildOILRIGS, {rNAVYSTATICamount, "RED", "Russia"}, timer.getTime() + 8)
+		--mist.scheduleFunction(BuildOILRIGS, {bNAVYSTATICamount, "BLUE", "USA"}, timer.getTime() + 10)
 		mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 11)
 		mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 12)
 		mist.scheduleFunction(MonitorTask, {"STRIKE", "RED"}, timer.getTime() + 13, 10)
 		mist.scheduleFunction(MonitorTask, {"STRIKE", "BLUE"}, timer.getTime() + 14, 10)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 10)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 10)
+		--mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 10)
+		--mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 10)
 		mist.scheduleFunction(MonitorTask, {"FARP", "BLUE"}, timer.getTime() + 18, 30)
 		mist.scheduleFunction(MonitorTask, {"FARP", "RED"}, timer.getTime() + 18, 30)
 		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.RED, "RED", "AAA"}, timer.getTime() + 61, 45) -- begin monitoring all the red groups of each type of unit
