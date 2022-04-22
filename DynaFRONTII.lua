@@ -1,4 +1,4 @@
-		--revision .36
+		--revision .38
 		dynaFRONT = {}
 		dynaFRONT.log_level = "info"
 		dynaFRONT.log = mist.Logger:new("DynaFRONT", dynaFRONT.log_level)
@@ -6,7 +6,7 @@
 		-- intro function
 		function Introduce_Mission() -- standard mission introduction function
 			local msg = {}
-			msg.text = 'OPERATION GRANDSTAND 0.36'
+			msg.text = 'OPERATION GRANDSTAND 0.38'
 			msg.displayTime = 29  
 			msg.msgFor = {coa = {'all'}} 
 			mist.message.add(msg)
@@ -513,7 +513,7 @@ function BuildFARP(side, ownedBy)
 		local randsquare = 0
 		local restrictPoly = ""
 		local useSide = ""
-		local spawnPsn = {}
+		--local spawnPsn = {}
 		local failedAttempts = 0
 
 		if side == "RED" then
@@ -539,7 +539,7 @@ function BuildFARP(side, ownedBy)
 				local restriction5 = false
 				local landgood = false -- reset landgood
 			
-				spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius) -- get a point from that zone
+				local spawnPsn = mist.getRandomPointInZone(zoneUsed, zoneUsed.radius) -- get a point from that zone
 				local spawnPsn2 = {y = spawnPsn.y - 500, x = spawnPsn.x - 500}
 				local spawnPsn3 = {y = spawnPsn.y + 500, x = spawnPsn.x + 500}
 				local spawnPsn4 = {y = spawnPsn.y - 500, x = spawnPsn.x + 500}
@@ -568,10 +568,10 @@ function BuildFARP(side, ownedBy)
 							break -- break out of the loop
 							end
 				
-				local data = mist.utils.serialize("sP", spawnPsn) -- debug to show us our table
-				trigger.action.outText(data,55, true)	
-				local data = mist.utils.serialize("sP", spawnPsn2) -- debug to show us our table
-				trigger.action.outText(data,55, false)	
+				--local data = mist.utils.serialize("sP", spawnPsn) -- debug to show us our table
+				--trigger.action.outText(data,55, true)	
+				--local data = mist.utils.serialize("sP", spawnPsn2) -- debug to show us our table
+				--trigger.action.outText(data,55, false)	
 				
 				
 				end
@@ -610,12 +610,12 @@ function BuildFARP(side, ownedBy)
 		y = buildPsn.z, -- vec2 y value
 		 --name = farpName,
 		unitName = farpName, -- the farpName
-		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		clone = true, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
 		--groupName = "FARP" .. side,
 		heading = 0, -- probably should randomize the direction or have it face the right way in future
 		heliport_callsign_id = 2,
 		heliport_modulation = 0,
-		heliport_frequency = "127.5",
+		heliport_frequency = "128.5",
 		}
 		mist.dynAddStatic(vars)	-- add the static item to the mission
 		
@@ -684,9 +684,9 @@ function BuildFARP(side, ownedBy)
 		category = "Fortifications", -- category 
 		x = newx,
 		y = newy,
-		 --name = farpName,
-		--unitName = farpName, -- the farpName
-		clone = false, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
+		--name = farpName,
+		--unitName = farpName,
+		clone = true, -- clone it, we must clone an already existing FARP otherwise an error occurs (DCS limitation perhaps?)
 		--groupName = "FARP" .. side,
 		heading = 1.5708, -- probably should randomize the direction or have it face the right way in future
 		--heliport_callsign_id = 2,
@@ -702,21 +702,21 @@ function BuildFARP(side, ownedBy)
 					}
 					
 					local Strike_Area_Zone = {
-					point = {buildPsn.x, buildPsn.z, buildPsn.y},
-					radius = 3000
+					point = {x = buildPsn.x, y = buildPsn.y, z = buildPsn.z},
+					radius = 2000
 					}
 					
 					
 					if forWhom == "Russia" then
 					redStartFarp = buildPsnFarp
 					redFarpPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1005', req_num = 1}
+					mist.flagFunc.mapobjs_dead_point { locations = {Strike_Area_Zone}, flag = 1005, req_num = 4}
 					end
 					
 					if forWhom == "USA" then
 					blueStartFarp = buildPsnFarp
 					blueFarpPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1006', req_num = 1}
+					mist.flagFunc.mapobjs_dead_point { locations = {Strike_Area_Zone}, flag = 1006, req_num = 4}
 					end
 					
 		end
@@ -1126,7 +1126,7 @@ end
 		y = buildPsn.z, -- vec2 y value
 		unitId = 9000 + iterations,
 		groupName = groupprefix .. "oil",
-		unitName = groupprefix .. "oil", -- the static name
+		--unitName = groupprefix .. "oil", -- the static name
 		heliport_callsign_id = 1,
         heliport_modulation = 0,
 		heliport_frequency = "127.5",
@@ -1145,21 +1145,21 @@ end
 					}
 					
 					local Strike_Area_Zone = {
-					point = {buildPsn.x, buildPsn.z, buildPsn.y},
-					radius = 10000
+					point = {x = buildPsn.x, y = buildPsn.y, z = buildPsn.z},
+					radius = 2000
 					}
 		
 					
 					if forWhom == "Russia" then
 					redStartRig = buildPsnRig
 					redRigPos = Strike_Area -- store the vec3 in redFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1003', req_num = 2}
+					mist.flagFunc.mapobjs_dead_point { locations = {Strike_Area_Zone}, flag = 1003, req_num = 1}
 					end
 					
 					if forWhom == "USA" then
 					blueStartRig = buildPsnRig
 					blueRigPos = Strike_Area -- store the vec3 in blueFarpPos for use with the heloattack script
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1004', req_num = 2}
+					mist.flagFunc.mapobjs_dead_point { locations = {Strike_Area_Zone}, flag = 1004, req_num = 1}
 					end
 					
 					mist.dynAddStatic(vars)	-- add the static item to the mission
@@ -1234,6 +1234,19 @@ end
 		--rate = 100,
 		--clone = true, -- 
 		
+		--	if Group.getByName(side .. " Strike1") then -- the group must be present (existing) in order for the checks to occur
+	--		Group.destroy(Group.getByName(side .. " Strike1"))
+--			end
+			
+			--if Group.getByName(side .. " Strike2") then -- the group must be present (existing) in order for the checks to occur
+			--Group.destroy(Group.getByName(side .. " Strike2"))
+			--end
+			
+			--if Group.getByName(side .. " Strike3") then -- the group must be present (existing) in order for the checks to occur
+			--Group.destroy(Group.getByName(side .. " Strike3"))
+			--end
+			
+		
 		
 			local buildPsn = mist.utils.makeVec3(buildPsn)		
 			
@@ -1247,8 +1260,8 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x,
 			 y = buildPsn.z + math.random(200,300),
-			 --name = "Strike1", 
-			 groupName = "Strike1",
+			-- name = "Strike1", 
+			 groupName = side .. " Strike1",
 			 clone = false,
 			 heading = 0.47123889803847
 			}
@@ -1260,8 +1273,8 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x,
 			 y = buildPsn.z + math.random(300, 600),
-			 --name = "Strike2", 
-			 groupName = "Strike2",
+			-- name = "Strike2", 
+			-- groupName = "Strike2",
 			 clone = false,
 			 heading = 0.47123889803847
 			}
@@ -1273,9 +1286,9 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x + math.random(300, 590),
 			 y = buildPsn.z + math.random(300,600),
-			 --name = "Strike3", 
+			-- name = "Strike3", 
 			 clone = false,
-			 groupName = "Strike3",
+			 --groupName = "Strike3",
 			 heading = 0.47123889803847
 			}
 			mist.dynAddStatic(vars3)
@@ -1288,8 +1301,8 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x,
 			 y = buildPsn.z + math.random(200,300),
-			 --name = "Strike1", 
-			 groupName = "Strike1",
+			-- name = "Strike1", 
+			-- groupName = "Strike1",
 			 clone = false,
 			 heading = 0.47123889803847
 			}
@@ -1301,8 +1314,8 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x,
 			 y = buildPsn.z + math.random(300, 600),
-			 --name = "Strike2", 
-			 groupName = "Strike2",
+			-- name = "Strike2", 
+			-- groupName = "Strike2",
 			 clone = false,
 			 heading = 0.47123889803847
 			}
@@ -1314,8 +1327,8 @@ end
 			 category = "Fortifications", 
 			 x = buildPsn.x + math.random(300, 590),
 			 y = buildPsn.z + math.random(300,600),
-			 --name = "Strike3", 
-			 groupName = "Strike3",
+			-- name = "Strike3", 
+			-- groupName = "Strike3",
 			 clone = false,
 			 heading = 0.47123889803847
 			}
@@ -1326,25 +1339,26 @@ end
 					x = buildPsn.x,
 					z = buildPsn.z,
 					y = buildPsn.y,
-					radius = 6000
-					}
-					
-						local Strike_Area_Zone = {
-					point = {buildPsn.x, buildPsn.z, buildPsn.y},
 					radius = 3000
 					}
 					
+					--local thisZone = trigger.misc.getZone('Strike_Area_Zone') 
+
+					Strike_Area_Zone = {
+					point = {y = buildPsn.y, x = buildPsn.x, z = buildPsn.z},
+					radius = 2000
+					}
+					
+				
 					
 					if forWhom == "Russia" then
 					redStrikePos = Strike_Area -- store the strike area in redStrikePos for use with the bomber and scoring script
-					--blueAttack = Strike_Area
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1001', req_num = 1}
+					mist.flagFunc.mapobjs_dead_point{locations = {Strike_Area_Zone}, flag = 1001, req_num = 1}
 					end
 					
 					if forWhom == "USA" then
 					blueStrikePos = Strike_Area -- store the vec2 in blueStrikePos for use with the bomber and scoring script
-					--redAttack = Strike_Area
-					mist.flagFunc.mapobjs_dead_zones { zones = Strike_Area_Zone, flag = '1002', req_num = 1}
+					mist.flagFunc.mapobjs_dead_point{locations = {Strike_Area_Zone}, flag = 1002, req_num = 1}
 					end
 				
 			end
@@ -1366,7 +1380,7 @@ end
 			msg.text = ' Monitoring... ' .. whichTask .. side .. data .. data2 .. data3 .. data4 .. data5 .. data6
 			msg.displayTime = 10
 			msg.msgFor = {coa = {'ALL'}}
-			mist.message.add(msg)
+			--mist.message.add(msg)
 			
 			
 		
@@ -1383,7 +1397,7 @@ end
 				BLUESCORE = BLUESCORE + 10
 				--trigger.action.setUserFlag('1001',0)
 				trigger.action.setUserFlag('1001', 0)
-				mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 1800)
 			end
 			end
 			
@@ -1398,7 +1412,7 @@ end
 				
 				BLUESCORE = BLUESCORE + 10
 				trigger.action.setUserFlag('1003',0)
-				mist.scheduleFunction(BuildOILRIGS, {1, "RED", "Russia"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildOILRIGS, {1, "RED", "Russia"}, timer.getTime() + 1800)
 			end
 		end
 		
@@ -1413,7 +1427,7 @@ end
 				
 				BLUESCORE = BLUESCORE + 10
 				trigger.action.setUserFlag('1005',0)
-				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildFARP, {1, "RED", "Russia"}, timer.getTime() + 1800)
 			end
 		end
 	
@@ -1429,7 +1443,7 @@ end
 				
 				REDSCORE = REDSCORE + 10
 				trigger.action.setUserFlag('1002',0)
-				mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 1800)
 			end
 		end
 		
@@ -1444,7 +1458,7 @@ end
 				
 				REDSCORE = REDSCORE + 10
 				trigger.action.setUserFlag('1004',0)
-				mist.scheduleFunction(BuildOILRIGS, {1, "BLUE", "USA"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildOILRIGS, {1, "BLUE", "USA"}, timer.getTime() + 1800)
 			end
 		end
 		
@@ -1459,7 +1473,7 @@ end
 				
 				REDSCORE = REDSCORE + 10
 				trigger.action.setUserFlag('1006',0)
-				mist.scheduleFunction(BuildFARP, {1, "BLUE", "USA"}, timer.getTime() + 1)
+				mist.scheduleFunction(BuildFARP, {1, "BLUE", "USA"}, timer.getTime() + 1800)
 			end
 		end
 		
@@ -1481,31 +1495,31 @@ end
 	end
 
 		-- main
-		mist.scheduleFunction(updateGrid, {SeaList, 125, 144}, timer.getTime() + 2, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {SeaList, 100, 124}, timer.getTime() + 4, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {SeaList, 75, 99}, timer.getTime() + 6, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {SeaList, 50, 74}, timer.getTime() + 8, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {SeaList, 25, 49}, timer.getTime() + 10, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {SeaList, 1, 24}, timer.getTime() + 12, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 14, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 16, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 18, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 20, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 22, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 24, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 150, 170}, timer.getTime() + 26, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 28, 120) -- update grid every 60 seconds
-		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 60, 10) -- update strike targets every 5 minutes
+		mist.scheduleFunction(updateGrid, {SeaList, 125, 144}, timer.getTime() + 2, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 100, 124}, timer.getTime() + 4, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 75, 99}, timer.getTime() + 6, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 50, 74}, timer.getTime() + 8, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 25, 49}, timer.getTime() + 10, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {SeaList, 1, 24}, timer.getTime() + 12, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 1, 24}, timer.getTime() + 14, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 25, 49}, timer.getTime() + 16, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 50, 74}, timer.getTime() + 18, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 75, 99}, timer.getTime() + 20, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 100, 124}, timer.getTime() + 22, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 125, 149}, timer.getTime() + 24, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 150, 170}, timer.getTime() + 26, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateGrid, {MasterList, 175, 199}, timer.getTime() + 28, 300) -- update grid every 60 seconds
+		mist.scheduleFunction(updateStrike, {}, timer.getTime() + 29, 300) -- update strike targets every 5 minutes
 		mist.scheduleFunction(BuildFARP, {"BLUE", "USA"}, timer.getTime() + 3) -- build a farp
 		mist.scheduleFunction(BuildFARP, {"RED", "Russia"}, timer.getTime() + 6) -- build a farp
 		mist.scheduleFunction(BuildOILRIGS, {rNAVYSTATICamount, "RED", "Russia"}, timer.getTime() + 8)
 		mist.scheduleFunction(BuildOILRIGS, {bNAVYSTATICamount, "BLUE", "USA"}, timer.getTime() + 10)
 		mist.scheduleFunction(BuildSTRIKETARGET, {1, "BLUE", "USA"}, timer.getTime() + 11)
 		mist.scheduleFunction(BuildSTRIKETARGET, {1, "RED", "Russia"}, timer.getTime() + 12)
-		mist.scheduleFunction(MonitorTask, {"STRIKE", "RED"}, timer.getTime() + 13, 30)
-		mist.scheduleFunction(MonitorTask, {"STRIKE", "BLUE"}, timer.getTime() + 14, 30)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 30)
-		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 30)
+		mist.scheduleFunction(MonitorTask, {"STRIKE", "RED"}, timer.getTime() + 13, 10)
+		mist.scheduleFunction(MonitorTask, {"STRIKE", "BLUE"}, timer.getTime() + 14, 10)
+		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "RED"}, timer.getTime() + 15, 10)
+		mist.scheduleFunction(MonitorTask, {"NAVAL_HELIPORT", "BLUE"}, timer.getTime() + 16, 10)
 		mist.scheduleFunction(MonitorTask, {"FARP", "BLUE"}, timer.getTime() + 18, 30)
 		mist.scheduleFunction(MonitorTask, {"FARP", "RED"}, timer.getTime() + 18, 30)
 		mist.scheduleFunction(monitorGroup, {ActiveForces.AAA.RED, "RED", "AAA"}, timer.getTime() + 61, 45) -- begin monitoring all the red groups of each type of unit

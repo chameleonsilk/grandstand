@@ -30,6 +30,7 @@ Official Releases <https://github.com/mrSkortch/MissionScriptingTools/tree/maste
 @author Grimes
 @author lukrop
 ]]
+-- CSR2 is a revision by CSILK that adds a couple functions not found in standard MIST library
 mist = {}
 
 -- don't change these
@@ -2945,6 +2946,23 @@ function mist.getGroupsByAttribute(att, rnum, id)
     
 end
 
+function mist.getDeadMapObjsAtPoint(locations)
+	-- location: a table or multiple tables formated in the style of a preplaced ME triggerZone
+	-- returns: table of dead map objects (indexed numerically)
+	local map_objs = {}
+
+	for obj_id, obj in pairs(mist.DBs.deadObjects) do
+		if obj.objectType and obj.objectType == 'building' then --dead map object
+			for i = 1, #locations do
+				if ((locations[i].point.x - obj.objectPos.x)^2 + (locations[i].point.z - obj.objectPos.z)^2)^0.5 <= locations[i].radius then
+					map_objs[#map_objs + 1] = mist.utils.deepCopy(obj)
+				end
+			end
+		end
+	end
+	return map_objs
+end
+
 function mist.getDeadMapObjsInZones(zone_names)
 	-- zone_names: table of zone names
 	-- returns: table of dead map objects (indexed numerically)
@@ -5812,9 +5830,9 @@ initial_number
 		local req_num = vars.req_num or vars.reqnum or 1
 		local initial_number = vars.initial_number
 
-		if type(zones) == 'string' then
+		--if type(zones) == 'string' then
 			zones = {zones}
-		end
+		--end
 
 		if not initial_number then
 			initial_number = #mist.getDeadMapObjsInZones(zones)
@@ -5826,6 +5844,51 @@ initial_number
 				return
 			else
 				mist.scheduleFunction(mist.flagFunc.mapobjs_dead_zones, {{zones = zones, flag = flag, stopflag = stopflag, req_num = req_num, initial_number = initial_number}}, timer.getTime() + 1)
+			end
+		end
+	end
+	
+		function mist.flagFunc.mapobjs_dead_point(vars)
+		--[[vars needs to be:
+location = a table or mutliple tables that are identical to a ME triggerzone
+flag = number,
+stopflag = number or nil,
+req_num = number or nil
+
+AND used by function,
+initial_number
+
+]]
+		-- type_tbl
+		local type_tbl = {
+			[{'locations'}] = {'table'},
+			flag = {'number', 'string'},
+			[{'stopflag', 'stopFlag'}] = {'number', 'string', 'nil'},
+			[{'req_num', 'reqnum'}] = {'number', 'nil'},
+		}
+
+		local err, errmsg = mist.utils.typeCheck('mist.flagFunc.mapobjs_dead_point', type_tbl, vars)
+		assert(err, errmsg)
+		local locations = vars.locations
+		local flag = vars.flag
+		local stopflag = vars.stopflag or vars.stopFlag or -1
+		local req_num = vars.req_num or vars.reqnum or 1
+		local initial_number = vars.initial_number
+
+		--if type(zones) == 'string' then
+			--zones = {zones}
+		--end
+
+		if not initial_number then
+			initial_number = #mist.getDeadMapObjsAtPoint(locations)
+		end
+
+		if stopflag == -1 or (type(trigger.misc.getUserFlag(stopflag)) == 'number' and trigger.misc.getUserFlag(stopflag) == 0) or (type(trigger.misc.getUserFlag(stopflag)) == 'boolean' and trigger.misc.getUserFlag(stopflag) == false) then
+			if (#mist.getDeadMapObjsAtPoint(locations) - initial_number) >= req_num and trigger.misc.getUserFlag(flag) == 0 then
+				trigger.action.setUserFlag(flag, true)
+				return
+			else
+				mist.scheduleFunction(mist.flagFunc.mapobjs_dead_point, {{locations = locations, flag = flag, stopflag = stopflag, req_num = req_num, initial_number = initial_number}}, timer.getTime() + 1)
 			end
 		end
 	end
