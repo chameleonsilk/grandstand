@@ -299,7 +299,8 @@ do
 
     if not cold then
       -- only engage if enemy is inside of 10km of the leg
-      bmbrstrike.taskEngage(group, 10000)
+      --bmbrstrike.taskEngage(group, 10000)
+	  bmbrstrike.taskEngageBomb(side)
     end
 
     bmbrstrike.log:info("Tasking $1 with RTB to $2", group:getName(), airbase:getName())
@@ -713,7 +714,7 @@ do
       params = {
         maxDist = max_dist,
         maxDistEnabled = true,
-        targetTypes = { [1] = "SAM related", [2] = "MANPADS", [3] = "IR Guided SAM"},
+        targetTypes = { [1] = "All"},
         priority = 0
       }
     }

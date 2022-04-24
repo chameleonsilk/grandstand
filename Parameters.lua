@@ -3,10 +3,10 @@
 -- determines the amount of spawned stuff when creating the sides
 --
 
-GROUND_RESPAWN_DELAY = 600 -- 5 minutes for normal ground stuff
-GROUND_RESPAWN_SAM_DELAY = 2400 -- 40 minutes for SAMs
+GROUND_RESPAWN_DELAY = 300 -- 5 minutes for normal ground stuff
+GROUND_RESPAWN_SAM_DELAY = 2400 --2400 -- 40 minutes for SAMs
 DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
-DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
+DISBAND_SAM_PERCENT = 90 -- when a group is this hurt it is removed for SAMS
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
@@ -630,14 +630,14 @@ bmbrstrike.next_spawn_delay = 900 -- 15 minute CAP/GCI delay between respawning 
 ---Minimum altitudes in meters.
 -- Default 4500
 heloattack.cas.min_alt = 90
-groundattack.cas.min_alt = 2500
-seadattack.sead.min_alt = 2500
+groundattack.cas.min_alt = 3500
+seadattack.sead.min_alt = 3500
 gcicap.cap.min_alt = 4000
 bmbrstrike.bomb.min_alt = 5000
 --- Maximum altitudes in meters.
 -- Default 7500
 heloattack.cas.max_alt = 1000
-groundattack.cas.max_alt = 3500
+groundattack.cas.max_alt = 4500
 seadattack.sead.max_alt = 5000
 gcicap.cap.max_alt = 6000
 bmbrstrike.bomb.max_alt = 7000
@@ -652,11 +652,11 @@ bmbrstrike.bomb.speed = 190
 --- Maximum engage distance for flights as long as they are on patrol.
 -- this might be overruled by an intercept vector given from
 -- ground control (EWR) in the case of GCI. Default 15000.
-heloattack.cas.max_engage_distance = 25000
-groundattack.cas.max_engage_distance = 50000
-seadattack.sead.max_engage_distance = 25000
-gcicap.cap.max_engage_distance = 20000
-bmbrstrike.bomb.max_engage_distance = 999999
+heloattack.cas.max_engage_distance = 10000
+groundattack.cas.max_engage_distance = 10000
+seadattack.sead.max_engage_distance = 10000
+gcicap.cap.max_engage_distance = 15000
+bmbrstrike.bomb.max_engage_distance = 10000
 --- Minimum red CAS VUL time in minutes.
 -- Minimum time the red CAS flight will orbit on station.
 heloattack.red.cas.vul_time_min = 25
@@ -752,14 +752,14 @@ heloattack.red.cas.group_size = "2"
 groundattack.red.cas.group_size = "randomized"
 seadattack.red.sead.group_size = "2"
 gcicap.red.cap.group_size = "randomized"
-gcicap.red.gci.group_size = "dynamic"
+gcicap.red.gci.group_size = "2"
 bmbrstrike.red.bomb.group_size = "2"
 --- Group size of blue flights.
 heloattack.blue.cas.group_size = "2"
 groundattack.blue.cas.group_size = "randomized"
 seadattack.blue.sead.group_size = "2"
 gcicap.blue.cap.group_size = "randomized"
-gcicap.blue.gci.group_size = "dynamic"
+gcicap.blue.gci.group_size = "2"
 bmbrstrike.blue.bomb.group_size = "2"
 --- How red flights are spawned.
 -- can be "parking", "takeoff" or "air" and defines the way the fighters spawn
