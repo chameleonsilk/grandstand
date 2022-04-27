@@ -1,4 +1,4 @@
---revision 4
+--revision 6
 -- DO NOT TOUCH THESE GLOBALS BELOW
 heloattack = {}
 heloattack.red = {}
@@ -78,6 +78,7 @@ ActiveForces.INF = {}
 ActiveForces.APC = {}
 ActiveForces.CP = {}
 ActiveForces.NAVY = {}
+ActiveForces.SHIP = {}
 
 
 ActiveForces.AAA.RED = {}
@@ -90,6 +91,7 @@ ActiveForces.INF.RED = {}
 ActiveForces.APC.RED = {}
 ActiveForces.CP.RED = {}
 ActiveForces.NAVY.RED = {}
+ActiveForces.SHIP.RED = {}
 
 ActiveForces.AAA.RED.DESTROYED = {}
 ActiveForces.TANK.RED.DESTROYED = {}
@@ -101,6 +103,7 @@ ActiveForces.INF.RED.DESTROYED = {}
 ActiveForces.APC.RED.DESTROYED = {}
 ActiveForces.CP.RED.DESTROYED = {}
 ActiveForces.NAVY.RED.DESTROYED = {}
+ActiveForces.SHIP.RED.DESTROYED = {}
 
 ActiveForces.AAA.RED.TEMPLATE = {}
 ActiveForces.TANK.RED.TEMPLATE = {}
@@ -112,6 +115,7 @@ ActiveForces.INF.RED.TEMPLATE = {}
 ActiveForces.APC.RED.TEMPLATE = {}
 ActiveForces.CP.RED.TEMPLATE = {}
 ActiveForces.NAVY.RED.TEMPLATE = {}
+ActiveForces.SHIP.RED.TEMPLATE = {}
 
 ActiveForces.AAA.RED.INITSIZE = {}
 ActiveForces.TANK.RED.INITSIZE = {}
@@ -123,6 +127,7 @@ ActiveForces.INF.RED.INITSIZE = {}
 ActiveForces.APC.RED.INITSIZE = {}
 ActiveForces.CP.RED.INITSIZE = {}
 ActiveForces.NAVY.RED.INITSIZE = {}
+ActiveForces.SHIP.RED.INITSIZE = {}
 
 ActiveForces.AAA.RED.SIZE = {}
 ActiveForces.TANK.RED.SIZE = {}
@@ -134,6 +139,7 @@ ActiveForces.INF.RED.SIZE = {}
 ActiveForces.APC.RED.SIZE = {}
 ActiveForces.CP.RED.SIZE= {}
 ActiveForces.NAVY.RED.SIZE = {}
+ActiveForces.SHIP.RED.SIZE = {}
 
 ActiveForces.AAA.RED.POS = {}
 ActiveForces.TANK.RED.POS = {}
@@ -145,6 +151,7 @@ ActiveForces.INF.RED.POS = {}
 ActiveForces.APC.RED.POS = {}
 ActiveForces.CP.RED.POS = {}
 ActiveForces.NAVY.RED.POS = {}
+ActiveForces.SHIP.RED.POS = {}
 
 ActiveForces.AAA.RED.SQUARE = {}
 ActiveForces.TANK.RED.SQUARE = {}
@@ -156,6 +163,7 @@ ActiveForces.INF.RED.SQUARE = {}
 ActiveForces.APC.RED.SQUARE = {}
 ActiveForces.CP.RED.SQUARE = {}
 ActiveForces.NAVY.RED.SQUARE = {}
+ActiveForces.SHIP.RED.SQUARE = {}
 
 ActiveForces.AAA.BLUE = {}
 ActiveForces.TANK.BLUE = {}
@@ -167,6 +175,7 @@ ActiveForces.INF.BLUE = {}
 ActiveForces.APC.BLUE = {}
 ActiveForces.CP.BLUE = {}
 ActiveForces.NAVY.BLUE = {}
+ActiveForces.SHIP.BLUE = {}
 
 ActiveForces.AAA.BLUE.TEMPLATE = {}
 ActiveForces.TANK.BLUE.TEMPLATE = {}
@@ -178,6 +187,7 @@ ActiveForces.INF.BLUE.TEMPLATE = {}
 ActiveForces.APC.BLUE.TEMPLATE = {}
 ActiveForces.CP.BLUE.TEMPLATE = {}
 ActiveForces.NAVY.BLUE.TEMPLATE = {}
+ActiveForces.SHIP.BLUE.TEMPLATE = {}
 
 ActiveForces.AAA.BLUE.DESTROYED = {}
 ActiveForces.TANK.BLUE.DESTROYED = {}
@@ -189,6 +199,7 @@ ActiveForces.INF.BLUE.DESTROYED = {}
 ActiveForces.APC.BLUE.DESTROYED = {}
 ActiveForces.CP.BLUE.DESTROYED = {}
 ActiveForces.NAVY.BLUE.DESTROYED = {}
+ActiveForces.SHIP.BLUE.DESTROYED = {}
 
 ActiveForces.AAA.BLUE.INITSIZE = {}
 ActiveForces.TANK.BLUE.INITSIZE = {}
@@ -200,6 +211,7 @@ ActiveForces.INF.BLUE.INITSIZE = {}
 ActiveForces.APC.BLUE.INITSIZE = {}
 ActiveForces.CP.BLUE.INITSIZE = {}
 ActiveForces.NAVY.BLUE.INITSIZE = {}
+ActiveForces.SHIP.BLUE.INITSIZE = {}
 
 ActiveForces.AAA.BLUE.SIZE = {}
 ActiveForces.TANK.BLUE.SIZE = {}
@@ -211,6 +223,7 @@ ActiveForces.INF.BLUE.SIZE = {}
 ActiveForces.APC.BLUE.SIZE = {}
 ActiveForces.CP.BLUE.SIZE = {}
 ActiveForces.NAVY.BLUE.SIZE = {}
+ActiveForces.SHIP.BLUE.SIZE = {}
 
 
 ActiveForces.AAA.BLUE.POS = {}
@@ -223,6 +236,7 @@ ActiveForces.INF.BLUE.POS = {}
 ActiveForces.APC.BLUE.POS = {}
 ActiveForces.CP.BLUE.POS = {}
 ActiveForces.NAVY.BLUE.POS = {}
+ActiveForces.SHIP.BLUE.POS = {}
 
 ActiveForces.AAA.BLUE.SQUARE = {}
 ActiveForces.TANK.BLUE.SQUARE = {}
@@ -234,6 +248,7 @@ ActiveForces.INF.BLUE.SQUARE = {}
 ActiveForces.APC.BLUE.SQUARE = {}
 ActiveForces.CP.BLUE.SQUARE = {}
 ActiveForces.NAVY.BLUE.SQUARE = {}
+ActiveForces.SHIP.BLUE.SQUARE = {}
 
 heloattack.allowspawn = true
 seadattack.allowspawn = true
@@ -265,4 +280,6 @@ BLUESCORE = 1
 gid = 0
 
 leaderANNOUNCE = 0
+blueStartPlayerFarp = trigger.misc.getZone('blueplayerfarp')
+redStartPlayerFarp = trigger.misc.getZone('redplayerfarp')
 -- DO NOT TOUCH THESE GLOBALS ABOVE

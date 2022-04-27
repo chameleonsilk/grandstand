@@ -769,15 +769,15 @@ do
     end
     local template_group = mist.getGroupData(template_unit:getGroup():getName())
     local template_unit_data = template_group.units[1]
-    local airbase_pos = airbase:getPoint()
-	--local airbase_pos = {}
+    --local airbase_pos = airbase:getPoint()
+	local airbase_pos = {}
     local group_data = {}
     local unit_data = {}
     local onboard_num = template_unit_data.onboard_num - 1
     local route = {}
 
     --local rand_point = {}
-	local choose_spot = mist.random(1,1) -- turned off so that its always the dynamic farp
+	local choose_spot = mist.random(1,2) -- turned off so that its always the dynamic farp
     --if spawn_mode == "in-zone" then
 	local rand_point = mist.getRandomPointInZone(zone)
 	
@@ -787,7 +787,7 @@ do
 		airbase_pos = redStartFarp
 		end
 		if choose_spot == 2 then
-		airbase_pos = redStartRig
+		airbase_pos = redStartPlayerFarp
 		end
 	end
 
@@ -796,12 +796,14 @@ do
 		airbase_pos = blueStartFarp
 		end
 		if choose_spot == 2 then
-		airbase_pos = blueStartRig
+		airbase_pos = blueStartPlayerFarp
 		end
 	end	
 	
 
-    
+    if airbase_pos == nil then
+	return
+	end
 
     for i = 1, size do
       unit_data[i] = {}

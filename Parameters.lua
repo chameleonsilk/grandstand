@@ -1,12 +1,14 @@
--- version 1.05
+-- version 1.07
 -- START EDITABLE STUFF --
 -- determines the amount of spawned stuff when creating the sides
 --
 
-GROUND_RESPAWN_DELAY = 300 -- 5 minutes for normal ground stuff
+GROUND_RESPAWN_DELAY = 1200 -- 20 minutes for normal ground stuff
 GROUND_RESPAWN_SAM_DELAY = 2400 --2400 -- 40 minutes for SAMs
+SHIP_RESPAWN_DELAY = 600 -- 10 minutes for cargo ships
+WARSHIP_RESPAWN_DELAY = 4800 -- 80 minutes for Warships
 DISBAND_PERCENT = 50 -- when a group is this hurt it is removed
-DISBAND_SAM_PERCENT = 90 -- when a group is this hurt it is removed for SAMS
+DISBAND_SAM_PERCENT = 80 -- when a group is this hurt it is removed for SAMS
 -- NEW GRID BASED SECTOR MAPS
 -- All Sectors follow this naming convention
 -- XX##Square
@@ -389,24 +391,72 @@ BlueTRUCK_SectorSquares = {
 }
 
 BlueNAVAL_SectorSquares = {
-[1] = 'FH07',
-[2] = 'FH17',
-[3] = 'FH27',
-[4] = 'FH06',
-[5] = 'FH16',
-[6] = 'FH26',
-[7] = 'FH36',
-[8] = 'FH46',
-[8] = 'FH56'
+[1] = 'FH02',
+[2] = 'FH12',
+[3] = 'FH22',
+[4] = 'FH32',
+[5] = 'FH42',
+[6] = 'FH52',
+[7] = 'FH62',
+[8] = 'FH72',
+[9] = 'FH82',
+[10] = 'FH01',
+[11] = 'FH11',
+[12] = 'FH21',
+[13] = 'FH31',
+[14] = 'FH41',
+[15] = 'FH51',
+[16] = 'FH61',
+[17] = 'FH71',
+[18] = 'FH81'
 }
 
 BlueSHALLOWNAVAL_SectorSquares = {
-[1] = 'GG18',
-[2] = 'GG08',
-[3] = 'GG09',
-[4] = 'FG99',
-[5] = 'FG98'
+[1] = 'FG49',
+[2] = 'FH40',
+[3] = 'FG59'
 }
+--[[
+[11] = 'FH00',
+[12] = 'FH10',
+[13] = 'FH20',
+[14] = 'FH30',
+[15] = 'FH40',
+[16] = 'FH50',
+[17] = 'FH60',
+[18] = 'FH70',
+[19] = 'FH80',
+[20] = 'FH90',
+
+[21] = 'FH01',
+[22] = 'FH11',
+[23] = 'FH21',
+[24] = 'FH31',
+[25] = 'FH41',
+[26] = 'FH51',
+[27] = 'FH61',
+[28] = 'FH71',
+[29] = 'FH81',
+[30] = 'FH91',
+
+[31] = 'FH02',
+[32] = 'FH12',
+[33] = 'FH22',
+[34] = 'FH32',
+[35] = 'FH42',
+[36] = 'FH52',
+[37] = 'FH62',
+[38] = 'FH72',
+
+[39] = 'FH03',
+[40] = 'FH13',
+[41] = 'FH23',
+[42] = 'FH33',
+[43] = 'FH43',
+[44] = 'FH53',
+[45] = 'FH63'
+}
+--]]
 
 -- end blue zones
 
@@ -449,23 +499,89 @@ RedTRUCK_SectorSquares = {
 }
 
 RedNAVAL_SectorSquares = {
-[1] = 'FF35',
-[2] = 'FF25',
-[3] = 'FF15',
-[4] = 'FF05',
-[5] = 'FF04',
-[6] = 'FF14',
-[7] = 'FF24',
-[8] = 'FF03'
+[1] = 'FG02',
+[2] = 'FG12',
+[3] = 'FG22',
+[4] = 'FG32',
+[5] = 'FG42',
+[6] = 'FG52',
+[7] = 'FG62',
+[8] = 'FG72',
+[9] = 'FG82',
+[10] = 'FG01',
+[11] = 'FG11',
+[12] = 'FG21',
+[13] = 'FG31',
+[14] = 'FG41',
+[15] = 'FG51',
+[16] = 'FG61',
+[17] = 'FG71',
+[18] = 'FG81'
 }
 
 RedSHALLOWNAVAL_SectorSquares = {
-[1] = 'GG14',
-[2] = 'GG15',
-[3] = 'GG16',
-[4] = 'GG24',
-[5] = 'GG25'
+[1] = 'FG54',
+[2] = 'FG55',
+[3] = 'FG53'
 }
+--[[
+
+[11] = 'FG03',
+[12] = 'FG13',
+[13] = 'FG23',
+[14] = 'FG33',
+[15] = 'FG43',
+[16] = 'FG53',
+[17] = 'FG63',
+[18] = 'FG73',
+[19] = 'FG83',
+[20] = 'FG93',
+
+[21] = 'FG02',
+[22] = 'FG12',
+[23] = 'FG22',
+[24] = 'FG32',
+[25] = 'FG42',
+[26] = 'FG52',
+[27] = 'FG62',
+[28] = 'FG72',
+[29] = 'FG82',
+[30] = 'FG92',
+
+[31] = 'FG01',
+[32] = 'FG11',
+[33] = 'FG21',
+[34] = 'FG31',
+[35] = 'FG41',
+[36] = 'FG51',
+[37] = 'FG61',
+[38] = 'FG71',
+[39] = 'FG81',
+[40] = 'FG91',
+
+[41] = 'FG00',
+[42] = 'FG10',
+[43] = 'FG20',
+[44] = 'FG30',
+[45] = 'FG40',
+[46] = 'FG50',
+[47] = 'FG60',
+[48] = 'FG70',
+[49] = 'FG80',
+[50] = 'FG90',
+
+[51] = 'FF09',
+[52] = 'FF19',
+[53] = 'FF29',
+[54] = 'FF39',
+[55] = 'FF49',
+[56] = 'FF59',
+[57] = 'FF69',
+[58] = 'FF79',
+[59] = 'FF89',
+[60] = 'FF99'
+}
+--]]
 
 -- end red zones
 
@@ -482,7 +598,6 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [1] = 'Blue AAA Asset-1',
 	  [2] = 'Blue AAA Asset-2',
 	  [3] = 'Blue AAA Asset-3',
-	  [4] = 'Blue AAA Asset-4',
 	}
 	
 	Blue_Names_TRUCK = {
@@ -518,6 +633,14 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [3] = 'Blue TANK Asset-3',
 	}
 	
+	Blue_Names_DEFENDERS = {
+		[1] = 'Blue DEF Asset-1'
+	}
+	
+	Blue_Names_BOATS = {
+		[1] = 'Blue BOAT Asset-1'
+	}
+	
 	--Blue_Names_AF = {
 	--  [1] = 'Blue AF Asset #000',
 	--}
@@ -530,10 +653,15 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [1] = 'Blue CP Asset-1',
 	}
 	
-	Blue_Naval_SHIPS = {
+	Blue_Naval_WARSHIPS = {
 	[1] = 'Blue Naval Asset-1',
 	[2] = 'Blue Naval Asset-2',
 	[3] = 'Blue Naval Asset-3'
+	}
+	
+	Blue_Naval_SHIPS = {
+	[1] = 'Blue Ship Asset-1',
+	[2] = 'Blue Ship Asset-2',
 	}
 	
 -- end Red template names
@@ -544,7 +672,6 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [1] = 'Red AAA Asset-1',
 	  [2] = 'Red AAA Asset-2',
 	  [3] = 'Red AAA Asset-3',
-	  [4] = 'Red AAA Asset-4',
 	}
 	
 	Red_Names_TRUCK = {
@@ -581,9 +708,13 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [3] = 'Red TANK Asset-3',
 	}
 	
-	--Red_Names_AF = {
-	--  [1] = 'Red AF Asset #000',
-	--}
+	Red_Names_DEFENDERS = {
+		[1] = 'Red DEF Asset-1'
+	}
+	
+	Red_Names_BOATS = {
+		[1] = 'Red BOAT Asset-1'
+	}
 	
 	Red_Names_INF = {
 	  [1] = 'Red INF Asset-1',
@@ -593,10 +724,15 @@ RedSHALLOWNAVAL_SectorSquares = {
 	  [1] = 'Red CP Asset-1',
 	}
 	
-	Red_Naval_SHIPS = {
+	Red_Naval_WARSHIPS = {
 	[1] = 'Red Naval Asset-1',
 	[2] = 'Red Naval Asset-2',
-	[3] = 'Red Naval Asset-3'
+	[3] = 'Red Naval Asset-3',
+	}
+	
+	Red_Naval_SHIPS = {
+	[1] = 'Red Ship Asset-1',
+	[2] = 'Red Ship Asset-2'
 	}
 	
 	
